@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
     generateArray();
     firstTry = true;
+    this->statusBar()->setSizeGripEnabled(false); // Disables the resize icon for the window
 }
 
 // UI Destructor

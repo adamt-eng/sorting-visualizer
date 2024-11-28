@@ -22,6 +22,8 @@ private slots:
 
     void on_elementsCount_valueChanged(int arg1);
 
+    void on_elementsCount_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     bool firstTry;
@@ -30,5 +32,6 @@ private:
     void bubbleSortAscending();
     void bubbleSortDescending();
     void wait();
+    void revisualize();
 };
 #endif // MAINWINDOW_H

@@ -31,6 +31,7 @@ std::string sortingAlgorithm;
 bool isAscending;
 int delayInMilliseconds;
 bool shouldReset = false;
+int elementsCount;
 
 // This boolean is used to avoid calling generateArray() again before the first visualization,
 // as it was already called in the constructor of the UI
@@ -48,8 +49,10 @@ void MainWindow::generateArray()
     // Clear array
     array.clear();
 
+    elementsCount = ui->elementsCount->value();
+
     // Fill the array with values increasing by 1
-    for (int i = 0; i < ui->elementsCount->value(); ++i)
+    for (int i = 0; i < elementsCount; ++i)
     {
         array.push_back(i + 1);
     }
@@ -128,19 +131,26 @@ void MainWindow::visualize()
 
     QPainter painter(&pixmap);
 
-    int elementsCount = array.size();
-    int barWidth = (width - elementsCount + 1) / elementsCount;
+    double gapWidth = 1.0;
+    double barWidth = (width - (elementsCount - 1) * gapWidth) / elementsCount;
+
+    // If barWidth is less than 1, make it 1 and reduce gapWidth
+    if (barWidth < 1.0)
+    {
+        barWidth = 1.0;
+        gapWidth = (width - elementsCount * barWidth) / (elementsCount - 1);
+    }
+
     int maxHeight = *std::max_element(array.begin(), array.end());
-    int xPos = 0;
+    double xPos = 0;
 
     for (int i = 0; i < elementsCount; ++i)
     {
-        int currentBarWidth = barWidth + (i < (width - elementsCount + 1) % elementsCount ? 1 : 0);
         int barHeight = (array[i] * height) / maxHeight;
 
-        painter.fillRect(xPos, height - barHeight, currentBarWidth, barHeight, Qt::white);
+        painter.fillRect(QRectF(xPos, height - barHeight, barWidth, barHeight), Qt::white);
 
-        xPos += currentBarWidth + 1;
+        xPos += barWidth + gapWidth;
     }
 
     ui->textLabel->setPixmap(pixmap);
@@ -157,19 +167,33 @@ void MainWindow::wait()
 }
 
 // Update graph in realtime when user changes the elements count
+bool beingUpdated;
+void MainWindow::revisualize()
+{
+    if (!beingUpdated)
+    {
+        beingUpdated = true;
+        visualize();
+        generateArray();
+        beingUpdated = false;
+    }
+}
 void MainWindow::on_elementsCount_valueChanged(int arg1)
 {
-    visualize();
-    generateArray();
+    revisualize();
+}
+void MainWindow::on_elementsCount_textChanged(const QString &arg1)
+{
+    revisualize();
 }
 
 // Algorithms
 // 1. Bubble Sort
 void MainWindow::bubbleSortAscending()
 {
-    for (int i = 0; i < array.size() - 1; i++)
+    for (int i = 0; i < elementsCount - 1; i++)
     {
-        for (int j = 0; j < array.size() - i - 1; j++)
+        for (int j = 0; j < elementsCount - i - 1; j++)
         {
             if (shouldReset) return;
 
@@ -185,9 +209,9 @@ void MainWindow::bubbleSortAscending()
 }
 void MainWindow::bubbleSortDescending()
 {
-    for (int i = 0; i < array.size() - 1; i++)
+    for (int i = 0; i < elementsCount - 1; i++)
     {
-        for (int j = 0; j < array.size() - i - 1; j++)
+        for (int j = 0; j < elementsCount - i - 1; j++)
         {
             if (shouldReset) return;
 

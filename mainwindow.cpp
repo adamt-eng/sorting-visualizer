@@ -168,6 +168,7 @@ void MainWindow::visualize()
 // Function for adding wait time between the graph updates
 void MainWindow::wait()
 {
+    if (!isContinuous) return;
     QTime dieTime = QTime::currentTime().addMSecs(delayInMilliseconds);
     while (QTime::currentTime() < dieTime)
     {

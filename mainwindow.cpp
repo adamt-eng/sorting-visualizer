@@ -29,6 +29,8 @@ MainWindow::~MainWindow()
 std::vector<int> array; // Array to be sorted
 std::string sortingAlgorithm;
 bool isAscending;
+bool isContinuous;
+bool stepTriggered;
 int delayInMilliseconds;
 bool shouldReset = false;
 int elementsCount;
@@ -80,8 +82,12 @@ void MainWindow::on_startButton_clicked()
         sortingAlgorithm = ui->comboBox->currentText().toStdString();
         isAscending = ui->ascendingRadioButton->isChecked();
         delayInMilliseconds = ui->delay->value();
+        isContinuous = ui->continuousRadioButton->isChecked();
 
         // Disable all controls to prevent modification
+        ui->nextStepButton->setEnabled(!isContinuous);
+        ui->continuousRadioButton->setEnabled(false);
+        ui->stepByStepRadioButton->setEnabled(false);
         ui->comboBox->setEnabled(false);
         ui->elementsCount->setEnabled(false);
         ui->delay->setEnabled(false);
@@ -116,6 +122,9 @@ void MainWindow::on_startButton_clicked()
     ui->comboBox->setEnabled(true);
     ui->elementsCount->setEnabled(true);
     ui->delay->setEnabled(true);
+    ui->nextStepButton->setEnabled(false);
+    ui->continuousRadioButton->setEnabled(true);
+    ui->stepByStepRadioButton->setEnabled(true);
     ui->ascendingRadioButton->setEnabled(true);
     ui->descendingRadioButton->setEnabled(true);
 }
@@ -187,12 +196,26 @@ void MainWindow::on_elementsCount_textChanged(const QString &arg1)
     revisualize();
 }
 
+void MainWindow::on_nextStepButton_clicked()
+{
+    stepTriggered = true;
+}
+
 // Algorithms
 // 1. Bubble Sort
 void MainWindow::bubbleSortAscending()
 {
     for (int i = 0; i < elementsCount - 1; i++)
     {
+        if (!isContinuous)
+        {
+            stepTriggered = false;
+            while (!stepTriggered)
+            {
+                QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+            }
+        }
+
         for (int j = 0; j < elementsCount - i - 1; j++)
         {
             if (shouldReset) return;

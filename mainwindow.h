@@ -26,6 +26,9 @@ private slots:
 
     void on_nextStepButton_clicked();
 
+
+    void on_themeComboBox_currentTextChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     bool firstTry;

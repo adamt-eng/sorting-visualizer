@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <random>
+#include <unordered_map>
 
 // UI Constructor
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -25,6 +26,9 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+QColor backgroundColor = Qt::black;
+QColor barColor = Qt::white;
 
 std::vector<int> array; // Array to be sorted
 std::string sortingAlgorithm;
@@ -136,7 +140,7 @@ void MainWindow::visualize()
     int height = ui->textLabel->height();
 
     QPixmap pixmap(width, height);
-    pixmap.fill(Qt::black);
+    pixmap.fill(backgroundColor);
 
     QPainter painter(&pixmap);
 
@@ -157,7 +161,7 @@ void MainWindow::visualize()
     {
         int barHeight = (array[i] * height) / maxHeight;
 
-        painter.fillRect(QRectF(xPos, height - barHeight, barWidth, barHeight), Qt::white);
+        painter.fillRect(QRectF(xPos, height - barHeight, barWidth, barHeight), barColor);
 
         xPos += barWidth + gapWidth;
     }
@@ -200,6 +204,35 @@ void MainWindow::on_elementsCount_textChanged(const QString &arg1)
 void MainWindow::on_nextStepButton_clicked()
 {
     stepTriggered = true;
+}
+
+void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
+{
+    static const std::unordered_map<std::string, std::pair<QColor, QColor>> themes =
+        {
+            { "Default", { Qt::black, Qt::white }},
+            { "Night Glow", { QColor(0, 31, 63), QColor(255, 220, 0) }},
+            { "Retro Pop", { QColor(243, 240, 224), QColor(0, 116, 217) }},
+            { "Solar Burst", { QColor(51, 51, 51), QColor(255, 133, 27) }},
+            { "Zen Garden", { QColor(61, 153, 112), QColor(221, 221, 221) }},
+            { "Tropical Drift", { QColor(57, 204, 204), QColor(255, 255, 255) }},
+            { "Monotone", { QColor(0, 0, 0), QColor(170, 170, 170) }},
+            { "Bold Sunset", { QColor(44, 62, 80), QColor(241, 196, 15) }},
+            { "Cyber", { QColor(128, 0, 128), QColor(0, 255, 255) }},
+            { "Autumn", { QColor(90, 61, 49), QColor(255, 127, 80) }},
+            { "Frosty Chill", { QColor(50, 150, 200), QColor(220, 240, 255) }}
+        };
+
+    std::string choice = arg1.toStdString();
+    auto it = themes.find(choice);
+
+    if (it != themes.end())
+    {
+        backgroundColor = it->second.first;
+        barColor = it->second.second;
+    }
+
+    visualize();
 }
 
 // Algorithms

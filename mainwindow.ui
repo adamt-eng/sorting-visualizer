@@ -270,13 +270,91 @@
      <string>Next Step -&gt;</string>
     </property>
    </widget>
+   <widget class="QLabel" name="themeLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>320</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Theme:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="themeComboBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>340</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Default</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Cyber</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Autumn</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Night Glow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Retro Pop</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Solar Burst</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Zen Garden</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Tropical Drift</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Monotone</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Bold Sunset</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Frosty Chill</string>
+     </property>
+    </item>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="orderButtonGroup"/>
   <buttongroup name="modeButtonGroup"/>
+  <buttongroup name="orderButtonGroup"/>
  </buttongroups>
 </ui>

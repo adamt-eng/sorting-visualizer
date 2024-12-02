@@ -30,7 +30,7 @@ MainWindow::~MainWindow()
 QColor backgroundColor = Qt::black;
 QColor barColor = Qt::white;
 
-std::vector<int> array; // Array to be sorted
+std::vector<int> array;
 std::string sortingAlgorithm;
 bool isAscending;
 bool isContinuous;
@@ -107,7 +107,7 @@ void MainWindow::on_startButton_clicked()
             }
             else
             {
-                bubbleSortDescending();
+                // bubbleSortDescending();
             }
         }
         else
@@ -201,11 +201,7 @@ void MainWindow::on_elementsCount_textChanged(const QString &arg1)
     revisualize();
 }
 
-void MainWindow::on_nextStepButton_clicked()
-{
-    stepTriggered = true;
-}
-
+// Themes
 void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
 {
     static const std::unordered_map<std::string, std::pair<QColor, QColor>> themes =
@@ -235,20 +231,30 @@ void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
     visualize();
 }
 
+// Next step trigger
+void MainWindow::on_nextStepButton_clicked()
+{
+    stepTriggered = true;
+}
+void MainWindow::waitForStep()
+{
+    if (!isContinuous)
+    {
+        stepTriggered = false;
+        while (!stepTriggered)
+        {
+            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+        }
+    }
+}
+
 // Algorithms
 // 1. Bubble Sort
 void MainWindow::bubbleSortAscending()
 {
     for (int i = 0; i < elementsCount - 1; i++)
     {
-        if (!isContinuous)
-        {
-            stepTriggered = false;
-            while (!stepTriggered)
-            {
-                QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-            }
-        }
+        waitForStep();
 
         for (int j = 0; j < elementsCount - i - 1; j++)
         {
@@ -257,28 +263,10 @@ void MainWindow::bubbleSortAscending()
             if (array[j] > array[j + 1])
             {
                 std::swap(array[j], array[j + 1]);
+
+                visualize();
+                wait();
             }
-
-            visualize();
-            wait();
-        }
-    }
-}
-void MainWindow::bubbleSortDescending()
-{
-    for (int i = 0; i < elementsCount - 1; i++)
-    {
-        for (int j = 0; j < elementsCount - i - 1; j++)
-        {
-            if (shouldReset) return;
-
-            if (array[j] < array[j + 1])
-            {
-                std::swap(array[j], array[j + 1]);
-            }
-
-            visualize();
-            wait();
         }
     }
 }

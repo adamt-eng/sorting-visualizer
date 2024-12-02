@@ -19,14 +19,9 @@ public:
 
 private slots:
     void on_startButton_clicked();
-
     void on_elementsCount_valueChanged(int arg1);
-
     void on_elementsCount_textChanged(const QString &arg1);
-
     void on_nextStepButton_clicked();
-
-
     void on_themeComboBox_currentTextChanged(const QString &arg1);
 
 private:
@@ -38,5 +33,6 @@ private:
     void bubbleSortDescending();
     void wait();
     void revisualize();
+    void waitForStep();
 };
 #endif // MAINWINDOW_H

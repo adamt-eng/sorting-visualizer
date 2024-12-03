@@ -33,6 +33,7 @@ private:
     void bubbleSortAscending();
     void bubbleSortDescending();
     void selectionSortAscending(std::vector<int>& array, int size);
+    void selectionSortDescending(std::vector<int>& array, int size);
     void wait();
     void revisualize();
     void waitForStep();

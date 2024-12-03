@@ -288,40 +288,53 @@ void MainWindow::bubbleSortAscending()
 
 void MainWindow::selectionSortAscending(std::vector<int>& array, int size)
 {
-    int currentMin;
-    int currentMinIndex;
-    for (int i=0;i<size-1;i++)
-    {
-        currentMin=array[i];
-        currentMinIndex=i;
+    for (int i = 0; i < size - 1; i++) {
+        int currentMinIndex = i;
 
-        for(int j=i+1;j<size;j++)
-        {
-            if (currentMin>array[j])
-            {
-                currentMin=array[j];
-                currentMinIndex=j;
-
+        for (int j = i + 1; j < size; j++) {
+            if (array[j] < array[currentMinIndex]) {
+                currentMinIndex = j;
             }
-            visualize();
-            wait();
 
         }
+        visualize();
+        wait();
 
-        if (currentMinIndex!=i)
-        {
-            //array[currentMinIndex]=array[i];
-           // array[i]=currentMin;
-
+        if (currentMinIndex != i) {
             std::swap(array[currentMinIndex], array[i]);
 
+            visualize();
+            wait();
+        }
+    }
+}
+
+
+
+void MainWindow::selectionSortDescending(std::vector<int>& array, int size)
+{
+    for (int i = 0; i < size - 1; i++) {
+        int currentMaxIndex = i;
+
+        for (int j = i + 1; j < size; j++) {
+            if (array[j] > array[currentMaxIndex]) {
+                currentMaxIndex = j;
+            }
+
+        }
+        visualize();
+        wait();
+
+        if (currentMaxIndex != i) {
+            std::swap(array[currentMaxIndex], array[i]);
 
             visualize();
             wait();
         }
-
     }
 }
+
+
 
 
 

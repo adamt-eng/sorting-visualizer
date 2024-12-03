@@ -248,6 +248,15 @@ void MainWindow::waitForStep()
     }
 }
 
+
+//swap function
+
+void swap(int &x, int &y) {
+    int temp = x;
+    x = y;
+    y = temp;
+}
+
 // Algorithms
 // 1. Bubble Sort
 void MainWindow::bubbleSortAscending()
@@ -270,3 +279,78 @@ void MainWindow::bubbleSortAscending()
         }
     }
 }
+
+
+
+// 2.Selection Sort
+
+
+
+void MainWindow::selectionSortAscending(std::vector<int>& array, int size)
+{
+    int currentMin;
+    int currentMinIndex;
+    for (int i=0;i<size-1;i++)
+    {
+        currentMin=array[i];
+        currentMinIndex=i;
+
+        for(int j=i+1;j<size;j++)
+        {
+            if (currentMin>array[j])
+            {
+                currentMin=array[j];
+                currentMinIndex=j;
+
+            }
+            visualize();
+            wait();
+
+        }
+
+        if (currentMinIndex!=i)
+        {
+            //array[currentMinIndex]=array[i];
+           // array[i]=currentMin;
+
+            std::swap(array[currentMinIndex], array[i]);
+
+
+            visualize();
+            wait();
+        }
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

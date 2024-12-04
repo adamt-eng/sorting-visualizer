@@ -368,9 +368,6 @@ void MainWindow::mergeAscending(int start, int mid, int end)
             j++;
             k++;
         }
-
-        visualize();
-        wait();
     }
 
     while (i <= mid)
@@ -378,9 +375,6 @@ void MainWindow::mergeAscending(int start, int mid, int end)
         if (shouldReset) return;
 
         temp[k++] = array[i++];
-
-        visualize();
-        wait();
     }
 
     while (j <= end)
@@ -388,9 +382,6 @@ void MainWindow::mergeAscending(int start, int mid, int end)
         if (shouldReset) return;
 
         temp[k++] = array[j++];
-
-        visualize();
-        wait();
     }
 
     for (int l = 0; l < temp.size(); l++)
@@ -412,7 +403,6 @@ void MainWindow::mergeDescending(int start, int mid, int end)
 
     while (i <= mid && j <= end)
     {
-
         if (shouldReset) return;
 
         if (array[i] >= array[j])
@@ -427,9 +417,6 @@ void MainWindow::mergeDescending(int start, int mid, int end)
             j++;
             k++;
         }
-
-        visualize();
-        wait();
     }
 
     while (i <= mid)
@@ -437,9 +424,6 @@ void MainWindow::mergeDescending(int start, int mid, int end)
         if (shouldReset) return;
 
         temp[k++] = array[i++];
-
-        visualize();
-        wait();
     }
 
     while (j <= end)
@@ -447,9 +431,6 @@ void MainWindow::mergeDescending(int start, int mid, int end)
         if (shouldReset) return;
 
         temp[k++] = array[j++];
-
-        visualize();
-        wait();
     }
 
     for (int l = 0; l < temp.size(); l++)
@@ -505,10 +486,10 @@ int MainWindow::partitionAscending(int start, int end)
             temp = array[i];
             array[i] = array[j];
             array[j] = temp;
-        }
 
-        visualize();
-        wait();
+            visualize();
+            wait();
+        }
     }
 
     // After the loop, i + 1 points to the correct position for the pivot
@@ -540,10 +521,10 @@ int MainWindow::partitionDescending(int start, int end)
             temp = array[i];
             array[i] = array[j];
             array[j] = temp;
-        }
 
-        visualize();
-        wait();
+            visualize();
+            wait();
+        }
     }
 
     // After the loop, i + 1 points to the correct position for the pivot
@@ -566,9 +547,6 @@ void MainWindow::quickSortAscending(int start, int end)
 
     quickSortAscending(start, pivotIndex - 1);
     quickSortAscending(pivotIndex + 1, end);
-
-    visualize();
-    wait();
 }
 
 void MainWindow::quickSortDescending(int start, int end)
@@ -581,9 +559,6 @@ void MainWindow::quickSortDescending(int start, int end)
 
     quickSortDescending(start, pivotIndex - 1);
     quickSortDescending(pivotIndex + 1, end);
-
-    visualize();
-    wait();
 }
 
 void MainWindow::countingSort(int place)

@@ -446,9 +446,7 @@ void MainWindow::mergeDescending(int start, int mid, int end)
 
 void MainWindow::mergeSortAscending(int start, int end)
 {
-    if (shouldReset) return;
-
-    if (start >= end) return;
+    if (shouldReset || start >= end) return;
 
     int mid = (start + end) / 2;
 
@@ -459,9 +457,7 @@ void MainWindow::mergeSortAscending(int start, int end)
 
 void MainWindow::mergeSortDescending(int start, int end)
 {
-    if (shouldReset) return;
-
-    if (start >= end) return;
+    if (shouldReset || start >= end) return;
 
     int mid = (start + end) / 2;
 
@@ -478,6 +474,8 @@ int MainWindow::partitionAscending(int start, int end)
 
     for (int j = start; j < end; j++)
     {
+        if (shouldReset) return -1;
+
         if (array[j] < pivot)
         {
             waitForStep();
@@ -513,6 +511,8 @@ int MainWindow::partitionDescending(int start, int end)
 
     for (int j = start; j < end; j++)
     {
+        if (shouldReset) return -1;
+
         if (array[j] > pivot)
         {
             waitForStep();
@@ -534,16 +534,19 @@ int MainWindow::partitionDescending(int start, int end)
     array[i] = array[end];
     array[end] = temp;
 
+    visualize();
+    wait();
+
     return i;
 }
 
 void MainWindow::quickSortAscending(int start, int end)
 {
-    if (shouldReset) return;
-
-    if (start >= end) return;
+    if (shouldReset || start >= end) return;
 
     int pivotIndex = partitionAscending(start, end);
+
+    if (pivotIndex == -1) return;
 
     quickSortAscending(start, pivotIndex - 1);
     quickSortAscending(pivotIndex + 1, end);
@@ -551,11 +554,11 @@ void MainWindow::quickSortAscending(int start, int end)
 
 void MainWindow::quickSortDescending(int start, int end)
 {
-    if (shouldReset) return;
-
-    if (start >= end) return;
+    if (shouldReset || start >= end) return;
 
     int pivotIndex = partitionDescending(start, end);
+
+    if (pivotIndex == -1) return;
 
     quickSortDescending(start, pivotIndex - 1);
     quickSortDescending(pivotIndex + 1, end);

@@ -76,11 +76,6 @@
     </item>
     <item>
      <property name="text">
-      <string>Merge Sort</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
       <string>Selection Sort</string>
      </property>
     </item>
@@ -91,7 +86,32 @@
     </item>
     <item>
      <property name="text">
+      <string>Merge Sort</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Heap Sort</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>Quick Sort</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Counting Sort</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Radix Sort</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Cocktail Sort</string>
      </property>
     </item>
    </widget>
@@ -162,7 +182,7 @@
      <number>2</number>
     </property>
     <property name="maximum">
-     <number>1000</number>
+     <number>10000</number>
     </property>
     <property name="value">
      <number>50</number>
@@ -354,7 +374,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="modeButtonGroup"/>
   <buttongroup name="orderButtonGroup"/>
+  <buttongroup name="modeButtonGroup"/>
  </buttongroups>
 </ui>

@@ -107,13 +107,68 @@ void MainWindow::on_startButton_clicked()
             }
             else
             {
-                // bubbleSortDescending();
+                bubbleSortDescending();
             }
         }
-        else
+        else if (sortingAlgorithm == "Merge Sort")
         {
-            // Other algorithms here
-            // Each algorithm has two functions: ascending & descending, this is to avoid checking the value of isAscending when sorting
+            if (isAscending)
+            {
+                mergeSortAscending(0, elementsCount);
+            }
+            else
+            {
+                mergeSortDescending(0, elementsCount);
+            }
+        }
+        else if (sortingAlgorithm == "Quick Sort")
+        {
+            if (isAscending)
+            {
+                quickSortAscending(0, elementsCount - 1);
+            }
+            else
+            {
+                quickSortDescending(0, elementsCount - 1);
+            }
+        }
+        else if (sortingAlgorithm == "Counting Sort")
+        {
+            countingSort(0);
+        }
+        else if (sortingAlgorithm == "Radix Sort")
+        {
+            radixSort();
+        }
+        else if (sortingAlgorithm == "Selection Sort")
+        {
+            if (isAscending)
+            {
+                selectionSortAscending();
+            }
+            else
+            {
+                selectionSortDescending();
+            }
+        }
+        else if (sortingAlgorithm == "Insertion Sort")
+        {
+
+        }
+        else if (sortingAlgorithm == "Heap Sort")
+        {
+
+        }
+        else if (sortingAlgorithm == "Cocktail Sort")
+        {
+            if (isAscending)
+            {
+                cocktailSortAscending();
+            }
+            else
+            {
+                cocktailSortDescending();
+            }
         }
     }
     else
@@ -248,17 +303,7 @@ void MainWindow::waitForStep()
     }
 }
 
-
-//swap function
-
-void swap(int &x, int &y) {
-    int temp = x;
-    x = y;
-    y = temp;
-}
-
 // Algorithms
-// 1. Bubble Sort
 void MainWindow::bubbleSortAscending()
 {
     for (int i = 0; i < elementsCount - 1; i++)
@@ -280,27 +325,346 @@ void MainWindow::bubbleSortAscending()
     }
 }
 
-
-
-// 2.Selection Sort
-
-
-
-void MainWindow::selectionSortAscending(std::vector<int>& array, int size)
+void MainWindow::bubbleSortDescending()
 {
-    for (int i = 0; i < size - 1; i++) {
+    for (int i = 0; i < elementsCount - 1; i++)
+    {
+        waitForStep();
+
+        for (int j = 0; j < elementsCount - i - 1; j++)
+        {
+            if (shouldReset) return;
+
+            if (array[j] < array[j + 1])
+            {
+                std::swap(array[j], array[j + 1]);
+
+                visualize();
+                wait();
+            }
+        }
+    }
+}
+
+void MainWindow::mergeAscending(int start, int mid, int end)
+{
+    std::vector<int> temp(end - start + 1); // end - start + 1 is the size of merged array
+
+    int i = start, j = mid + 1, k = 0;
+
+    while (i <= mid && j <= end)
+    {
+        if (shouldReset) return;
+
+        if (array[i] <= array[j])
+        {
+            temp[k] = array[i];
+            i++;
+            k++;
+        }
+        else
+        {
+            temp[k] = array[j];
+            j++;
+            k++;
+        }
+
+        visualize();
+        wait();
+    }
+
+    while (i <= mid)
+    {
+        if (shouldReset) return;
+
+        temp[k++] = array[i++];
+
+        visualize();
+        wait();
+    }
+
+    while (j <= end)
+    {
+        if (shouldReset) return;
+
+        temp[k++] = array[j++];
+
+        visualize();
+        wait();
+    }
+
+    for (int l = 0; l < temp.size(); l++)
+    {
+        waitForStep();
+
+        array[start + l] = temp[l]; // Copy into original array so we can visualize it
+
+        visualize();
+        wait();
+    }
+}
+
+void MainWindow::mergeDescending(int start, int mid, int end)
+{
+    std::vector<int> temp(end - start + 1); // end - start + 1 is the size of merged array
+
+    int i = start, j = mid + 1, k = 0;
+
+    while (i <= mid && j <= end)
+    {
+
+        if (shouldReset) return;
+
+        if (array[i] >= array[j])
+        {
+            temp[k] = array[i];
+            i++;
+            k++;
+        }
+        else
+        {
+            temp[k] = array[j];
+            j++;
+            k++;
+        }
+
+        visualize();
+        wait();
+    }
+
+    while (i <= mid)
+    {
+        if (shouldReset) return;
+
+        temp[k++] = array[i++];
+
+        visualize();
+        wait();
+    }
+
+    while (j <= end)
+    {
+        if (shouldReset) return;
+
+        temp[k++] = array[j++];
+
+        visualize();
+        wait();
+    }
+
+    for (int l = 0; l < temp.size(); l++)
+    {
+        waitForStep();
+
+        array[start + l] = temp[l]; // Copy into original array so we can visualize it
+
+        visualize();
+        wait();
+    }
+}
+
+void MainWindow::mergeSortAscending(int start, int end)
+{
+    if (shouldReset) return;
+
+    if (start >= end) return;
+
+    int mid = (start + end) / 2;
+
+    mergeSortAscending(start, mid); // First half sort
+    mergeSortAscending(mid + 1, end); // Second half sort
+    mergeAscending(start, mid, end); // Merge both halves
+}
+
+void MainWindow::mergeSortDescending(int start, int end)
+{
+    if (shouldReset) return;
+
+    if (start >= end) return;
+
+    int mid = (start + end) / 2;
+
+    mergeSortDescending(start, mid); // First half sort
+    mergeSortDescending(mid + 1, end); // Second half sort
+    mergeDescending(start, mid, end); // Merge both halves
+}
+
+int MainWindow::partitionAscending(int start, int end)
+{
+    int pivot = array[end]; // We chose the end as the pivot index
+    int i = start - 1;
+    int temp; // For swapping purposes
+
+    for (int j = start; j < end; j++)
+    {
+        if (array[j] < pivot)
+        {
+            waitForStep();
+
+            i++;
+            temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+
+        visualize();
+        wait();
+    }
+
+    // After the loop, i + 1 points to the correct position for the pivot
+    // So, swap between the elements in that position and the pivot index
+    i++;
+    temp = array[i];
+    array[i] = array[end];
+    array[end] = temp;
+
+    visualize();
+    wait();
+
+    return i;
+}
+
+int MainWindow::partitionDescending(int start, int end)
+{
+    int pivot = array[end]; // We chose the end as the pivot index
+    int i = start - 1;
+    int temp; // For swapping purposes
+
+    for (int j = start; j < end; j++)
+    {
+        if (array[j] > pivot)
+        {
+            waitForStep();
+
+            i++;
+            temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+
+        visualize();
+        wait();
+    }
+
+    // After the loop, i + 1 points to the correct position for the pivot
+    // So, swap between the elements in that position and the pivot index
+    i++;
+    temp = array[i];
+    array[i] = array[end];
+    array[end] = temp;
+
+    return i;
+}
+
+void MainWindow::quickSortAscending(int start, int end)
+{
+    if (shouldReset) return;
+
+    if (start >= end) return;
+
+    int pivotIndex = partitionAscending(start, end);
+
+    quickSortAscending(start, pivotIndex - 1);
+    quickSortAscending(pivotIndex + 1, end);
+
+    visualize();
+    wait();
+}
+
+void MainWindow::quickSortDescending(int start, int end)
+{
+    if (shouldReset) return;
+
+    if (start >= end) return;
+
+    int pivotIndex = partitionDescending(start, end);
+
+    quickSortDescending(start, pivotIndex - 1);
+    quickSortDescending(pivotIndex + 1, end);
+
+    visualize();
+    wait();
+}
+
+void MainWindow::countingSort(int place)
+{
+    int max = (place == 0) ? (*std::max_element(array.begin(), array.end()) + 1) : 10;
+
+    std::vector<int> count(max, 0);
+    std::vector<int> output(elementsCount);
+
+    // Build the count array
+    for (int i = 0; i < elementsCount; ++i)
+    {
+        int index = (place == 0) ? array[i] : (array[i] / place) % 10;
+        count[index]++;
+    }
+
+    // Build cumulative count
+    for (int i = 1; i < max; ++i)
+    {
+        count[i] += count[i - 1];
+    }
+
+    // Build the output array
+    if (isAscending)
+    {
+        for (int i = elementsCount - 1; i >= 0; --i)
+        {
+            int index = (place == 0) ? array[i] : (array[i] / place) % 10;
+            output[count[index] - 1] = array[i];
+            count[index]--;
+        }
+    }
+    else
+    {
+        for (int i = 0; i < elementsCount; ++i)
+        {
+            int index = (place == 0) ? array[i] : (array[i] / place) % 10;
+            output[elementsCount - count[index]] = array[i];
+            count[index]--;
+        }
+    }
+
+    // Copy back the sorted array and visualize each step
+    for (int i = 0; i < elementsCount; ++i)
+    {
+        array[i] = output[i];
+        visualize();
+        wait();
+    }
+}
+
+void MainWindow::radixSort()
+{
+    int max = *std::max_element(array.begin(), array.end());
+
+    for (int i = 1; max / i > 0; i *= 10)
+    {
+        countingSort(i);
+    }
+}
+
+
+void MainWindow::selectionSortAscending()
+{
+    for (int i = 0; i < elementsCount - 1; i++)
+    {
+        waitForStep();
+
         int currentMinIndex = i;
 
-        for (int j = i + 1; j < size; j++) {
-            if (array[j] < array[currentMinIndex]) {
+        for (int j = i + 1; j < elementsCount; j++)
+        {
+            if (array[j] < array[currentMinIndex])
+            {
                 currentMinIndex = j;
             }
 
         }
-        visualize();
-        wait();
 
-        if (currentMinIndex != i) {
+        if (currentMinIndex != i)
+        {
             std::swap(array[currentMinIndex], array[i]);
 
             visualize();
@@ -309,23 +673,25 @@ void MainWindow::selectionSortAscending(std::vector<int>& array, int size)
     }
 }
 
-
-
-void MainWindow::selectionSortDescending(std::vector<int>& array, int size)
+void MainWindow::selectionSortDescending()
 {
-    for (int i = 0; i < size - 1; i++) {
+    for (int i = 0; i < elementsCount - 1; i++)
+    {
+        waitForStep();
+
         int currentMaxIndex = i;
 
-        for (int j = i + 1; j < size; j++) {
-            if (array[j] > array[currentMaxIndex]) {
+        for (int j = i + 1; j < elementsCount; j++)
+        {
+            if (array[j] > array[currentMaxIndex])
+            {
                 currentMaxIndex = j;
             }
 
         }
-        visualize();
-        wait();
 
-        if (currentMaxIndex != i) {
+        if (currentMaxIndex != i)
+        {
             std::swap(array[currentMaxIndex], array[i]);
 
             visualize();
@@ -334,36 +700,108 @@ void MainWindow::selectionSortDescending(std::vector<int>& array, int size)
     }
 }
 
+void MainWindow::cocktailSortAscending()
+{
+    int start = 0;
+    int end = elementsCount - 1;
+    bool swapped = true;
 
+    while (swapped)
+    {
+        waitForStep();
 
+        swapped = false;
 
+        // Forward pass
+        for (int i = start; i < end; ++i)
+        {
+            if (shouldReset) return;
 
+            if (array[i] > array[i + 1])
+            {
+                std::swap(array[i], array[i + 1]);
 
+                visualize();
+                wait();
 
+                swapped = true;
+            }
+        }
 
+        if (!swapped) break;
 
+        swapped = false;
+        --end;
 
+        // Backward pass
+        for (int i = end - 1; i >= start; --i)
+        {
+            if (shouldReset) return;
 
+            if (array[i] > array[i + 1])
+            {
+                std::swap(array[i], array[i + 1]);
 
+                visualize();
+                wait();
 
+                swapped = true;
+            }
+        }
 
+        ++start;
+    }
+}
 
+void MainWindow::cocktailSortDescending()
+{
+    int start = 0;
+    int end = elementsCount - 1;
+    bool swapped = true;
 
+    while (swapped)
+    {
+        waitForStep();
 
+        swapped = false;
 
+        // Forward pass
+        for (int i = start; i < end; ++i)
+        {
+            if (shouldReset) return;
 
+            if (array[i] < array[i + 1])
+            {
+                std::swap(array[i], array[i + 1]);
 
+                visualize();
+                wait();
 
+                swapped = true;
+            }
+        }
 
+        if (!swapped) break;
 
+        swapped = false;
+        --end;
 
+        // Backward pass
+        for (int i = end - 1; i >= start; --i)
+        {
+            if (shouldReset) return;
 
+            if (array[i] < array[i + 1])
+            {
+                std::swap(array[i], array[i + 1]);
 
+                visualize();
+                wait();
 
+                swapped = true;
+            }
+        }
 
-
-
-
-
-
-
+        ++start;
+    }
+}

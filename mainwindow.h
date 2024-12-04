@@ -29,11 +29,30 @@ private:
     bool firstTry;
     void generateArray();
     void visualize();
-    void swap();
+
     void bubbleSortAscending();
     void bubbleSortDescending();
-    void selectionSortAscending(std::vector<int>& array, int size);
-    void selectionSortDescending(std::vector<int>& array, int size);
+
+    void mergeAscending(int start, int mid, int end);
+    void mergeDescending(int start, int mid, int end);
+    void mergeSortAscending(int start, int end);
+    void mergeSortDescending(int start, int end);
+
+    int partitionAscending(int start, int end);
+    int partitionDescending(int start, int end);
+    void quickSortAscending(int start, int end);
+    void quickSortDescending(int start, int end);
+
+    void countingSort(int place);
+
+    void radixSort();
+
+    void selectionSortAscending();
+    void selectionSortDescending();
+
+    void cocktailSortAscending();
+    void cocktailSortDescending();
+
     void wait();
     void revisualize();
     void waitForStep();

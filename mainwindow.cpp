@@ -607,6 +607,8 @@ void MainWindow::countingSort(int place)
     // Copy back the sorted array and visualize each step
     for (int i = 0; i < elementsCount; ++i)
     {
+        if (shouldReset) return;
+
         array[i] = output[i];
         visualize();
         wait();
@@ -623,11 +625,12 @@ void MainWindow::radixSort()
     }
 }
 
-
 void MainWindow::selectionSortAscending()
 {
     for (int i = 0; i < elementsCount - 1; i++)
     {
+        if (shouldReset) return;
+
         waitForStep();
 
         int currentMinIndex = i;
@@ -655,6 +658,8 @@ void MainWindow::selectionSortDescending()
 {
     for (int i = 0; i < elementsCount - 1; i++)
     {
+        if (shouldReset) return;
+
         waitForStep();
 
         int currentMaxIndex = i;

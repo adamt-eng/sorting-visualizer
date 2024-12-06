@@ -37,6 +37,9 @@ QColor barColor = Qt::white;
 
 int bar1Index = -1, bar2Index = -1, bar3Index = -1, bar4Index = -1;
 
+std::vector<int> heapElements;
+std::vector<QColor> heapLevelColors = {  QColor::fromHsl(30, 150, 200), QColor::fromHsl(120, 150, 200), QColor::fromHsl(180, 150, 200), QColor::fromHsl(240, 150, 200), QColor::fromHsl(300, 150, 200)};
+
 std::vector<int> array;
 std::string sortingAlgorithm;
 bool isAscending;
@@ -82,6 +85,8 @@ void MainWindow::on_startButton_clicked()
 {
     if (ui->startButton->text() == "Start")
     {
+        heapElements.clear();
+
         ui->startButton->setText("Reset");
 
         shouldReset = false;
@@ -284,6 +289,13 @@ void MainWindow::visualize()
         int barHeight = (array[i] * height) / maxHeight;
 
         QColor currentColor = barColor;
+
+        if (std::find(heapElements.begin(), heapElements.end(), i) != heapElements.end())
+        {
+            int level = static_cast<int>(std::log2(i + 1));
+            currentColor = heapLevelColors[level % heapLevelColors.size()];
+        }
+
         if (i == bar1Index || i == bar2Index) currentColor = Qt::red;
         if (i == bar3Index) currentColor = Qt::green;
         if (i == bar4Index) currentColor = QColor(3, 181, 252);
@@ -1207,101 +1219,245 @@ void MainWindow::gnomeSortDescending()
     }
 }
 
-void heapifyMax(std::vector<int>& heap, int n, int i) {
+void MainWindow::heapifyMax(std::vector<int>& heap, int n, int i)
+{
     int largest = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
 
-    if (left < n && heap[left] > heap[largest]) {
-        largest = left;
-    }
-    if (right < n && heap[right] > heap[largest]) {
-        largest = right;
+    bar1Index = i;
+    waitForStep();
+    visualize();
+    wait();
+
+    if (std::find(heapElements.begin(), heapElements.end(), i) == heapElements.end())
+    {
+        heapElements.push_back(i);
+        waitForStep();
+        visualize();
+        playSound(i, i);
+        wait();
     }
 
-    if (largest != i) {
+    if (left < n)
+    {
+        if (std::find(heapElements.begin(), heapElements.end(), left) == heapElements.end())
+        {
+            heapElements.push_back(left);
+            waitForStep();
+            visualize();
+            playSound(left, left);
+            wait();
+        }
+
+        if (heap[left] > heap[largest])
+        {
+            largest = left;
+        }
+    }
+
+    if (right < n)
+    {
+        if (std::find(heapElements.begin(), heapElements.end(), right) == heapElements.end())
+        {
+            heapElements.push_back(right);
+            waitForStep();
+            visualize();
+            playSound(right, right);
+            wait();
+        }
+
+        if (heap[right] > heap[largest])
+        {
+            largest = right;
+        }
+    }
+
+    if (largest != i)
+    {
         std::swap(heap[i], heap[largest]);
+
+        waitForStep();
+        visualize();
+        playSound(i, largest);
+        wait();
+
         heapifyMax(heap, n, largest);
     }
 }
-void buildMaxdHeap(std::vector<int>& heap) {
+
+
+void MainWindow::buildMaxdHeap(std::vector<int>& heap)
+{
     int n = heap.size();
-    for (int i = n / 2 - 1; i >= 0; i--) {
+    heapElements.clear();
+
+    for (int i = n / 2 - 1; i >= 0; i--)
+    {
+        if (shouldReset) return;
+
         heapifyMax(heap, n, i);
+
+        waitForStep();
+        visualize();
+        wait();
     }
 }
-void popMax(std::vector<int>& heap, int n) {
+
+void MainWindow::popMax(std::vector<int>& heap, int n)
+{
     if (n == 0) return;
+
     std::swap(heap[0], heap[n - 1]);
-    heapifyMax(heap, n-1, 0);
+
+    waitForStep();
+    visualize();
+    wait();
+
+    heapifyMax(heap, n - 1, 0);
+
+    waitForStep();
+    visualize();
+    wait();
 }
-
-
-void heapifyMin(std::vector<int>& heap, int n, int i) {
-    int smallest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
-
-    if (left < n && heap[left] < heap[smallest]) {
-        smallest = left;
-    }
-    if (right < n && heap[right] < heap[smallest]) {
-        smallest = right;
-    }
-
-    if (smallest != i) {
-        std::swap(heap[i], heap[smallest]);
-        heapifyMin(heap, n, smallest);
-    }
-}
-void buildMindHeap(std::vector<int>& heap) {
-    int n = heap.size();
-    for (int i = n / 2 - 1; i >= 0; i--) {
-        heapifyMin(heap, n, i);
-    }
-}
-void popMin(std::vector<int>& heap, int n) {
-    if (n == 0) return;
-    std::swap(heap[0], heap[n - 1]);
-    heapifyMin(heap, n-1, 0);
-}
-
 
 void MainWindow::heapSortAscending()
 {
     buildMaxdHeap(array);
+    waitForStep();
     visualize();
     wait();
-    for(int i = 0; i < array.size()-1;i++)
+
+    for (int i = 0; i < array.size()-1;i++)
     {
-        if(shouldReset)
-        {
-            return;
-        }
+        if (shouldReset) return;
+
+        popMax(array, array.size()-i);
+
         waitForStep();
-        popMax(array,array.size()-i);
-        visualize();
-        wait();
-    }
-}
-void MainWindow::heapSortDescending()
-{
-    buildMindHeap(array);
-    visualize();
-    wait();
-    for(int i = 0; i < array.size()-1;i++)
-    {
-        if(shouldReset)
-        {
-            return;
-        }
-        waitForStep();
-        popMin(array,array.size()-i);
         visualize();
         wait();
     }
 }
 
+void MainWindow::heapifyMin(std::vector<int>& heap, int n, int i)
+{
+    int smallest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    bar1Index = i;
+    waitForStep();
+    visualize();
+    wait();
+
+    if (std::find(heapElements.begin(), heapElements.end(), i) == heapElements.end())
+    {
+        heapElements.push_back(i);
+        waitForStep();
+        visualize();
+        playSound(i, i);
+        wait();
+    }
+
+    if (left < n)
+    {
+        if (std::find(heapElements.begin(), heapElements.end(), left) == heapElements.end())
+        {
+            heapElements.push_back(left);
+            waitForStep();
+            visualize();
+            playSound(left, left);
+            wait();
+        }
+
+        if (heap[left] < heap[smallest])
+        {
+            smallest = left;
+        }
+    }
+
+    if (right < n)
+    {
+        if (std::find(heapElements.begin(), heapElements.end(), right) == heapElements.end())
+        {
+            heapElements.push_back(right);
+            waitForStep();
+            visualize();
+            playSound(right, right);
+            wait();
+        }
+
+        if (heap[right] < heap[smallest])
+        {
+            smallest = right;
+        }
+    }
+
+    if (smallest != i)
+    {
+        std::swap(heap[i], heap[smallest]);
+
+        waitForStep();
+        visualize();
+        playSound(i, smallest);
+        wait();
+
+        heapifyMin(heap, n, smallest);
+    }
+}
+void MainWindow::buildMindHeap(std::vector<int>& heap)
+{
+    int n = heap.size();
+    heapElements.clear();
+
+    for (int i = n / 2 - 1; i >= 0; i--)
+    {
+        if (shouldReset) return;
+
+        heapifyMin(heap, n, i);
+
+        waitForStep();
+        visualize();
+        wait();
+    }
+}
+
+void MainWindow::popMin(std::vector<int>& heap, int n)
+{
+    if (n == 0) return;
+
+    std::swap(heap[0], heap[n - 1]);
+
+    waitForStep();
+    visualize();
+    wait();
+
+    heapifyMin(heap, n - 1, 0);
+
+    waitForStep();
+    visualize();
+    wait();
+}
+
+void MainWindow::heapSortDescending()
+{
+    buildMindHeap(array);
+    waitForStep();
+    visualize();
+    wait();
+
+    for (int i = 0; i < array.size() - 1; i++)
+    {
+        if (shouldReset) return;
+
+        popMin(array, array.size() - i);
+
+        waitForStep();
+        visualize();
+        wait();
+    }
+}
 
 
 void MainWindow::insertionSortAscending()

@@ -60,7 +60,14 @@ private:
     void gnomeSortAscending();
     void gnomeSortDescending();
 
+    void heapifyMax(std::vector<int>& heap, int n, int i);
+    void buildMaxdHeap(std::vector<int>& heap);
+    void popMax(std::vector<int>& heap, int n);
     void heapSortAscending();
+
+    void heapifyMin(std::vector<int>& heap, int n, int i);
+    void buildMindHeap(std::vector<int>& heap);
+    void popMin(std::vector<int>& heap, int n);
     void heapSortDescending();
 
     void insertionSortAscending();

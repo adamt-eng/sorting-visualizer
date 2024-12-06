@@ -24,6 +24,8 @@ private slots:
     void on_nextStepButton_clicked();
     void on_themeComboBox_currentTextChanged(const QString &arg1);
 
+    void on_invertThemeCheckBox_checkStateChanged(const Qt::CheckState &arg1);
+
 private:
     Ui::MainWindow *ui;
     bool firstTry;
@@ -52,6 +54,15 @@ private:
 
     void cocktailSortAscending();
     void cocktailSortDescending();
+
+    void gnomeSortAscending();
+    void gnomeSortDescending();
+
+    void heapSortAscending();
+    void heapSortDescending();
+
+    void insertionSortAscending();
+    void insertionSortDescending();
 
     void wait();
     void revisualize();

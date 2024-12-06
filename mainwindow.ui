@@ -114,6 +114,11 @@
       <string>Cocktail Sort</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>Gnome Sort</string>
+     </property>
+    </item>
    </widget>
    <widget class="QRadioButton" name="ascendingRadioButton">
     <property name="geometry">
@@ -185,7 +190,7 @@
      <number>10000</number>
     </property>
     <property name="value">
-     <number>50</number>
+     <number>100</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="delay">
@@ -204,7 +209,7 @@
      <number>10000</number>
     </property>
     <property name="value">
-     <number>1</number>
+     <number>100</number>
     </property>
    </widget>
    <widget class="QLabel" name="elementsCountLabel">
@@ -308,7 +313,7 @@
      <rect>
       <x>20</x>
       <y>340</y>
-      <width>101</width>
+      <width>91</width>
       <height>21</height>
      </rect>
     </property>
@@ -354,7 +359,7 @@
     </item>
     <item>
      <property name="text">
-      <string>Monotone</string>
+      <string>Amethyst</string>
      </property>
     </item>
     <item>
@@ -368,13 +373,26 @@
      </property>
     </item>
    </widget>
+   <widget class="QCheckBox" name="invertThemeCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>370</y>
+      <width>81</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Invert</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="orderButtonGroup"/>
   <buttongroup name="modeButtonGroup"/>
+  <buttongroup name="orderButtonGroup"/>
  </buttongroups>
 </ui>

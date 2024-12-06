@@ -10,7 +10,6 @@
 
 #include <algorithm>
 #include <random>
-#include <unordered_map>
 
 // UI Constructor
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -30,6 +29,8 @@ MainWindow::~MainWindow()
 QColor backgroundColor = Qt::black;
 QColor barColor = Qt::white;
 
+int bar1Index = -1, bar2Index = -1, bar3Index = -1, bar4Index = -1;
+
 std::vector<int> array;
 std::string sortingAlgorithm;
 bool isAscending;
@@ -38,6 +39,7 @@ bool stepTriggered;
 int delayInMilliseconds;
 bool shouldReset = false;
 int elementsCount;
+int maxHeight;
 
 // This boolean is used to avoid calling generateArray() again before the first visualization,
 // as it was already called in the constructor of the UI
@@ -63,6 +65,8 @@ void MainWindow::generateArray()
         array.push_back(i + 1);
     }
 
+    maxHeight = *std::max_element(array.begin(), array.end());
+
     // Shuffle the array randomly
     std::random_device rd;
     std::mt19937 g(rd());
@@ -77,6 +81,8 @@ void MainWindow::on_startButton_clicked()
     if (ui->startButton->text() == "Start")
     {
         shouldReset = false;
+
+        bar1Index = bar2Index = bar3Index = bar4Index = -1;
 
         ui->startButton->setText("Reset");
 
@@ -153,11 +159,25 @@ void MainWindow::on_startButton_clicked()
         }
         else if (sortingAlgorithm == "Insertion Sort")
         {
-
+            if (isAscending)
+            {
+                insertionSortAscending();
+            }
+            else
+            {
+                insertionSortDescending();
+            }
         }
         else if (sortingAlgorithm == "Heap Sort")
         {
-
+            if (isAscending)
+            {
+                heapSortAscending();
+            }
+            else
+            {
+                heapSortDescending();
+            }
         }
         else if (sortingAlgorithm == "Cocktail Sort")
         {
@@ -170,11 +190,25 @@ void MainWindow::on_startButton_clicked()
                 cocktailSortDescending();
             }
         }
+        else if (sortingAlgorithm == "Gnome Sort")
+        {
+            if (isAscending)
+            {
+                gnomeSortAscending();
+            }
+            else
+            {
+                gnomeSortDescending();
+            }
+        }
     }
     else
     {
         shouldReset = true;
     }
+
+    bar1Index = bar2Index = bar3Index = bar4Index = -1;
+    visualize();
 
     // Re-enable controls
     ui->startButton->setText("Start");
@@ -209,14 +243,18 @@ void MainWindow::visualize()
         gapWidth = (width - elementsCount * barWidth) / (elementsCount - 1);
     }
 
-    int maxHeight = *std::max_element(array.begin(), array.end());
     double xPos = 0;
 
     for (int i = 0; i < elementsCount; ++i)
     {
         int barHeight = (array[i] * height) / maxHeight;
 
-        painter.fillRect(QRectF(xPos, height - barHeight, barWidth, barHeight), barColor);
+        QColor currentColor = barColor;
+        if (i == bar1Index || i == bar2Index) currentColor = Qt::red;
+        if (i == bar3Index) currentColor = Qt::green;
+        if (i == bar4Index) currentColor = QColor(3, 181, 252);
+
+        painter.fillRect(QRectF(xPos, height - barHeight, barWidth, barHeight), currentColor);
 
         xPos += barWidth + gapWidth;
     }
@@ -257,33 +295,79 @@ void MainWindow::on_elementsCount_textChanged(const QString &arg1)
 }
 
 // Themes
+void MainWindow::on_invertThemeCheckBox_checkStateChanged(const Qt::CheckState &arg1)
+{
+    QColor temp = barColor;
+    barColor = backgroundColor;
+    backgroundColor = temp;
+    visualize();
+}
 void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
 {
-    static const std::unordered_map<std::string, std::pair<QColor, QColor>> themes =
-        {
-            { "Default", { Qt::black, Qt::white }},
-            { "Night Glow", { QColor(0, 31, 63), QColor(255, 220, 0) }},
-            { "Retro Pop", { QColor(243, 240, 224), QColor(0, 116, 217) }},
-            { "Solar Burst", { QColor(51, 51, 51), QColor(255, 133, 27) }},
-            { "Zen Garden", { QColor(61, 153, 112), QColor(221, 221, 221) }},
-            { "Tropical Drift", { QColor(57, 204, 204), QColor(255, 255, 255) }},
-            { "Monotone", { QColor(0, 0, 0), QColor(170, 170, 170) }},
-            { "Bold Sunset", { QColor(44, 62, 80), QColor(241, 196, 15) }},
-            { "Cyber", { QColor(128, 0, 128), QColor(0, 255, 255) }},
-            { "Autumn", { QColor(90, 61, 49), QColor(255, 127, 80) }},
-            { "Frosty Chill", { QColor(50, 150, 200), QColor(220, 240, 255) }}
-        };
-
-    std::string choice = arg1.toStdString();
-    auto it = themes.find(choice);
-
-    if (it != themes.end())
+    if (arg1 == "Default")
     {
-        backgroundColor = it->second.first;
-        barColor = it->second.second;
+        backgroundColor = Qt::black;
+        barColor = Qt::white;
+    }
+    else if (arg1 == "Night Glow")
+    {
+        backgroundColor = QColor(0, 31, 63);
+        barColor = QColor(255, 220, 0);
+    }
+    else if (arg1 == "Retro Pop")
+    {
+        backgroundColor = QColor(243, 240, 224);
+        barColor = QColor(0, 116, 217);
+    }
+    else if (arg1 == "Solar Burst")
+    {
+        backgroundColor = QColor(51, 51, 51);
+        barColor = QColor(255, 133, 27);
+    }
+    else if (arg1 == "Zen Garden")
+    {
+        backgroundColor = QColor(61, 153, 112);
+        barColor = QColor(221, 221, 221);
+    }
+    else if (arg1 == "Tropical Drift")
+    {
+        backgroundColor = QColor(55, 163, 163);
+        barColor = QColor(255, 255, 255);
+    }
+    else if (arg1 == "Amethyst")
+    {
+        backgroundColor = QColor(237, 231, 246);
+        barColor = QColor(96, 50, 168);
+    }
+    else if (arg1 == "Bold Sunset")
+    {
+        backgroundColor = QColor(44, 62, 80);
+        barColor = QColor(241, 196, 15);
+    }
+    else if (arg1 == "Cyber")
+    {
+        backgroundColor = QColor(128, 0, 128);
+        barColor = QColor(0, 255, 255);
+    }
+    else if (arg1 == "Autumn")
+    {
+        backgroundColor = QColor(90, 61, 49);
+        barColor = QColor(255, 127, 80);
+    }
+    else if (arg1 == "Frosty Chill")
+    {
+        backgroundColor = QColor(50, 150, 200);
+        barColor = QColor(220, 240, 255);
     }
 
-    visualize();
+    if (ui->invertThemeCheckBox->isChecked())
+    {
+        on_invertThemeCheckBox_checkStateChanged(ui->invertThemeCheckBox->checkState());
+    }
+    else
+    {
+        visualize();
+    }
 }
 
 // Next step trigger
@@ -308,20 +392,31 @@ void MainWindow::bubbleSortAscending()
 {
     for (int i = 0; i < elementsCount - 1; i++)
     {
-        waitForStep();
-
         for (int j = 0; j < elementsCount - i - 1; j++)
         {
             if (shouldReset) return;
+
+            bar1Index = j;
+            bar2Index = j + 1;
+
+            waitForStep();
+            visualize();
+            wait();
 
             if (array[j] > array[j + 1])
             {
                 std::swap(array[j], array[j + 1]);
 
+                waitForStep();
                 visualize();
                 wait();
             }
         }
+
+        bar1Index = -1;
+        bar2Index = -1;
+
+        visualize();
     }
 }
 
@@ -329,20 +424,31 @@ void MainWindow::bubbleSortDescending()
 {
     for (int i = 0; i < elementsCount - 1; i++)
     {
-        waitForStep();
-
         for (int j = 0; j < elementsCount - i - 1; j++)
         {
             if (shouldReset) return;
+
+            bar1Index = j;
+            bar2Index = j + 1;
+
+            waitForStep();
+            visualize();
+            wait();
 
             if (array[j] < array[j + 1])
             {
                 std::swap(array[j], array[j + 1]);
 
+                waitForStep();
                 visualize();
                 wait();
             }
         }
+
+        bar1Index = -1;
+        bar2Index = -1;
+
+        visualize();
     }
 }
 
@@ -352,27 +458,43 @@ void MainWindow::mergeAscending(int start, int mid, int end)
 
     int i = start, j = mid + 1, k = 0;
 
+    bar1Index = start;
+    bar2Index = end;
+    bar3Index = mid;
+
+    waitForStep();
+    visualize();
+    wait();
+
     while (i <= mid && j <= end)
     {
         if (shouldReset) return;
+
+        bar4Index = start + k;
+
+        waitForStep();
+        visualize();
+        wait();
 
         if (array[i] <= array[j])
         {
-            temp[k] = array[i];
-            i++;
-            k++;
+            temp[k++] = array[i++];
         }
         else
         {
-            temp[k] = array[j];
-            j++;
-            k++;
+            temp[k++] = array[j++];
         }
     }
 
     while (i <= mid)
     {
         if (shouldReset) return;
+
+        bar4Index = start + k;
+
+        waitForStep();
+        visualize();
+        wait();
 
         temp[k++] = array[i++];
     }
@@ -381,69 +503,26 @@ void MainWindow::mergeAscending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        temp[k++] = array[j++];
-    }
+        bar4Index = start + k;
 
-    for (int l = 0; l < temp.size(); l++)
-    {
         waitForStep();
-
-        array[start + l] = temp[l]; // Copy into original array so we can visualize it
-
         visualize();
         wait();
-    }
-}
-
-void MainWindow::mergeDescending(int start, int mid, int end)
-{
-    std::vector<int> temp(end - start + 1); // end - start + 1 is the size of merged array
-
-    int i = start, j = mid + 1, k = 0;
-
-    while (i <= mid && j <= end)
-    {
-        if (shouldReset) return;
-
-        if (array[i] >= array[j])
-        {
-            temp[k] = array[i];
-            i++;
-            k++;
-        }
-        else
-        {
-            temp[k] = array[j];
-            j++;
-            k++;
-        }
-    }
-
-    while (i <= mid)
-    {
-        if (shouldReset) return;
-
-        temp[k++] = array[i++];
-    }
-
-    while (j <= end)
-    {
-        if (shouldReset) return;
 
         temp[k++] = array[j++];
     }
 
     for (int l = 0; l < temp.size(); l++)
     {
-        waitForStep();
+        bar4Index = start + l;
 
         array[start + l] = temp[l]; // Copy into original array so we can visualize it
 
+        waitForStep();
         visualize();
         wait();
     }
 }
-
 void MainWindow::mergeSortAscending(int start, int end)
 {
     if (shouldReset || start >= end) return;
@@ -452,9 +531,89 @@ void MainWindow::mergeSortAscending(int start, int end)
 
     mergeSortAscending(start, mid); // First half sort
     mergeSortAscending(mid + 1, end); // Second half sort
+
+    bar1Index = start;
+    bar2Index = end;
+    bar3Index = mid;
+
+    waitForStep();
+    visualize();
+    wait();
+
     mergeAscending(start, mid, end); // Merge both halves
 }
 
+void MainWindow::mergeDescending(int start, int mid, int end)
+{
+    std::vector<int> temp(end - start + 1); // end - start + 1 is the size of merged array
+
+    int i = start, j = mid + 1, k = 0;
+
+    bar1Index = start;
+    bar2Index = end;
+    bar3Index = mid;
+
+    waitForStep();
+    visualize();
+    wait();
+
+    while (i <= mid && j <= end)
+    {
+        if (shouldReset) return;
+
+        bar4Index = start + k;
+
+        waitForStep();
+        visualize();
+        wait();
+
+        if (array[i] >= array[j])
+        {
+            temp[k++] = array[i++];
+        }
+        else
+        {
+            temp[k++] = array[j++];
+        }
+    }
+
+    while (i <= mid)
+    {
+        if (shouldReset) return;
+
+        bar4Index = start + k;
+
+        waitForStep();
+        visualize();
+        wait();
+
+        temp[k++] = array[i++];
+    }
+
+    while (j <= end)
+    {
+        if (shouldReset) return;
+
+        bar4Index = start + k;
+
+        waitForStep();
+        visualize();
+        wait();
+
+        temp[k++] = array[j++];
+    }
+
+    for (int l = 0; l < temp.size(); l++)
+    {
+        bar4Index = start + l;
+
+        array[start + l] = temp[l]; // Copy into original array so we can visualize it
+
+        waitForStep();
+        visualize();
+        wait();
+    }
+}
 void MainWindow::mergeSortDescending(int start, int end)
 {
     if (shouldReset || start >= end) return;
@@ -463,6 +622,15 @@ void MainWindow::mergeSortDescending(int start, int end)
 
     mergeSortDescending(start, mid); // First half sort
     mergeSortDescending(mid + 1, end); // Second half sort
+
+    bar1Index = start;
+    bar2Index = end;
+    bar3Index = mid;
+
+    waitForStep();
+    visualize();
+    wait();
+
     mergeDescending(start, mid, end); // Merge both halves
 }
 
@@ -502,7 +670,6 @@ int MainWindow::partitionAscending(int start, int end)
 
     return i;
 }
-
 int MainWindow::partitionDescending(int start, int end)
 {
     int pivot = array[end]; // We chose the end as the pivot index
@@ -551,7 +718,6 @@ void MainWindow::quickSortAscending(int start, int end)
     quickSortAscending(start, pivotIndex - 1);
     quickSortAscending(pivotIndex + 1, end);
 }
-
 void MainWindow::quickSortDescending(int start, int end)
 {
     if (shouldReset || start >= end) return;
@@ -592,6 +758,12 @@ void MainWindow::countingSort(int place)
             int index = (place == 0) ? array[i] : (array[i] / place) % 10;
             output[count[index] - 1] = array[i];
             count[index]--;
+
+            bar4Index = i;
+
+            waitForStep();
+            visualize();
+            wait();
         }
     }
     else
@@ -601,8 +773,17 @@ void MainWindow::countingSort(int place)
             int index = (place == 0) ? array[i] : (array[i] / place) % 10;
             output[elementsCount - count[index]] = array[i];
             count[index]--;
+
+            bar4Index = i;
+
+            waitForStep();
+            visualize();
+            wait();
         }
     }
+
+    bar4Index = -1;
+    visualize();
 
     // Copy back the sorted array and visualize each step
     for (int i = 0; i < elementsCount; ++i)
@@ -610,9 +791,16 @@ void MainWindow::countingSort(int place)
         if (shouldReset) return;
 
         array[i] = output[i];
+
+        bar1Index = i;
+
+        waitForStep();
         visualize();
         wait();
     }
+
+    bar1Index = -1;
+    visualize();
 }
 
 void MainWindow::radixSort()
@@ -631,52 +819,71 @@ void MainWindow::selectionSortAscending()
     {
         if (shouldReset) return;
 
-        waitForStep();
-
         int currentMinIndex = i;
+
+        bar1Index = currentMinIndex;
+        waitForStep();
+        visualize();
+        wait();
 
         for (int j = i + 1; j < elementsCount; j++)
         {
+            bar1Index = j;
+            bar2Index = currentMinIndex;
+
+            waitForStep();
+            visualize();
+            wait();
+
             if (array[j] < array[currentMinIndex])
             {
                 currentMinIndex = j;
             }
-
         }
 
         if (currentMinIndex != i)
         {
             std::swap(array[currentMinIndex], array[i]);
 
+            waitForStep();
             visualize();
             wait();
         }
     }
 }
-
 void MainWindow::selectionSortDescending()
 {
     for (int i = 0; i < elementsCount - 1; i++)
     {
         if (shouldReset) return;
 
-        waitForStep();
-
         int currentMaxIndex = i;
+
+        bar1Index = currentMaxIndex;
+        waitForStep();
+        visualize();
+        wait();
 
         for (int j = i + 1; j < elementsCount; j++)
         {
+            bar1Index = j;
+            bar2Index = currentMaxIndex;
+
+            waitForStep();
+            visualize();
+            wait();
+
             if (array[j] > array[currentMaxIndex])
             {
                 currentMaxIndex = j;
             }
-
         }
 
         if (currentMaxIndex != i)
         {
             std::swap(array[currentMaxIndex], array[i]);
 
+            waitForStep();
             visualize();
             wait();
         }
@@ -700,10 +907,18 @@ void MainWindow::cocktailSortAscending()
         {
             if (shouldReset) return;
 
+            bar1Index = i;
+            bar2Index = i + 1;
+
+            waitForStep();
+            visualize();
+            wait();
+
             if (array[i] > array[i + 1])
             {
                 std::swap(array[i], array[i + 1]);
 
+                waitForStep();
                 visualize();
                 wait();
 
@@ -721,10 +936,18 @@ void MainWindow::cocktailSortAscending()
         {
             if (shouldReset) return;
 
+            bar1Index = i;
+            bar2Index = i + 1;
+
+            waitForStep();
+            visualize();
+            wait();
+
             if (array[i] > array[i + 1])
             {
                 std::swap(array[i], array[i + 1]);
 
+                waitForStep();
                 visualize();
                 wait();
 
@@ -735,7 +958,6 @@ void MainWindow::cocktailSortAscending()
         ++start;
     }
 }
-
 void MainWindow::cocktailSortDescending()
 {
     int start = 0;
@@ -753,10 +975,18 @@ void MainWindow::cocktailSortDescending()
         {
             if (shouldReset) return;
 
+            bar1Index = i;
+            bar2Index = i + 1;
+
+            waitForStep();
+            visualize();
+            wait();
+
             if (array[i] < array[i + 1])
             {
                 std::swap(array[i], array[i + 1]);
 
+                waitForStep();
                 visualize();
                 wait();
 
@@ -774,10 +1004,18 @@ void MainWindow::cocktailSortDescending()
         {
             if (shouldReset) return;
 
+            bar1Index = i;
+            bar2Index = i + 1;
+
+            waitForStep();
+            visualize();
+            wait();
+
             if (array[i] < array[i + 1])
             {
                 std::swap(array[i], array[i + 1]);
 
+                waitForStep();
                 visualize();
                 wait();
 
@@ -786,5 +1024,200 @@ void MainWindow::cocktailSortDescending()
         }
 
         ++start;
+    }
+}
+
+void MainWindow::gnomeSortAscending()
+{
+    int index = 0;
+    while (index < elementsCount)
+    {
+        if (shouldReset) return;
+
+        if (index == 0 || array[index] >= array[index - 1])
+        {
+            index++;
+        }
+        else
+        {
+            bar1Index = index;
+            bar2Index = index - 1;
+
+            waitForStep();
+            visualize();
+            wait();
+
+            std::swap(array[index], array[index - 1]);
+            index--;
+
+            waitForStep();
+            visualize();
+            wait();
+        }
+    }
+}
+void MainWindow::gnomeSortDescending()
+{
+    int index = 0;
+    while (index < elementsCount)
+    {
+        if (shouldReset) return;
+
+        if (index == 0 || array[index] <= array[index - 1])
+        {
+            index++;
+        }
+        else
+        {
+            bar1Index = index;
+            bar2Index = index - 1;
+
+            waitForStep();
+            visualize();
+            wait();
+
+            std::swap(array[index], array[index - 1]);
+            index--;
+
+            waitForStep();
+            visualize();
+            wait();
+        }
+    }
+}
+
+void MainWindow::heapSortAscending()
+{
+    std::make_heap(array.begin(), array.end());
+
+    visualize();
+    wait();
+
+    for(int i = 0; i < array.size()-1;i++)
+    {
+        if (shouldReset) return;
+
+        std::pop_heap(array.begin(), array.end()-i);
+
+        visualize();
+        wait();
+    }
+}
+void MainWindow::heapSortDescending()
+{
+    std::make_heap(array.begin(), array.end(), std::greater<int>());
+
+    visualize();
+    wait();
+
+    for(int i = 0; i < array.size()-1;i++)
+    {
+        if (shouldReset) return;
+
+        std::pop_heap(array.begin(), array.end()-i, std::greater<int>());
+
+        visualize();
+        wait();
+    }
+}
+
+void MainWindow::insertionSortAscending()
+{
+    for (int i = 1; i < elementsCount; i++)
+    {
+        if (shouldReset) return;
+
+        waitForStep();
+
+        bar3Index = i;
+        bar1Index = -1;
+        bar2Index = -1;
+        bar4Index = -1;
+
+        waitForStep();
+        visualize();
+        wait();
+
+        int index = i;
+
+        while (index > 0 && array[index - 1] > array[index])
+        {
+            if (shouldReset) return;
+
+            bar1Index = index - 1;
+            bar2Index = index;
+            bar3Index = i;
+
+            waitForStep();
+            visualize();
+            wait();
+
+            std::swap(array[index], array[index - 1]);
+
+            waitForStep();
+            visualize();
+            wait();
+
+            index--;
+        }
+
+        bar3Index = -1;
+        bar1Index = -1;
+        bar2Index = -1;
+        bar4Index = index;
+
+        waitForStep();
+        visualize();
+        wait();
+    }
+}
+void MainWindow::insertionSortDescending()
+{
+    for (int i = 1; i < elementsCount; i++)
+    {
+        if (shouldReset) return;
+
+        waitForStep();
+
+        bar3Index = i;
+        bar1Index = -1;
+        bar2Index = -1;
+        bar4Index = -1;
+
+        waitForStep();
+        visualize();
+        wait();
+
+        int index = i;
+
+        while (index > 0 && array[index - 1] < array[index])
+        {
+            if (shouldReset) return;
+
+            bar1Index = index - 1;
+            bar2Index = index;
+            bar3Index = i;
+
+            waitForStep();
+            visualize();
+            wait();
+
+            std::swap(array[index], array[index - 1]);
+
+            waitForStep();
+            visualize();
+            wait();
+
+            index--;
+        }
+
+        bar3Index = -1;
+        bar1Index = -1;
+        bar2Index = -1;
+        bar4Index = index;
+
+        waitForStep();
+        visualize();
+        wait();
     }
 }

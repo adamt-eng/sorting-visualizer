@@ -1207,40 +1207,102 @@ void MainWindow::gnomeSortDescending()
     }
 }
 
+void heapifyMax(std::vector<int>& heap, int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && heap[left] > heap[largest]) {
+        largest = left;
+    }
+    if (right < n && heap[right] > heap[largest]) {
+        largest = right;
+    }
+
+    if (largest != i) {
+        std::swap(heap[i], heap[largest]);
+        heapifyMax(heap, n, largest);
+    }
+}
+void buildMaxdHeap(std::vector<int>& heap) {
+    int n = heap.size();
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapifyMax(heap, n, i);
+    }
+}
+void popMax(std::vector<int>& heap, int n) {
+    if (n == 0) return;
+    std::swap(heap[0], heap[n - 1]);
+    heapifyMax(heap, n-1, 0);
+}
+
+
+void heapifyMin(std::vector<int>& heap, int n, int i) {
+    int smallest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && heap[left] < heap[smallest]) {
+        smallest = left;
+    }
+    if (right < n && heap[right] < heap[smallest]) {
+        smallest = right;
+    }
+
+    if (smallest != i) {
+        std::swap(heap[i], heap[smallest]);
+        heapifyMin(heap, n, smallest);
+    }
+}
+void buildMindHeap(std::vector<int>& heap) {
+    int n = heap.size();
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapifyMin(heap, n, i);
+    }
+}
+void popMin(std::vector<int>& heap, int n) {
+    if (n == 0) return;
+    std::swap(heap[0], heap[n - 1]);
+    heapifyMin(heap, n-1, 0);
+}
+
+
 void MainWindow::heapSortAscending()
 {
-    std::make_heap(array.begin(), array.end());
-
+    buildMaxdHeap(array);
     visualize();
     wait();
-
     for(int i = 0; i < array.size()-1;i++)
     {
-        if (shouldReset) return;
-
-        std::pop_heap(array.begin(), array.end()-i);
-
+        if(shouldReset)
+        {
+            return;
+        }
+        waitForStep();
+        popMax(array,array.size()-i);
         visualize();
         wait();
     }
 }
 void MainWindow::heapSortDescending()
 {
-    std::make_heap(array.begin(), array.end(), std::greater<int>());
-
+    buildMindHeap(array);
     visualize();
     wait();
-
     for(int i = 0; i < array.size()-1;i++)
     {
-        if (shouldReset) return;
-
-        std::pop_heap(array.begin(), array.end()-i, std::greater<int>());
-
+        if(shouldReset)
+        {
+            return;
+        }
+        waitForStep();
+        popMin(array,array.size()-i);
         visualize();
         wait();
     }
 }
+
+
 
 void MainWindow::insertionSortAscending()
 {

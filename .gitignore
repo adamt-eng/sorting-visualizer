@@ -53,3 +53,5 @@ compile_commands.json
 
 *_qmlcache.qrc
 /build
+
+SDL2/** linguist-vendored

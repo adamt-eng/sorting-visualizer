@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "soundplayer.h"
 
 #include <QRandomGenerator>
 #include <QThread>
@@ -10,6 +11,8 @@
 
 #include <algorithm>
 #include <random>
+
+#include <SDL2/SDL.h>
 
 // UI Constructor
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -25,6 +28,9 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+SoundPlayer player;
+bool variableSound;
 
 QColor backgroundColor = Qt::black;
 QColor barColor = Qt::white;
@@ -59,11 +65,7 @@ void MainWindow::generateArray()
 
     elementsCount = ui->elementsCount->value();
 
-    // Fill the array with values increasing by 1
-    for (int i = 0; i < elementsCount; ++i)
-    {
-        array.push_back(i + 1);
-    }
+    for (int i = 1; i <= elementsCount; ++i) array.push_back(i);
 
     maxHeight = *std::max_element(array.begin(), array.end());
 
@@ -80,11 +82,11 @@ void MainWindow::on_startButton_clicked()
 {
     if (ui->startButton->text() == "Start")
     {
+        ui->startButton->setText("Reset");
+
         shouldReset = false;
 
         bar1Index = bar2Index = bar3Index = bar4Index = -1;
-
-        ui->startButton->setText("Reset");
 
         generateArray();
 
@@ -94,8 +96,39 @@ void MainWindow::on_startButton_clicked()
         delayInMilliseconds = ui->delay->value();
         isContinuous = ui->continuousRadioButton->isChecked();
 
+        std::string choice = ui->soundComboBox->currentText().toStdString();
+        variableSound = (choice == "Variable");
+
+        if (!variableSound)
+        {
+            bool wavLoaded;
+            if (choice == "Beep")
+            {
+                wavLoaded = player.loadWAV(":/resources/sounds/beep.wav");
+            }
+            else if (choice == "Duck")
+            {
+                wavLoaded = player.loadWAV(":/resources/sounds/quack.wav");
+            }
+            else if (choice == "Cat")
+            {
+                wavLoaded = player.loadWAV(":/resources/sounds/meow.wav");
+            }
+            else if (choice == "Dog")
+            {
+                wavLoaded = player.loadWAV(":/resources/sounds/bark.wav");
+            }
+
+            if (!wavLoaded)
+            {
+                QMessageBox::warning(this, "Warning", "Failed to load audio file, sound will be set to variable.");
+                variableSound = true;
+            }
+        }
+
         // Disable all controls to prevent modification
         ui->nextStepButton->setEnabled(!isContinuous);
+        ui->soundComboBox->setEnabled(false);
         ui->continuousRadioButton->setEnabled(false);
         ui->stepByStepRadioButton->setEnabled(false);
         ui->comboBox->setEnabled(false);
@@ -201,17 +234,19 @@ void MainWindow::on_startButton_clicked()
                 gnomeSortDescending();
             }
         }
+
+        player.stopSound();
+        bar1Index = bar2Index = bar3Index = bar4Index = -1;
+        visualize();
     }
     else
     {
         shouldReset = true;
     }
 
-    bar1Index = bar2Index = bar3Index = bar4Index = -1;
-    visualize();
-
     // Re-enable controls
     ui->startButton->setText("Start");
+    ui->soundComboBox->setEnabled(true);
     ui->comboBox->setEnabled(true);
     ui->elementsCount->setEnabled(true);
     ui->delay->setEnabled(true);
@@ -237,8 +272,7 @@ void MainWindow::visualize()
     double barWidth = (width - (elementsCount - 1) * gapWidth) / elementsCount;
 
     // If barWidth is less than 1, make it 1 and reduce gapWidth
-    if (barWidth < 1.0)
-    {
+    if (barWidth < 1.0) {
         barWidth = 1.0;
         gapWidth = (width - elementsCount * barWidth) / (elementsCount - 1);
     }
@@ -262,14 +296,15 @@ void MainWindow::visualize()
     ui->textLabel->setPixmap(pixmap);
 }
 
-// Function for adding wait time between the graph updates
+// Delay function to wait the time specified by the user in delayInMilliseconds
 void MainWindow::wait()
 {
     if (!isContinuous) return;
     QTime dieTime = QTime::currentTime().addMSecs(delayInMilliseconds);
     while (QTime::currentTime() < dieTime)
     {
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+        if (shouldReset) return; // For if the user uses a high delay but tries to reset
+        else QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
 }
 
@@ -294,12 +329,10 @@ void MainWindow::on_elementsCount_textChanged(const QString &arg1)
     revisualize();
 }
 
-// Themes
+// Theme control
 void MainWindow::on_invertThemeCheckBox_checkStateChanged(const Qt::CheckState &arg1)
 {
-    QColor temp = barColor;
-    barColor = backgroundColor;
-    backgroundColor = temp;
+    std::swap(barColor, backgroundColor);
     visualize();
 }
 void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
@@ -387,6 +420,35 @@ void MainWindow::waitForStep()
     }
 }
 
+// Sound control
+void MainWindow::playSound(int i, int j)
+{
+    if (variableSound)
+    {
+        float minFrequency = 120.0f;
+        float maxFrequency = 1212.0f;
+
+        float value1 = static_cast<float>(array[i]) / static_cast<float>(elementsCount);
+        float value2 = static_cast<float>(array[j]) / static_cast<float>(elementsCount);
+
+        float frequency = minFrequency + ((value1 + value2) / 2.0f) * (maxFrequency - minFrequency);
+
+        float totalDuration = delayInMilliseconds / 1000.0f;
+
+        float attackTime = 0.10f * totalDuration;
+        float decayTime = 0.15f * totalDuration;
+        float sustainLevel = 0.6f;
+        float sustainDuration = 0.50f * totalDuration;
+        float releaseTime = 0.25f * totalDuration;
+
+        player.playFrequencyWithEnvelope(frequency, attackTime, decayTime, sustainLevel, sustainDuration, releaseTime);
+    }
+    else
+    {
+        player.playSound();
+    }
+}
+
 // Algorithms
 void MainWindow::bubbleSortAscending()
 {
@@ -409,6 +471,7 @@ void MainWindow::bubbleSortAscending()
 
                 waitForStep();
                 visualize();
+                playSound(j, j + 1);
                 wait();
             }
         }
@@ -419,7 +482,6 @@ void MainWindow::bubbleSortAscending()
         visualize();
     }
 }
-
 void MainWindow::bubbleSortDescending()
 {
     for (int i = 0; i < elementsCount - 1; i++)
@@ -441,6 +503,7 @@ void MainWindow::bubbleSortDescending()
 
                 waitForStep();
                 visualize();
+                playSound(j, j + 1);
                 wait();
             }
         }
@@ -460,7 +523,7 @@ void MainWindow::mergeAscending(int start, int mid, int end)
 
     bar1Index = start;
     bar2Index = end;
-    bar3Index = mid;
+    bar4Index = mid;
 
     waitForStep();
     visualize();
@@ -470,10 +533,11 @@ void MainWindow::mergeAscending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar4Index = start + k;
+        bar3Index = start + k;
 
         waitForStep();
         visualize();
+        playSound(i, j);
         wait();
 
         if (array[i] <= array[j])
@@ -490,7 +554,7 @@ void MainWindow::mergeAscending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar4Index = start + k;
+        bar3Index = start + k;
 
         waitForStep();
         visualize();
@@ -503,7 +567,7 @@ void MainWindow::mergeAscending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar4Index = start + k;
+        bar3Index = start + k;
 
         waitForStep();
         visualize();
@@ -514,12 +578,13 @@ void MainWindow::mergeAscending(int start, int mid, int end)
 
     for (int l = 0; l < temp.size(); l++)
     {
-        bar4Index = start + l;
+        bar3Index = start + l;
 
         array[start + l] = temp[l]; // Copy into original array so we can visualize it
 
         waitForStep();
         visualize();
+        playSound(start + l, l);
         wait();
     }
 }
@@ -534,7 +599,7 @@ void MainWindow::mergeSortAscending(int start, int end)
 
     bar1Index = start;
     bar2Index = end;
-    bar3Index = mid;
+    bar4Index = mid;
 
     waitForStep();
     visualize();
@@ -551,7 +616,7 @@ void MainWindow::mergeDescending(int start, int mid, int end)
 
     bar1Index = start;
     bar2Index = end;
-    bar3Index = mid;
+    bar4Index = mid;
 
     waitForStep();
     visualize();
@@ -561,10 +626,11 @@ void MainWindow::mergeDescending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar4Index = start + k;
+        bar3Index = start + k;
 
         waitForStep();
         visualize();
+        playSound(i, j);
         wait();
 
         if (array[i] >= array[j])
@@ -581,7 +647,7 @@ void MainWindow::mergeDescending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar4Index = start + k;
+        bar3Index = start + k;
 
         waitForStep();
         visualize();
@@ -594,7 +660,7 @@ void MainWindow::mergeDescending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar4Index = start + k;
+        bar3Index = start + k;
 
         waitForStep();
         visualize();
@@ -605,12 +671,13 @@ void MainWindow::mergeDescending(int start, int mid, int end)
 
     for (int l = 0; l < temp.size(); l++)
     {
-        bar4Index = start + l;
+        bar3Index = start + l;
 
         array[start + l] = temp[l]; // Copy into original array so we can visualize it
 
         waitForStep();
         visualize();
+        playSound(start + l, l);
         wait();
     }
 }
@@ -625,7 +692,7 @@ void MainWindow::mergeSortDescending(int start, int end)
 
     bar1Index = start;
     bar2Index = end;
-    bar3Index = mid;
+    bar4Index = mid;
 
     waitForStep();
     visualize();
@@ -638,22 +705,31 @@ int MainWindow::partitionAscending(int start, int end)
 {
     int pivot = array[end]; // We chose the end as the pivot index
     int i = start - 1;
-    int temp; // For swapping purposes
+
+    bar4Index = end;
+
+    waitForStep();
+    visualize();
+    wait();
 
     for (int j = start; j < end; j++)
     {
         if (shouldReset) return -1;
+
+        bar3Index = j;
+
+        waitForStep();
+        visualize();
+        wait();
 
         if (array[j] < pivot)
         {
-            waitForStep();
-
             i++;
-            temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
+            std::swap(array[i], array[j]);
 
+            waitForStep();
             visualize();
+            playSound(i, j);
             wait();
         }
     }
@@ -661,66 +737,94 @@ int MainWindow::partitionAscending(int start, int end)
     // After the loop, i + 1 points to the correct position for the pivot
     // So, swap between the elements in that position and the pivot index
     i++;
-    temp = array[i];
-    array[i] = array[end];
-    array[end] = temp;
+    std::swap(array[i], array[end]);
 
+    bar3Index = i;
+
+    waitForStep();
     visualize();
+    playSound(i, end);
     wait();
 
     return i;
 }
-int MainWindow::partitionDescending(int start, int end)
-{
-    int pivot = array[end]; // We chose the end as the pivot index
-    int i = start - 1;
-    int temp; // For swapping purposes
-
-    for (int j = start; j < end; j++)
-    {
-        if (shouldReset) return -1;
-
-        if (array[j] > pivot)
-        {
-            waitForStep();
-
-            i++;
-            temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-
-            visualize();
-            wait();
-        }
-    }
-
-    // After the loop, i + 1 points to the correct position for the pivot
-    // So, swap between the elements in that position and the pivot index
-    i++;
-    temp = array[i];
-    array[i] = array[end];
-    array[end] = temp;
-
-    visualize();
-    wait();
-
-    return i;
-}
-
 void MainWindow::quickSortAscending(int start, int end)
 {
     if (shouldReset || start >= end) return;
 
-    int pivotIndex = partitionAscending(start, end);
+    bar1Index = start;
+    bar2Index = end;
 
+    waitForStep();
+    visualize();
+    playSound(start, end);
+    wait();
+
+    int pivotIndex = partitionAscending(start, end);
     if (pivotIndex == -1) return;
 
     quickSortAscending(start, pivotIndex - 1);
     quickSortAscending(pivotIndex + 1, end);
 }
+
+int MainWindow::partitionDescending(int start, int end)
+{
+    int pivot = array[end]; // We chose the end as the pivot index
+    int i = start - 1;
+
+    bar4Index = end;
+
+    waitForStep();
+    visualize();
+    wait();
+
+    for (int j = start; j < end; j++)
+    {
+        if (shouldReset) return -1;
+
+        bar3Index = j;
+
+        waitForStep();
+        visualize();
+        wait();
+
+        if (array[j] > pivot)
+        {
+            i++;
+            std::swap(array[i], array[j]);
+
+            waitForStep();
+            visualize();
+            playSound(i, j);
+            wait();
+        }
+    }
+
+    // After the loop, i + 1 points to the correct position for the pivot
+    // So, swap between the elements in that position and the pivot index
+    i++;
+    std::swap(array[i], array[end]);
+
+    bar3Index = i;
+
+    waitForStep();
+    visualize();
+    playSound(i, end);
+    wait();
+
+    return i;
+}
 void MainWindow::quickSortDescending(int start, int end)
 {
     if (shouldReset || start >= end) return;
+
+    bar1Index = start;
+    bar2Index = end;
+
+    waitForStep();
+    visualize();
+    playSound(start, end);
+    wait();
 
     int pivotIndex = partitionDescending(start, end);
 
@@ -763,6 +867,7 @@ void MainWindow::countingSort(int place)
 
             waitForStep();
             visualize();
+            playSound(i, i);
             wait();
         }
     }
@@ -778,6 +883,7 @@ void MainWindow::countingSort(int place)
 
             waitForStep();
             visualize();
+            playSound(i, i);
             wait();
         }
     }
@@ -796,6 +902,7 @@ void MainWindow::countingSort(int place)
 
         waitForStep();
         visualize();
+        playSound(i, i);
         wait();
     }
 
@@ -828,11 +935,14 @@ void MainWindow::selectionSortAscending()
 
         for (int j = i + 1; j < elementsCount; j++)
         {
+            if (shouldReset) return;
+
             bar1Index = j;
             bar2Index = currentMinIndex;
 
             waitForStep();
             visualize();
+            playSound(j, j);
             wait();
 
             if (array[j] < array[currentMinIndex])
@@ -847,6 +957,7 @@ void MainWindow::selectionSortAscending()
 
             waitForStep();
             visualize();
+            playSound(currentMinIndex, i);
             wait();
         }
     }
@@ -866,11 +977,14 @@ void MainWindow::selectionSortDescending()
 
         for (int j = i + 1; j < elementsCount; j++)
         {
+            if (shouldReset) return;
+
             bar1Index = j;
             bar2Index = currentMaxIndex;
 
             waitForStep();
             visualize();
+            playSound(j, j);
             wait();
 
             if (array[j] > array[currentMaxIndex])
@@ -885,6 +999,7 @@ void MainWindow::selectionSortDescending()
 
             waitForStep();
             visualize();
+            playSound(currentMaxIndex, i);
             wait();
         }
     }
@@ -920,6 +1035,7 @@ void MainWindow::cocktailSortAscending()
 
                 waitForStep();
                 visualize();
+                playSound(i, i + 1);
                 wait();
 
                 swapped = true;
@@ -949,6 +1065,7 @@ void MainWindow::cocktailSortAscending()
 
                 waitForStep();
                 visualize();
+                playSound(i, i + 1);
                 wait();
 
                 swapped = true;
@@ -988,6 +1105,7 @@ void MainWindow::cocktailSortDescending()
 
                 waitForStep();
                 visualize();
+                playSound(i, i + 1);
                 wait();
 
                 swapped = true;
@@ -1017,6 +1135,7 @@ void MainWindow::cocktailSortDescending()
 
                 waitForStep();
                 visualize();
+                playSound(i, i + 1);
                 wait();
 
                 swapped = true;
@@ -1052,6 +1171,7 @@ void MainWindow::gnomeSortAscending()
 
             waitForStep();
             visualize();
+            playSound(index + 1, index);
             wait();
         }
     }
@@ -1081,6 +1201,7 @@ void MainWindow::gnomeSortDescending()
 
             waitForStep();
             visualize();
+            playSound(index + 1, index);
             wait();
         }
     }
@@ -1156,6 +1277,7 @@ void MainWindow::insertionSortAscending()
 
             waitForStep();
             visualize();
+            playSound(index, index - 1);
             wait();
 
             index--;
@@ -1206,6 +1328,7 @@ void MainWindow::insertionSortDescending()
 
             waitForStep();
             visualize();
+            playSound(index, index - 1);
             wait();
 
             index--;
@@ -1221,3 +1344,4 @@ void MainWindow::insertionSortDescending()
         wait();
     }
 }
+

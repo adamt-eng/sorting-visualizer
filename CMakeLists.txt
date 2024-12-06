@@ -12,17 +12,26 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+set(SDL2_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/SDL2/include")
+set(SDL2_LIBRARY_DIR "${CMAKE_SOURCE_DIR}/SDL2/lib")
+
+include_directories(${SDL2_INCLUDE_DIR})
+
 set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
+    main.cpp
+    mainwindow.cpp
+    soundplayer.cpp
+    soundplayer.h
+    mainwindow.h
+    mainwindow.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(gui
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        soundplayer.h soundplayer.cpp
+        resources.qrc
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET gui APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -42,6 +51,8 @@ else()
     endif()
 endif()
 
+set(SDL2_LIBRARIES ${SDL2_LIBRARY_DIR}/libSDL2.dll.a ${SDL2_LIBRARY_DIR}/libSDL2main.a)
+target_link_libraries(gui PRIVATE ${SDL2_LIBRARIES})
 target_link_libraries(gui PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

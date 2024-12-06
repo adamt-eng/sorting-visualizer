@@ -27,6 +27,8 @@ private slots:
     void on_invertThemeCheckBox_checkStateChanged(const Qt::CheckState &arg1);
 
 private:
+    void makeFull();
+
     Ui::MainWindow *ui;
     bool firstTry;
     void generateArray();
@@ -64,6 +66,7 @@ private:
     void insertionSortAscending();
     void insertionSortDescending();
 
+    void playSound(int i, int j);
     void wait();
     void revisualize();
     void waitForStep();

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/sounds/beep.wav</file>
+        <file>resources/sounds/quack.wav</file>
+        <file>resources/sounds/meow.wav</file>
+        <file>resources/sounds/bark.wav</file>
+    </qresource>
+</RCC>

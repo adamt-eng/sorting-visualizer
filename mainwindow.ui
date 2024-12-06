@@ -47,122 +47,421 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="startButton">
+   <widget class="QGroupBox" name="stepControlGroupBox">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>101</width>
-      <height>31</height>
+      <x>10</x>
+      <y>250</y>
+      <width>141</width>
+      <height>141</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Start</string>
+    <property name="title">
+     <string>Step Control</string>
     </property>
+    <widget class="QWidget" name="verticalLayoutWidget_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>101</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="stepLayout">
+      <item>
+       <widget class="QRadioButton" name="continuousRadioButton">
+        <property name="text">
+         <string>Continuous</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">modeButtonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="stepByStepRadioButton">
+        <property name="text">
+         <string>Step-by-step</string>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">modeButtonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="nextStepButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Next Step -&gt;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QGroupBox" name="inputSettingsGroupBox">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>60</y>
-      <width>101</width>
-      <height>21</height>
+      <x>10</x>
+      <y>10</y>
+      <width>141</width>
+      <height>231</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>Bubble Sort</string>
+    <property name="title">
+     <string>Input Settings</string>
+    </property>
+    <widget class="QWidget" name="verticalLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>160</y>
+       <width>101</width>
+       <height>51</height>
+      </rect>
      </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Selection Sort</string>
+     <layout class="QVBoxLayout" name="elementsLayout">
+      <item>
+       <widget class="QLabel" name="elementsCountLabel">
+        <property name="text">
+         <string>Elements Count:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="elementsCount">
+        <property name="minimum">
+         <number>2</number>
+        </property>
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="formLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>14</x>
+       <y>31</y>
+       <width>111</width>
+       <height>71</height>
+      </rect>
      </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Insertion Sort</string>
+     <layout class="QFormLayout" name="startLayout">
+      <item row="0" column="0" colspan="2">
+       <widget class="QPushButton" name="startButton">
+        <property name="minimumSize">
+         <size>
+          <width>101</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QComboBox" name="comboBox">
+        <item>
+         <property name="text">
+          <string>Bubble Sort</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Selection Sort</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Insertion Sort</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Merge Sort</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Heap Sort</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Quick Sort</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Counting Sort</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Radix Sort</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Cocktail Sort</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Gnome Sort</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="verticalLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>21</x>
+       <y>101</y>
+       <width>101</width>
+       <height>52</height>
+      </rect>
      </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Merge Sort</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Heap Sort</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Quick Sort</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Counting Sort</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Radix Sort</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Cocktail Sort</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Gnome Sort</string>
-     </property>
-    </item>
+     <layout class="QVBoxLayout" name="ascendingFormLayout">
+      <item>
+       <widget class="QRadioButton" name="ascendingRadioButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Ascending</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="descendingRadioButton">
+        <property name="text">
+         <string>Descending</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
-   <widget class="QRadioButton" name="ascendingRadioButton">
+   <widget class="QGroupBox" name="animationSettingsGroupBox">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>90</y>
-      <width>91</width>
-      <height>22</height>
+      <x>10</x>
+      <y>400</y>
+      <width>141</width>
+      <height>251</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Ascending</string>
+    <property name="title">
+     <string>Animation Settings</string>
     </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-    <attribute name="buttonGroup">
-     <string notr="true">orderButtonGroup</string>
-    </attribute>
-   </widget>
-   <widget class="QRadioButton" name="descendingRadioButton">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>110</y>
-      <width>91</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Descending</string>
-    </property>
-    <attribute name="buttonGroup">
-     <string notr="true">orderButtonGroup</string>
-    </attribute>
+    <widget class="QWidget" name="verticalLayoutWidget_7">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>101</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="delayLayout">
+      <item>
+       <widget class="QLabel" name="delayLabel">
+        <property name="text">
+         <string>Delay (ms):</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="delay">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+        <property name="value">
+         <number>50</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="formLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>93</y>
+       <width>105</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="themeLayout">
+      <item row="1" column="0">
+       <widget class="QComboBox" name="themeComboBox">
+        <item>
+         <property name="text">
+          <string>Default</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Cyber</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Autumn</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Night Glow</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Retro Pop</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Solar Burst</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Zen Garden</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Tropical Drift</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Amethyst</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Bold Sunset</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Frosty Chill</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="themeLabel">
+        <property name="text">
+         <string>Theme:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="invertThemeCheckBox">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Invert</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="formLayoutWidget_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>180</y>
+       <width>101</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="soundLayout">
+      <item row="1" column="0" colspan="2">
+       <widget class="QComboBox" name="soundComboBox">
+        <item>
+         <property name="text">
+          <string>Variable</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Beep</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Duck</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Cat</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Dog</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="soundLabel">
+        <property name="text">
+         <string>Sound:</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
    <widget class="QLabel" name="textLabel">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>10</y>
-      <width>1121</width>
-      <height>671</height>
+      <x>170</x>
+      <y>20</y>
+      <width>1091</width>
+      <height>681</height>
      </rect>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Sunken</enum>
     </property>
     <property name="text">
      <string>TextLabel</string>
@@ -174,225 +473,13 @@
      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
     </property>
    </widget>
-   <widget class="QSpinBox" name="elementsCount">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>160</y>
-      <width>91</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>2</number>
-    </property>
-    <property name="maximum">
-     <number>10000</number>
-    </property>
-    <property name="value">
-     <number>100</number>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="delay">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>210</y>
-      <width>91</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>1</number>
-    </property>
-    <property name="maximum">
-     <number>10000</number>
-    </property>
-    <property name="value">
-     <number>100</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="elementsCountLabel">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>140</y>
-      <width>91</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Elements Count:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="delayLabel">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>190</y>
-      <width>111</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Delay (ms):</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="stepByStepRadioButton">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>260</y>
-      <width>91</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Step-by-step</string>
-    </property>
-    <property name="autoExclusive">
-     <bool>true</bool>
-    </property>
-    <attribute name="buttonGroup">
-     <string notr="true">modeButtonGroup</string>
-    </attribute>
-   </widget>
-   <widget class="QRadioButton" name="continuousRadioButton">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>240</y>
-      <width>91</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Continuous</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-    <property name="autoExclusive">
-     <bool>true</bool>
-    </property>
-    <attribute name="buttonGroup">
-     <string notr="true">modeButtonGroup</string>
-    </attribute>
-   </widget>
-   <widget class="QPushButton" name="nextStepButton">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>290</y>
-      <width>91</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Next Step -&gt;</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="themeLabel">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>320</y>
-      <width>91</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Theme:</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="themeComboBox">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>340</y>
-      <width>91</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>Default</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Cyber</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Autumn</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Night Glow</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Retro Pop</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Solar Burst</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Zen Garden</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Tropical Drift</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Amethyst</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Bold Sunset</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Frosty Chill</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QCheckBox" name="invertThemeCheckBox">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>370</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Invert</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="modeButtonGroup"/>
   <buttongroup name="orderButtonGroup"/>
+  <buttongroup name="modeButtonGroup"/>
  </buttongroups>
 </ui>

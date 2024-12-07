@@ -25,6 +25,8 @@ private slots:
     void on_themeComboBox_currentTextChanged(const QString &arg1);
     void on_invertThemeCheckBox_checkStateChanged(const Qt::CheckState &arg1);
     void on_fullScreenButton_clicked();
+    void on_delay_textChanged(const QString &arg1);
+    void on_delay_valueChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;

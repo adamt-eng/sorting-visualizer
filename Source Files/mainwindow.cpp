@@ -139,7 +139,6 @@ void MainWindow::on_startButton_clicked()
         ui->stepByStepRadioButton->setEnabled(false);
         ui->comboBox->setEnabled(false);
         ui->elementsCount->setEnabled(false);
-        ui->delay->setEnabled(false);
         ui->ascendingRadioButton->setEnabled(false);
         ui->descendingRadioButton->setEnabled(false);
 
@@ -255,7 +254,6 @@ void MainWindow::on_startButton_clicked()
     ui->soundComboBox->setEnabled(true);
     ui->comboBox->setEnabled(true);
     ui->elementsCount->setEnabled(true);
-    ui->delay->setEnabled(true);
     ui->nextStepButton->setEnabled(false);
     ui->continuousRadioButton->setEnabled(true);
     ui->stepByStepRadioButton->setEnabled(true);
@@ -320,6 +318,16 @@ void MainWindow::wait()
         if (shouldReset) return; // For if the user uses a high delay but tries to reset
         else QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
+}
+
+// Update delay as user changes it
+void MainWindow::on_delay_textChanged(const QString &arg1)
+{
+    delayInMilliseconds = ui->delay->value();
+}
+void MainWindow::on_delay_valueChanged(int arg1)
+{
+    delayInMilliseconds = ui->delay->value();
 }
 
 // Update graph in realtime when user changes the elements count
@@ -1617,4 +1625,3 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         QMainWindow::keyPressEvent(event);
     }
 }
-

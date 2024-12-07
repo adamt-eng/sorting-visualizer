@@ -18,11 +18,11 @@ set(SDL2_LIBRARY_DIR "${CMAKE_SOURCE_DIR}/SDL2/lib")
 include_directories(${SDL2_INCLUDE_DIR})
 
 set(PROJECT_SOURCES
-    main.cpp
-    mainwindow.cpp
-    soundplayer.cpp
-    soundplayer.h
-    mainwindow.h
+    "Source Files/main.cpp"
+    "Source Files/mainwindow.cpp"
+    "Source Files/soundplayer.cpp"
+    "Header Files/soundplayer.h"
+    "Header Files/mainwindow.h"
     mainwindow.ui
 )
 
@@ -30,7 +30,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(gui
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        soundplayer.h soundplayer.cpp
+        "Header Files/soundplayer.h"
+        "Source Files/soundplayer.cpp"
         resources.qrc
     )
 # Define target properties for Android with Qt 6 as:

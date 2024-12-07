@@ -1,4 +1,4 @@
-#include "SoundPlayer.h"
+#include "../Header Files/soundplayer.h"
 #include <QFile>
 
 const float TWO_PI = 2.0f * static_cast<float>(M_PI);

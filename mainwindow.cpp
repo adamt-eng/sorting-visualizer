@@ -8,19 +8,26 @@
 #include <QPixmap>
 #include <QTime>
 #include <QMessageBox>
+#include <QRect>
+#include <QKeyEvent>
 
 #include <algorithm>
 #include <random>
 
 #include <SDL2/SDL.h>
 
+// This boolean is used to avoid calling generateArray() again before the first visualization,
+// as it was already called in the constructor of the UI
+bool firstTry;
+
 // UI Constructor
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->statusBar()->setSizeGripEnabled(false); // Disables the resize icon for the window
+
     generateArray();
     firstTry = true;
-    this->statusBar()->setSizeGripEnabled(false); // Disables the resize icon for the window
 }
 
 // UI Destructor
@@ -50,10 +57,6 @@ bool shouldReset = false;
 int elementsCount;
 int maxHeight;
 
-// This boolean is used to avoid calling generateArray() again before the first visualization,
-// as it was already called in the constructor of the UI
-bool firstTry;
-
 // Function to generate array
 void MainWindow::generateArray()
 {
@@ -73,9 +76,7 @@ void MainWindow::generateArray()
     maxHeight = *std::max_element(array.begin(), array.end());
 
     // Shuffle the array randomly
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(array.begin(), array.end(), g);
+    std::shuffle(array.begin(), array.end(), std::mt19937{std::random_device{}()});
 
     visualize();
 }
@@ -158,11 +159,11 @@ void MainWindow::on_startButton_clicked()
         {
             if (isAscending)
             {
-                mergeSortAscending(0, elementsCount);
+                mergeSortAscending(0, elementsCount - 1);
             }
             else
             {
-                mergeSortDescending(0, elementsCount);
+                mergeSortDescending(0, elementsCount - 1);
             }
         }
         else if (sortingAlgorithm == "Quick Sort")
@@ -277,7 +278,8 @@ void MainWindow::visualize()
     double barWidth = (width - (elementsCount - 1) * gapWidth) / elementsCount;
 
     // If barWidth is less than 1, make it 1 and reduce gapWidth
-    if (barWidth < 1.0) {
+    if (barWidth < 1.0)
+    {
         barWidth = 1.0;
         gapWidth = (width - elementsCount * barWidth) / (elementsCount - 1);
     }
@@ -1459,7 +1461,6 @@ void MainWindow::heapSortDescending()
     }
 }
 
-
 void MainWindow::insertionSortAscending()
 {
     for (int i = 1; i < elementsCount; i++)
@@ -1560,6 +1561,60 @@ void MainWindow::insertionSortDescending()
         waitForStep();
         visualize();
         wait();
+    }
+}
+
+QRect originalGeometry, originalTextLabelGeometry;
+void MainWindow::on_fullScreenButton_clicked()
+{
+    originalGeometry = this->geometry();
+    originalTextLabelGeometry = ui->textLabel->geometry();
+
+    this->statusBar()->hide();
+    this->showFullScreen();
+
+    QList<QWidget*> allWidgets = this->centralWidget()->findChildren<QWidget*>();
+    for (auto widget : allWidgets)
+    {
+        if (widget != ui->textLabel)
+        {
+            widget->hide();
+        }
+    }
+
+    ui->textLabel->setGeometry(this->centralWidget()->geometry());
+    ui->textLabel->setPixmap(ui->textLabel->pixmap().scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    visualize();
+}
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape && this->isFullScreen())
+    {
+        this->statusBar()->show();
+        this->showNormal();
+        this->setGeometry(originalGeometry);
+
+        QList<QWidget*> allWidgets = this->centralWidget()->findChildren<QWidget*>();
+        for (auto widget : allWidgets)
+        {
+            widget->show();
+        }
+
+        ui->textLabel->setGeometry(originalTextLabelGeometry);
+
+        visualize();
+
+        QMessageBox* messageBox = new QMessageBox(this);
+        messageBox->setWindowTitle("Notification");
+        messageBox->setText("Fullscreen mode exited");
+        messageBox->setStandardButtons(QMessageBox::Ok);
+        messageBox->setModal(true);
+        messageBox->show();
+    }
+    else
+    {
+        QMainWindow::keyPressEvent(event);
     }
 }
 

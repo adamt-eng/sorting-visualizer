@@ -4,14 +4,14 @@
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
+namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 
 public:
     MainWindow(QWidget *parent = nullptr);
@@ -23,16 +23,18 @@ private slots:
     void on_elementsCount_textChanged(const QString &arg1);
     void on_nextStepButton_clicked();
     void on_themeComboBox_currentTextChanged(const QString &arg1);
-
     void on_invertThemeCheckBox_checkStateChanged(const Qt::CheckState &arg1);
+    void on_fullScreenButton_clicked();
 
 private:
-    void makeFull();
-
     Ui::MainWindow *ui;
-    bool firstTry;
+
     void generateArray();
     void visualize();
+    void playSound(int i, int j);
+    void wait();
+    void revisualize();
+    void waitForStep();
 
     void bubbleSortAscending();
     void bubbleSortDescending();
@@ -72,10 +74,5 @@ private:
 
     void insertionSortAscending();
     void insertionSortDescending();
-
-    void playSound(int i, int j);
-    void wait();
-    void revisualize();
-    void waitForStep();
 };
 #endif // MAINWINDOW_H

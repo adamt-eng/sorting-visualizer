@@ -64,8 +64,8 @@
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>101</width>
-       <height>91</height>
+       <width>103</width>
+       <height>101</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="stepLayout">
@@ -102,6 +102,12 @@
        <widget class="QPushButton" name="nextStepButton">
         <property name="enabled">
          <bool>false</bool>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>101</width>
+          <height>31</height>
+         </size>
         </property>
         <property name="text">
          <string>Next Step -&gt;</string>
@@ -276,7 +282,7 @@
       <x>10</x>
       <y>400</y>
       <width>141</width>
-      <height>251</height>
+      <height>291</height>
      </rect>
     </property>
     <property name="title">
@@ -450,6 +456,31 @@
       </item>
      </layout>
     </widget>
+    <widget class="QWidget" name="verticalLayoutWidget_4">
+     <property name="geometry">
+      <rect>
+       <x>19</x>
+       <y>239</y>
+       <width>103</width>
+       <height>33</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="fullScreenLayout">
+      <item>
+       <widget class="QPushButton" name="fullScreenButton">
+        <property name="minimumSize">
+         <size>
+          <width>101</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Fullscreen</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
    <widget class="QLabel" name="textLabel">
     <property name="geometry">
@@ -479,7 +510,6 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="orderButtonGroup"/>
   <buttongroup name="modeButtonGroup"/>
  </buttongroups>
 </ui>

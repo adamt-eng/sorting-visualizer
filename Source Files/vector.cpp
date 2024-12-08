@@ -1,11 +1,40 @@
 #include"../Header Files/vector.h"
-
+#include <cstddef> 
 template<typename T>
-vector<T>::vector() : mySize(0), myCapacity(0),arr(new T[1])
+vector<T>::vector() : mySize(0), myCapacity(1),arr(new T[1])
 {
 
 }
-
+template<typename T>
+vector<T>::vector(int newCapacity)
+{
+    arr = new T[newCapacity];
+    myCapacity = newCapacity;
+}
+template<typename T>
+vector<T>::~vector()
+{
+    delete[] arr;
+}
+template<typename T>
+template<std::size_t N>
+void vector<T>::operator=(const T (&arr)[N]) {
+    clear();           
+    reserve(N);      
+    for (std::size_t i = 0; i < N; ++i) {
+        push_back(arr[i]); 
+    }
+}
+template<typename T>
+void vector<T>::clear()
+{
+    mySize = 0;
+}
+template<typename T>
+bool vector<T>::isEmpty()
+{
+    return mySize == 0;
+}
 template<typename T>
 T& vector<T>::at(int index)
 {
@@ -51,7 +80,7 @@ void vector<T>::reserve(int newSize)
     {
         temp[i] = arr[i];
     }
-    delete[] arr;
+    ~vector();
     arr = temp;
     myCapacity = newSize;
 }
@@ -61,7 +90,7 @@ void vector<T>::push_back(T x)
 {
     if(myCapacity - mySize <= 1)
     {
-        myCapacity = (int)(1.5*myCapacity);
+        myCapacity = 2*myCapacity;
         reserve(myCapacity);
     }
     arr[mySize] = x;

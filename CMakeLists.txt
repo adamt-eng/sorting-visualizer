@@ -21,8 +21,10 @@ set(PROJECT_SOURCES
     "Source Files/main.cpp"
     "Source Files/mainwindow.cpp"
     "Source Files/soundplayer.cpp"
+    "Source Files/vector.cpp"
     "Header Files/soundplayer.h"
     "Header Files/mainwindow.h"
+    "Header Files/vector.h"
     mainwindow.ui
 )
 

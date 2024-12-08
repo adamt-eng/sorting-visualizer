@@ -3,8 +3,8 @@ class vector
 {
     private:
     T* arr;
-    int size;
-    int capacity;
+    int mySize;
+    int myCapacity;
     public:
     typedef T* iterator;
     vector();
@@ -16,6 +16,5 @@ class vector
     void push_back(T x);
     iterator begin();
     iterator end();
-    
 
 };

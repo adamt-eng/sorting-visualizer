@@ -1,6 +1,6 @@
-#include"vector.h"
+#include"../Header Files/vector.h"
 template<typename T>
-vector<T>::vector() : size(0),capacity(0)
+vector<T>::vector() : size(0),capacity(0),arr(new T[1])
 {
 
 }

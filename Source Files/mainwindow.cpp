@@ -49,13 +49,31 @@ std::vector<QColor> heapLevelColors = {  QColor::fromHsl(30, 150, 200), QColor::
 
 std::vector<int> array;
 std::string sortingAlgorithm;
-bool isAscending;
+bool isAscending = true;
 bool isContinuous;
 bool stepTriggered;
 int delayInMilliseconds;
 bool shouldReset = false;
 int elementsCount;
 int maxHeight;
+
+int comparisonCount = 0;
+int arrayAccessCount = 0;
+
+QString getAlgorithmComplexity(const std::string& algorithm)
+{
+    if (algorithm == "Bubble Sort") return "O(n^2)";
+    if (algorithm == "Merge Sort") return "O(n log n)";
+    if (algorithm == "Quick Sort") return "O(n log n)";
+    if (algorithm == "Counting Sort") return "O(n + k)";
+    if (algorithm == "Radix Sort") return "O(nk)";
+    if (algorithm == "Selection Sort") return "O(n^2)";
+    if (algorithm == "Insertion Sort") return "O(n^2)";
+    if (algorithm == "Heap Sort") return "O(n log n)";
+    if (algorithm == "Cocktail Sort") return "O(n^2)";
+    if (algorithm == "Gnome Sort") return "O(n^2)";
+    return "N/A";
+}
 
 // Function to generate array
 void MainWindow::generateArray()
@@ -91,6 +109,9 @@ void MainWindow::on_startButton_clicked()
         ui->startButton->setText("Reset");
 
         shouldReset = false;
+
+        comparisonCount = 0;
+        arrayAccessCount = 0;
 
         bar1Index = bar2Index = bar3Index = bar4Index = -1;
 
@@ -272,6 +293,43 @@ void MainWindow::visualize()
 
     QPainter painter(&pixmap);
 
+    int textHeight = 20;
+    painter.setPen(Qt::white);
+    painter.setFont(QFont("Arial", 10, QFont::Bold));
+
+    QString complexity = getAlgorithmComplexity(sortingAlgorithm);
+    QString algorithmText = QString("Algorithm: %1").arg(QString::fromStdString(sortingAlgorithm));
+    QString complexityText = QString("Complexity: %1").arg(complexity);
+
+    if (isAscending)
+    {
+        painter.drawText(10, textHeight, algorithmText);
+        painter.drawText(10, 2 * textHeight, complexityText);
+
+        QString comparisonText = QString("Comparisons: %1").arg(comparisonCount);
+        QString accessText = QString("Array Accesses: %1").arg(arrayAccessCount);
+
+        painter.drawText(10, 3 * textHeight, comparisonText);
+        painter.drawText(10, 4 * textHeight, accessText);
+    }
+    else
+    {
+        int algorithmTextWidth = painter.fontMetrics().horizontalAdvance(algorithmText);
+        int complexityTextWidth = painter.fontMetrics().horizontalAdvance(complexityText);
+
+        painter.drawText(width - algorithmTextWidth - 10, textHeight, algorithmText);
+        painter.drawText(width - complexityTextWidth - 10, 2 * textHeight, complexityText);
+
+        QString comparisonText = QString("Comparisons: %1").arg(comparisonCount);
+        QString accessText = QString("Array Accesses: %1").arg(arrayAccessCount);
+
+        int comparisonTextWidth = painter.fontMetrics().horizontalAdvance(comparisonText);
+        int accessTextWidth = painter.fontMetrics().horizontalAdvance(accessText);
+
+        painter.drawText(width - comparisonTextWidth - 10, 3 * textHeight, comparisonText);
+        painter.drawText(width - accessTextWidth - 10, 4 * textHeight, accessText);
+    }
+
     double gapWidth = 1.0;
     double barWidth = (width - (elementsCount - 1) * gapWidth) / elementsCount;
 
@@ -286,7 +344,7 @@ void MainWindow::visualize()
 
     for (int i = 0; i < elementsCount; ++i)
     {
-        int barHeight = (array[i] * height) / maxHeight;
+        int barHeight = (array[i] * (height - 5 * textHeight)) / maxHeight;
 
         QColor currentColor = barColor;
 
@@ -487,9 +545,13 @@ void MainWindow::bubbleSortAscending()
             visualize();
             wait();
 
+            comparisonCount++;
+            arrayAccessCount += 2;
+
             if (array[j] > array[j + 1])
             {
                 std::swap(array[j], array[j + 1]);
+                arrayAccessCount += 2;
 
                 waitForStep();
                 visualize();

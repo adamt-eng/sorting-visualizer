@@ -1,3 +1,4 @@
+#include <cstddef>
 template<typename T>
 class vector
 {
@@ -8,6 +9,12 @@ class vector
     public:
     typedef T* iterator;
     vector();
+    vector(int newCapacity);
+    ~vector();
+    void clear();
+    bool isEmpty();
+template<size_t N>
+void operator=(const T (&arr)[N]);
     T& at(int index);
     T& operator[](int index);
     int size();

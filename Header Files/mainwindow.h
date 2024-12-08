@@ -76,5 +76,7 @@ private:
 
     void insertionSortAscending();
     void insertionSortDescending();
+
+    void bogoSort();
 };
 #endif // MAINWINDOW_H

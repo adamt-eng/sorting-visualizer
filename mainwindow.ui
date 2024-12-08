@@ -64,7 +64,7 @@
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>103</width>
+       <width>117</width>
        <height>101</height>
       </rect>
      </property>
@@ -134,8 +134,8 @@
       <rect>
        <x>20</x>
        <y>160</y>
-       <width>101</width>
-       <height>51</height>
+       <width>108</width>
+       <height>58</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="elementsLayout">
@@ -166,7 +166,7 @@
       <rect>
        <x>14</x>
        <y>31</y>
-       <width>111</width>
+       <width>126</width>
        <height>71</height>
       </rect>
      </property>
@@ -236,6 +236,11 @@
           <string>Gnome Sort</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Bogo Sort</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
@@ -245,8 +250,8 @@
       <rect>
        <x>21</x>
        <y>101</y>
-       <width>101</width>
-       <height>52</height>
+       <width>109</width>
+       <height>61</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="ascendingFormLayout">
@@ -294,7 +299,7 @@
        <x>20</x>
        <y>30</y>
        <width>101</width>
-       <height>51</height>
+       <height>58</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="delayLayout">
@@ -325,8 +330,8 @@
       <rect>
        <x>20</x>
        <y>93</y>
-       <width>105</width>
-       <height>81</height>
+       <width>128</width>
+       <height>90</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="themeLayout">
@@ -414,7 +419,7 @@
        <x>20</x>
        <y>180</y>
        <width>101</width>
-       <height>51</height>
+       <height>57</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="soundLayout">

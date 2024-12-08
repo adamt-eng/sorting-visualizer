@@ -29,6 +29,9 @@ template<typename T>
 void vector<T>::clear()
 {
     mySize = 0;
+    ~vector();
+        myCapacity = 1;
+        arr = new T[1];
 }
 template<typename T>
 bool vector<T>::isEmpty()

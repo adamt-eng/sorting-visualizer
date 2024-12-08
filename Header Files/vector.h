@@ -10,6 +10,7 @@ class vector
     typedef T* iterator;
     vector();
     vector(int newCapacity);
+vector(int newSize, const T& initialValue);
     ~vector();
     void clear();
     bool isEmpty();

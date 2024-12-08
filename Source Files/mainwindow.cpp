@@ -1,6 +1,7 @@
 #include "../Header Files/mainwindow.h"
 #include ".././ui_mainwindow.h"
 #include "../Header Files/soundplayer.h"
+#include "../Header Files/vector.h"
 
 #include <QRandomGenerator>
 #include <QThread>

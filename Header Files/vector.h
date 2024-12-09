@@ -26,6 +26,7 @@ void operator=(const T (&arr)[N]);
     int size();
     int capacity();
     void reserve(int newSize);
+    void resize(int newSize, T value);
     void push_back(T x);
     iterator begin();
     iterator end();

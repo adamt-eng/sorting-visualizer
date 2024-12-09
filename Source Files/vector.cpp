@@ -1,7 +1,7 @@
 #include"../Header Files/vector.h"
 #include <cstddef> 
 template<typename T>
-vector<T>::vector() : mySize(0), myCapacity(1),arr(new T[1])
+vector<T>::vector() : mySize(0), myCapacity(0)
 {
 
 }
@@ -105,13 +105,30 @@ void vector<T>::reserve(int newSize)
     arr = temp;
     myCapacity = newSize;
 }
-
+template<typename T>
+void vector<T>::resize(int newSize, T value)
+{
+    int loop = newSize < mySize?newSize:mySize;
+    T* temp = new T[newSize];
+    for(int i = 0; i < loop;i++)
+    {
+        temp[i] = arr[i];
+    }
+    for(int i = loop;i < newSize;i++)
+    {
+        temp[i] = value;
+    }
+    delete[] arr;
+    arr = temp;
+    mySize = newSize;
+    myCapacity = newSize;
+}
 template<typename T>
 void vector<T>::push_back(T x)
 {
     if(myCapacity - mySize <= 1)
     {
-        myCapacity = 2*myCapacity;
+        myCapacity = isEmpty()?1:2*myCapacity;
         reserve(myCapacity);
     }
     arr[mySize] = x;

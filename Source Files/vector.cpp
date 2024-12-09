@@ -16,7 +16,7 @@ vector<T>::vector(int newSize, const T& initialValue)
     : mySize(newSize), myCapacity(newSize), arr(new T[newSize])
 {
     for (int i = 0; i < newSize; ++i) {
-        arr[i] = initialValue;  // Initialize all elements with the specified value
+        arr[i] = initialValue;
     }
 }
 template<typename T>

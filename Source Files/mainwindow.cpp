@@ -1,7 +1,7 @@
 #include "../Header Files/mainwindow.h"
 #include ".././ui_mainwindow.h"
 #include "../Header Files/soundplayer.h"
-//#include "../Source Files/std::vector.cpp"
+#include "../Source Files/vector.cpp"
 
 #include <QRandomGenerator>
 #include <QThread>
@@ -21,7 +21,7 @@
 // as it was already called in the constructor of the UI
 bool firstTry;
 
-std::vector<QColor> heapLevelColors;
+vector<QColor> heapLevelColors;
 
 // UI Constructor
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -53,9 +53,9 @@ QColor barColor = Qt::white;
 
 int bar1Index = -1, bar2Index = -1, bar3Index = -1, bar4Index = -1;
 
-std::vector<int> heapElements;
+vector<int> heapElements;
 
-std::vector<int> array;
+vector<int> array;
 std::string sortingAlgorithm;
 bool isAscending = true;
 bool isContinuous;
@@ -620,7 +620,7 @@ void MainWindow::bubbleSortDescending()
 
 void MainWindow::mergeAscending(int start, int mid, int end)
 {
-    std::vector<int> temp(end - start + 1); // end - start + 1 is the size of merged array
+    vector<int> temp(end - start + 1,0); // end - start + 1 is the size of merged array
 
     int i = start, j = mid + 1, k = 0;
 
@@ -722,7 +722,7 @@ void MainWindow::mergeSortAscending(int start, int end)
 
 void MainWindow::mergeDescending(int start, int mid, int end)
 {
-    std::vector<int> temp(end - start + 1); // end - start + 1 is the size of merged array
+    vector<int> temp(end - start + 1,0); // end - start + 1 is the size of merged array
 
     int i = start, j = mid + 1, k = 0;
 
@@ -973,8 +973,8 @@ void MainWindow::countingSort(int place)
 {
     int max = (place == 0) ? (*std::max_element(array.begin(), array.end()) + 1) : 10;
 
-    std::vector<int> count(max, 0);
-    std::vector<int> output(elementsCount);
+    vector<int> count(max, 0);
+    vector<int> output(elementsCount);
 
     // Build the count array
     for (int i = 0; i < elementsCount; ++i)

@@ -11,6 +11,8 @@ class vector
     vector();
     vector(int newCapacity);
 vector(int newSize, const T& initialValue);
+   template<size_t N>
+vector(const T (&arr)[N]);
     ~vector();
     void clear();
     bool isEmpty();

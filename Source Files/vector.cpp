@@ -12,16 +12,6 @@ vector<T>::vector(int newCapacity)
     myCapacity = newCapacity;
 }
 template<typename T>
-template<std::size_t N>
-vector<T>::vector(const T (&arr)[N]) {
-    arr = new T[N];
-    mySize = N;
-    myCapacity = N;
-    for (std::size_t i = 0; i < N; ++i) {
-        push_back(arr[i]);
-    }
-}
-template<typename T>
 vector<T>::vector(int newSize, const T& initialValue)
     : mySize(newSize), myCapacity(newSize), arr(new T[newSize])
 {
@@ -33,6 +23,16 @@ template<typename T>
 vector<T>::~vector()
 {
     delete[] arr;
+}
+template<typename T>
+template<std::size_t N>
+vector<T>::vector(const T (&arr)[N]) {
+    arr = new T[N];
+    mySize = N;
+    myCapacity = N;
+    for (std::size_t i = 0; i < N; ++i) {
+        push_back(arr[i]);
+    }
 }
 template<typename T>
 template<std::size_t N>

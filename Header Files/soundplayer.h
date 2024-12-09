@@ -13,7 +13,6 @@ public:
 
     bool loadWAV(const std::string& filePath);
     void playSound();
-    void stopSound();
 
     void playFrequencyWithEnvelope(float frequency, float attack, float decay, float sustain, float sustainDur, float release);
 

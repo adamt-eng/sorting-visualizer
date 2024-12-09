@@ -1,5 +1,7 @@
 #include"../Header Files/vector.h"
-#include <cstddef> 
+#include <cstddef>
+#include <initializer_list>
+
 template<typename T>
 vector<T>::vector() : mySize(0), myCapacity(0)
 {
@@ -19,6 +21,16 @@ vector<T>::vector(int newSize, const T& initialValue)
         arr[i] = initialValue;
     }
 }
+template<typename T>
+vector<T>::vector(std::initializer_list<T> initList)
+    : mySize(initList.size()), myCapacity(initList.size()), arr(new T[initList.size()])
+{
+    std::size_t index = 0;
+    for (const T& element : initList) {
+        arr[index++] = element;
+    }
+}
+
 template<typename T>
 vector<T>::~vector()
 {

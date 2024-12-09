@@ -450,6 +450,11 @@
           <string>Dog</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>No Sound</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="0" column="0" colspan="2">

@@ -86,11 +86,6 @@ void SoundPlayer::playSound()
     SDL_PauseAudioDevice(audioDevice, 0);
 }
 
-void SoundPlayer::stopSound()
-{
-    this->frequency = 0;
-}
-
 void SoundPlayer::AudioCallback(void* userdata, Uint8* stream, int len)
 {
     SoundPlayer* player = reinterpret_cast<SoundPlayer*>(userdata);

@@ -1,6 +1,5 @@
 #include <cstddef>
-
-
+#include <initializer_list>
 
 template<typename T>
 class vector
@@ -13,6 +12,7 @@ class vector
     typedef T* iterator;
     vector();
     vector(int newCapacity);
+    vector(std::initializer_list<T> initList);
     template<size_t N>
     vector(const T (&arr)[N]);
 vector(int newSize, const T& initialValue);

@@ -21,8 +21,6 @@
 // as it was already called in the constructor of the UI
 bool firstTry;
 
-vector<QColor> heapLevelColors;
-
 // UI Constructor
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -31,12 +29,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     generateArray();
     firstTry = true;
-
-    heapLevelColors.push_back(QColor::fromHsl(30, 150, 200));
-    heapLevelColors.push_back(QColor::fromHsl(120, 150, 200));
-    heapLevelColors.push_back(QColor::fromHsl(180, 150, 200));
-    heapLevelColors.push_back(QColor::fromHsl(240, 150, 200));
-    heapLevelColors.push_back(QColor::fromHsl(300, 150, 200));
 }
 
 // UI Destructor
@@ -54,6 +46,7 @@ QColor barColor = Qt::white;
 int bar1Index = -1, bar2Index = -1, bar3Index = -1, bar4Index = -1;
 
 vector<int> heapElements;
+vector<QColor> heapLevelColors = { QColor::fromHsl(30, 150, 200), QColor::fromHsl(120, 150, 200), QColor::fromHsl(180, 150, 200), QColor::fromHsl(240, 150, 200), QColor::fromHsl(300, 150, 200) };
 
 vector<int> array;
 std::string sortingAlgorithm;
@@ -138,27 +131,30 @@ void MainWindow::on_startButton_clicked()
         if (!variableSound)
         {
             bool wavLoaded;
-            if (choice == "Beep")
+            if (choice != "No Sound")
             {
-                wavLoaded = player.loadWAV(":/resources/sounds/beep.wav");
-            }
-            else if (choice == "Duck")
-            {
-                wavLoaded = player.loadWAV(":/resources/sounds/quack.wav");
-            }
-            else if (choice == "Cat")
-            {
-                wavLoaded = player.loadWAV(":/resources/sounds/meow.wav");
-            }
-            else if (choice == "Dog")
-            {
-                wavLoaded = player.loadWAV(":/resources/sounds/bark.wav");
-            }
+                if (choice == "Beep")
+                {
+                    wavLoaded = player.loadWAV(":/resources/sounds/beep.wav");
+                }
+                else if (choice == "Duck")
+                {
+                    wavLoaded = player.loadWAV(":/resources/sounds/quack.wav");
+                }
+                else if (choice == "Cat")
+                {
+                    wavLoaded = player.loadWAV(":/resources/sounds/meow.wav");
+                }
+                else if (choice == "Dog")
+                {
+                    wavLoaded = player.loadWAV(":/resources/sounds/bark.wav");
+                }
 
-            if (!wavLoaded)
-            {
-                QMessageBox::warning(this, "Warning", "Failed to load audio file, sound will be set to variable.");
-                variableSound = true;
+                if (!wavLoaded)
+                {
+                    QMessageBox::warning(this, "Warning", "Failed to load audio file, sound will be set to variable.");
+                    variableSound = true;
+                }
             }
         }
 
@@ -274,7 +270,6 @@ void MainWindow::on_startButton_clicked()
             bogoSort();
         }
 
-        player.stopSound();
         bar1Index = bar2Index = bar3Index = bar4Index = -1;
         visualize();
     }
@@ -516,6 +511,8 @@ void MainWindow::waitForStep()
 // Sound control
 void MainWindow::playSound(int i, int j)
 {
+    if (ui->soundComboBox->currentText() == "No Sound") return;
+
     if (variableSound)
     {
         float minFrequency = 120.0f;
@@ -1814,14 +1811,17 @@ void MainWindow::on_fullScreenButton_clicked()
     QList<QWidget*> allWidgets = this->centralWidget()->findChildren<QWidget*>();
     for (auto widget : allWidgets)
     {
-        if (widget != ui->textLabel)
+        if (qobject_cast<QRadioButton*>(widget)
+            || qobject_cast<QSpinBox*>(widget)
+            || qobject_cast<QComboBox*>(widget)
+            || qobject_cast<QCheckBox*>(widget)
+            || qobject_cast<QPushButton*>(widget))
         {
-            widget->hide();
+            widget->setEnabled(false);
         }
     }
 
     ui->textLabel->setGeometry(this->centralWidget()->geometry());
-    ui->textLabel->setPixmap(ui->textLabel->pixmap().scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     visualize();
 }
@@ -1833,25 +1833,40 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         this->showNormal();
         this->setGeometry(originalGeometry);
 
-        QList<QWidget*> allWidgets = this->centralWidget()->findChildren<QWidget*>();
-        for (auto widget : allWidgets)
+        if (ui->startButton->text() == "Start")
         {
-            widget->show();
+            QList<QWidget*> allWidgets = this->centralWidget()->findChildren<QWidget*>();
+            for (auto widget : allWidgets)
+            {
+                widget->setEnabled(true);
+            }
+
+            ui->nextStepButton->setEnabled(false);
+        }
+        else
+        {
+            ui->delay->setEnabled(true);
+            ui->themeComboBox->setEnabled(true);
+            ui->invertThemeCheckBox->setEnabled(true);
+            ui->fullScreenButton->setEnabled(true);
+            ui->startButton->setEnabled(true);
+            ui->nextStepButton->setEnabled(!isContinuous);
         }
 
         ui->textLabel->setGeometry(originalTextLabelGeometry);
 
         visualize();
 
-        QMessageBox* messageBox = new QMessageBox(this);
-        messageBox->setWindowTitle("Notification");
-        messageBox->setText("Fullscreen mode exited");
-        messageBox->setStandardButtons(QMessageBox::Ok);
-        messageBox->setModal(true);
-        messageBox->show();
+        QMessageBox::information(this, "Notification", "Fullscreen mode exited");
     }
     else
     {
         QMainWindow::keyPressEvent(event);
     }
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    shouldReset = true;
+    event->accept();
 }

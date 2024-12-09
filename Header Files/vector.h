@@ -1,4 +1,7 @@
 #include <cstddef>
+
+
+
 template<typename T>
 class vector
 {
@@ -10,9 +13,9 @@ class vector
     typedef T* iterator;
     vector();
     vector(int newCapacity);
+    template<size_t N>
+    vector(const T (&arr)[N]);
 vector(int newSize, const T& initialValue);
-   template<size_t N>
-vector(const T (&arr)[N]);
     ~vector();
     void clear();
     bool isEmpty();

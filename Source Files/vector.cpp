@@ -47,7 +47,7 @@ template<typename T>
 void vector<T>::clear()
 {
     mySize = 0;
-    ~vector();
+    delete[] arr;
         myCapacity = 1;
         arr = new T[1];
 }
@@ -101,7 +101,7 @@ void vector<T>::reserve(int newSize)
     {
         temp[i] = arr[i];
     }
-    ~vector();
+    delete[] arr;
     arr = temp;
     myCapacity = newSize;
 }

@@ -64,7 +64,7 @@
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>117</width>
+       <width>103</width>
        <height>101</height>
       </rect>
      </property>
@@ -133,9 +133,9 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>160</y>
-       <width>108</width>
-       <height>58</height>
+       <y>157</y>
+       <width>101</width>
+       <height>51</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="elementsLayout">
@@ -166,7 +166,7 @@
       <rect>
        <x>14</x>
        <y>31</y>
-       <width>126</width>
+       <width>111</width>
        <height>71</height>
       </rect>
      </property>
@@ -250,8 +250,8 @@
       <rect>
        <x>21</x>
        <y>101</y>
-       <width>109</width>
-       <height>61</height>
+       <width>101</width>
+       <height>51</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="ascendingFormLayout">
@@ -299,7 +299,7 @@
        <x>20</x>
        <y>30</y>
        <width>101</width>
-       <height>58</height>
+       <height>51</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="delayLayout">
@@ -330,8 +330,8 @@
       <rect>
        <x>20</x>
        <y>93</y>
-       <width>128</width>
-       <height>90</height>
+       <width>105</width>
+       <height>76</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="themeLayout">

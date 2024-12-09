@@ -1,7 +1,7 @@
 #include "../Header Files/mainwindow.h"
 #include ".././ui_mainwindow.h"
 #include "../Header Files/soundplayer.h"
-#include "../Header Files/vector.h"
+//#include "../Source Files/std::vector.cpp"
 
 #include <QRandomGenerator>
 #include <QThread>
@@ -21,6 +21,8 @@
 // as it was already called in the constructor of the UI
 bool firstTry;
 
+std::vector<QColor> heapLevelColors;
+
 // UI Constructor
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -29,6 +31,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     generateArray();
     firstTry = true;
+
+    heapLevelColors.push_back(QColor::fromHsl(30, 150, 200));
+    heapLevelColors.push_back(QColor::fromHsl(120, 150, 200));
+    heapLevelColors.push_back(QColor::fromHsl(180, 150, 200));
+    heapLevelColors.push_back(QColor::fromHsl(240, 150, 200));
+    heapLevelColors.push_back(QColor::fromHsl(300, 150, 200));
 }
 
 // UI Destructor
@@ -46,7 +54,6 @@ QColor barColor = Qt::white;
 int bar1Index = -1, bar2Index = -1, bar3Index = -1, bar4Index = -1;
 
 std::vector<int> heapElements;
-std::vector<QColor> heapLevelColors = {  QColor::fromHsl(30, 150, 200), QColor::fromHsl(120, 150, 200), QColor::fromHsl(180, 150, 200), QColor::fromHsl(240, 150, 200), QColor::fromHsl(300, 150, 200)};
 
 std::vector<int> array;
 std::string sortingAlgorithm;
@@ -73,7 +80,7 @@ QString getAlgorithmComplexity(const std::string& algorithm)
     if (algorithm == "Heap Sort") return "O(n log n)";
     if (algorithm == "Cocktail Sort") return "O(n^2)";
     if (algorithm == "Gnome Sort") return "O(n^2)";
-    if(algorithm == "Bogo Sort") return "O((n-1)!)";
+    if (algorithm == "Bogo Sort") return "O((n-1)!)";
     return "N/A";
 }
 
@@ -262,7 +269,7 @@ void MainWindow::on_startButton_clicked()
                 gnomeSortDescending();
             }
         }
-        else if(sortingAlgorithm == "Bogo Sort")
+        else if (sortingAlgorithm == "Bogo Sort")
         {
             bogoSort();
         }
@@ -547,16 +554,17 @@ void MainWindow::bubbleSortAscending()
             bar1Index = j;
             bar2Index = j + 1;
 
+            comparisonCount++;
+            arrayAccessCount += 2;
+
             waitForStep();
             visualize();
             wait();
 
-            comparisonCount++;
-            arrayAccessCount += 2;
-
             if (array[j] > array[j + 1])
             {
                 std::swap(array[j], array[j + 1]);
+
                 arrayAccessCount += 2;
 
                 waitForStep();
@@ -583,16 +591,18 @@ void MainWindow::bubbleSortDescending()
             bar1Index = j;
             bar2Index = j + 1;
 
+            comparisonCount++;
+            arrayAccessCount += 2;
+
             waitForStep();
             visualize();
             wait();
 
-            comparisonCount++;
-            arrayAccessCount += 2;
-
             if (array[j] < array[j + 1])
             {
                 std::swap(array[j], array[j + 1]);
+
+                arrayAccessCount += 2;
 
                 waitForStep();
                 visualize();
@@ -622,13 +632,14 @@ void MainWindow::mergeAscending(int start, int mid, int end)
     visualize();
     wait();
 
-
-
     while (i <= mid && j <= end)
     {
         if (shouldReset) return;
 
         bar3Index = start + k;
+
+        comparisonCount++;
+        arrayAccessCount+=3;
 
         waitForStep();
         visualize();
@@ -637,15 +648,11 @@ void MainWindow::mergeAscending(int start, int mid, int end)
 
         if (array[i] <= array[j])
         {
-            comparisonCount++;
             temp[k++] = array[i++];
-            arrayAccessCount+=2;
         }
         else
         {
-            comparisonCount++;
             temp[k++] = array[j++];
-            arrayAccessCount+=2;
         }
     }
 
@@ -655,11 +662,13 @@ void MainWindow::mergeAscending(int start, int mid, int end)
 
         bar3Index = start + k;
 
+        arrayAccessCount++;
+
+        temp[k++] = array[i++];
+
         waitForStep();
         visualize();
         wait();
-
-        temp[k++] = array[i++];
     }
 
     while (j <= end)
@@ -668,16 +677,20 @@ void MainWindow::mergeAscending(int start, int mid, int end)
 
         bar3Index = start + k;
 
+        arrayAccessCount++;
+
+        temp[k++] = array[j++];
+
         waitForStep();
         visualize();
         wait();
-
-        temp[k++] = array[j++];
     }
 
     for (int l = 0; l < temp.size(); l++)
     {
         bar3Index = start + l;
+
+        arrayAccessCount++;
 
         array[start + l] = temp[l]; // Copy into original array so we can visualize it
 
@@ -727,6 +740,9 @@ void MainWindow::mergeDescending(int start, int mid, int end)
 
         bar3Index = start + k;
 
+        comparisonCount++;
+        arrayAccessCount+=3;
+
         waitForStep();
         visualize();
         playSound(i, j);
@@ -734,15 +750,11 @@ void MainWindow::mergeDescending(int start, int mid, int end)
 
         if (array[i] >= array[j])
         {
-            comparisonCount++;
             temp[k++] = array[i++];
-            arrayAccessCount+=2;
         }
         else
         {
-            comparisonCount++;
             temp[k++] = array[j++];
-            arrayAccessCount+=2;
         }
     }
 
@@ -751,12 +763,13 @@ void MainWindow::mergeDescending(int start, int mid, int end)
         if (shouldReset) return;
 
         bar3Index = start + k;
+        arrayAccessCount++;
+
+        temp[k++] = array[i++];
 
         waitForStep();
         visualize();
         wait();
-
-        temp[k++] = array[i++];
     }
 
     while (j <= end)
@@ -765,16 +778,20 @@ void MainWindow::mergeDescending(int start, int mid, int end)
 
         bar3Index = start + k;
 
+        arrayAccessCount++;
+
+        temp[k++] = array[j++];
+
         waitForStep();
         visualize();
         wait();
-
-        temp[k++] = array[j++];
     }
 
     for (int l = 0; l < temp.size(); l++)
     {
         bar3Index = start + l;
+
+        arrayAccessCount++;
 
         array[start + l] = temp[l]; // Copy into original array so we can visualize it
 
@@ -811,6 +828,8 @@ int MainWindow::partitionAscending(int start, int end)
 
     bar4Index = end;
 
+    arrayAccessCount++;
+
     waitForStep();
     visualize();
     wait();
@@ -821,16 +840,18 @@ int MainWindow::partitionAscending(int start, int end)
 
         bar3Index = j;
 
+        arrayAccessCount++;
+        comparisonCount++;
+
         waitForStep();
         visualize();
         wait();
 
         if (array[j] < pivot)
         {
-            comparisonCount++;
             i++;
             std::swap(array[i], array[j]);
-            arrayAccessCount+=4;
+            arrayAccessCount+=2;
 
             waitForStep();
             visualize();
@@ -843,6 +864,8 @@ int MainWindow::partitionAscending(int start, int end)
     // So, swap between the elements in that position and the pivot index
     i++;
     std::swap(array[i], array[end]);
+
+    arrayAccessCount+=2;
 
     bar3Index = i;
 
@@ -878,6 +901,7 @@ int MainWindow::partitionDescending(int start, int end)
     int i = start - 1;
 
     bar4Index = end;
+    arrayAccessCount++;
 
     waitForStep();
     visualize();
@@ -889,16 +913,18 @@ int MainWindow::partitionDescending(int start, int end)
 
         bar3Index = j;
 
+        arrayAccessCount++;
+        comparisonCount++;
+
         waitForStep();
         visualize();
         wait();
 
         if (array[j] > pivot)
         {
-            comparisonCount++;
             i++;
             std::swap(array[i], array[j]);
-            arrayAccessCount+=4;
+            arrayAccessCount+=2;
 
             waitForStep();
             visualize();
@@ -911,6 +937,8 @@ int MainWindow::partitionDescending(int start, int end)
     // So, swap between the elements in that position and the pivot index
     i++;
     std::swap(array[i], array[end]);
+
+    arrayAccessCount+=2;
 
     bar3Index = i;
 
@@ -967,9 +995,12 @@ void MainWindow::countingSort(int place)
     {
         for (int i = elementsCount - 1; i >= 0; --i)
         {
-            int index = (place == 0) ? array[i] : (array[i] / place) % 10;
-            output[count[index] - 1] = array[i];
+            int element = array[i];
+            int index = (place == 0) ? element : (element / place) % 10;
+            output[count[index] - 1] = element;
             count[index]--;
+
+            arrayAccessCount++;
 
             bar4Index = i;
 
@@ -983,9 +1014,12 @@ void MainWindow::countingSort(int place)
     {
         for (int i = 0; i < elementsCount; ++i)
         {
-            int index = (place == 0) ? array[i] : (array[i] / place) % 10;
-            output[elementsCount - count[index]] = array[i];
+            int element = array[i];
+            int index = (place == 0) ? element : (element / place) % 10;
+            output[elementsCount - count[index]] = element;
             count[index]--;
+
+            arrayAccessCount++;
 
             bar4Index = i;
 
@@ -1005,6 +1039,8 @@ void MainWindow::countingSort(int place)
         if (shouldReset) return;
 
         array[i] = output[i];
+
+        arrayAccessCount++;
 
         bar1Index = i;
 
@@ -1048,13 +1084,13 @@ void MainWindow::selectionSortAscending()
             bar1Index = j;
             bar2Index = currentMinIndex;
 
+            comparisonCount++;
+            arrayAccessCount+=2;
+
             waitForStep();
             visualize();
             playSound(j, j);
             wait();
-
-            comparisonCount++;
-            arrayAccessCount+=2;
 
             if (array[j] < array[currentMinIndex])
             {
@@ -1065,7 +1101,7 @@ void MainWindow::selectionSortAscending()
         if (currentMinIndex != i)
         {
             std::swap(array[currentMinIndex], array[i]);
-            arrayAccessCount+=4;
+            arrayAccessCount+=2;
 
             waitForStep();
             visualize();
@@ -1094,12 +1130,13 @@ void MainWindow::selectionSortDescending()
             bar1Index = j;
             bar2Index = currentMaxIndex;
 
+            comparisonCount++;
+            arrayAccessCount+=2;
+
             waitForStep();
             visualize();
             playSound(j, j);
             wait();
-            comparisonCount++;
-            arrayAccessCount+=2;
 
             if (array[j] > array[currentMaxIndex])
             {
@@ -1110,7 +1147,7 @@ void MainWindow::selectionSortDescending()
         if (currentMaxIndex != i)
         {
             std::swap(array[currentMaxIndex], array[i]);
-            arrayAccessCount+=4;
+            arrayAccessCount+=2;
 
             waitForStep();
             visualize();
@@ -1140,15 +1177,17 @@ void MainWindow::cocktailSortAscending()
             bar1Index = i;
             bar2Index = i + 1;
 
+            comparisonCount++;
+            arrayAccessCount+=2;
+
             waitForStep();
             visualize();
             wait();
 
             if (array[i] > array[i + 1])
             {
-                comparisonCount++;
                 std::swap(array[i], array[i + 1]);
-                arrayAccessCount+=4;
+                arrayAccessCount+=2;
 
                 waitForStep();
                 visualize();
@@ -1172,15 +1211,17 @@ void MainWindow::cocktailSortAscending()
             bar1Index = i;
             bar2Index = i + 1;
 
+            comparisonCount++;
+            arrayAccessCount+=2;
+
             waitForStep();
             visualize();
             wait();
 
             if (array[i] > array[i + 1])
             {
-                comparisonCount++;
                 std::swap(array[i], array[i + 1]);
-                arrayAccessCount+=4;
+                arrayAccessCount+=2;
 
                 waitForStep();
                 visualize();
@@ -1214,15 +1255,17 @@ void MainWindow::cocktailSortDescending()
             bar1Index = i;
             bar2Index = i + 1;
 
+            comparisonCount++;
+            arrayAccessCount+=2;
+
             waitForStep();
             visualize();
             wait();
 
             if (array[i] < array[i + 1])
             {
-                comparisonCount++;
                 std::swap(array[i], array[i + 1]);
-                arrayAccessCount+=4;
+                arrayAccessCount+=2;
 
                 waitForStep();
                 visualize();
@@ -1246,15 +1289,17 @@ void MainWindow::cocktailSortDescending()
             bar1Index = i;
             bar2Index = i + 1;
 
+            comparisonCount++;
+            arrayAccessCount+=2;
+
             waitForStep();
             visualize();
             wait();
 
             if (array[i] < array[i + 1])
             {
-                comparisonCount++;
                 std::swap(array[i], array[i + 1]);
-                arrayAccessCount+=4;
+                arrayAccessCount+=2;
 
                 waitForStep();
                 visualize();
@@ -1276,28 +1321,37 @@ void MainWindow::gnomeSortAscending()
     {
         if (shouldReset) return;
 
-        if (index == 0 || array[index] >= array[index - 1])
+        if (index == 0)
         {
-            comparisonCount++;
             index++;
         }
         else
         {
-            bar1Index = index;
-            bar2Index = index - 1;
+            comparisonCount++;
+            arrayAccessCount+=2;
 
-            waitForStep();
-            visualize();
-            wait();
+            if (array[index] >= array[index - 1])
+            {
+                index++;
+            }
+            else
+            {
+                bar1Index = index;
+                bar2Index = index - 1;
 
-            std::swap(array[index], array[index - 1]);
-            arrayAccessCount+=4;
-            index--;
+                waitForStep();
+                visualize();
+                wait();
 
-            waitForStep();
-            visualize();
-            playSound(index + 1, index);
-            wait();
+                std::swap(array[index], array[index - 1]);
+                arrayAccessCount+=2;
+                index--;
+
+                waitForStep();
+                visualize();
+                playSound(index + 1, index);
+                wait();
+            }
         }
     }
 }
@@ -1308,33 +1362,42 @@ void MainWindow::gnomeSortDescending()
     {
         if (shouldReset) return;
 
-        if (index == 0 || array[index] <= array[index - 1])
+        if (index == 0)
         {
-            comparisonCount++;
             index++;
         }
         else
         {
-            bar1Index = index;
-            bar2Index = index - 1;
+            comparisonCount++;
+            arrayAccessCount+=2;
 
-            waitForStep();
-            visualize();
-            wait();
+            if (array[index] <= array[index - 1])
+            {
+                index++;
+            }
+            else
+            {
+                bar1Index = index;
+                bar2Index = index - 1;
 
-            std::swap(array[index], array[index - 1]);
-            arrayAccessCount+=4;
-            index--;
+                waitForStep();
+                visualize();
+                wait();
 
-            waitForStep();
-            visualize();
-            playSound(index + 1, index);
-            wait();
+                std::swap(array[index], array[index - 1]);
+                arrayAccessCount+=2;
+                index--;
+
+                waitForStep();
+                visualize();
+                playSound(index + 1, index);
+                wait();
+            }
         }
     }
 }
 
-void MainWindow::heapifyMax(std::vector<int>& heap, int n, int i)
+void MainWindow::heapifyMax(int n, int i)
 {
     int largest = i;
     int left = 2 * i + 1;
@@ -1356,8 +1419,6 @@ void MainWindow::heapifyMax(std::vector<int>& heap, int n, int i)
 
     if (left < n)
     {
-        comparisonCount++;
-        arrayAccessCount++;
         if (std::find(heapElements.begin(), heapElements.end(), left) == heapElements.end())
         {
             heapElements.push_back(left);
@@ -1367,18 +1428,17 @@ void MainWindow::heapifyMax(std::vector<int>& heap, int n, int i)
             wait();
         }
 
-        if (heap[left] > heap[largest])
+        comparisonCount++;
+        arrayAccessCount+=2;
+
+        if (array[left] > array[largest])
         {
             largest = left;
-            comparisonCount++;
-            arrayAccessCount++;
         }
     }
 
     if (right < n)
     {
-        comparisonCount++;
-        arrayAccessCount++;
         if (std::find(heapElements.begin(), heapElements.end(), right) == heapElements.end())
         {
             heapElements.push_back(right);
@@ -1388,39 +1448,40 @@ void MainWindow::heapifyMax(std::vector<int>& heap, int n, int i)
             wait();
         }
 
-        if (heap[right] > heap[largest])
+        comparisonCount++;
+        arrayAccessCount+=2;
+
+        if (array[right] > array[largest])
         {
             largest = right;
-            comparisonCount++;
-            arrayAccessCount++;
         }
     }
 
     if (largest != i)
     {
-        std::swap(heap[i], heap[largest]);
-        arrayAccessCount += 4;
+        std::swap(array[i], array[largest]);
+        arrayAccessCount += 2;
 
         waitForStep();
         visualize();
         playSound(i, largest);
         wait();
 
-        heapifyMax(heap, n, largest);
+        heapifyMax(n, largest);
     }
 }
 
 
-void MainWindow::buildMaxdHeap(std::vector<int>& heap)
+void MainWindow::buildMaxdHeap()
 {
-    int n = heap.size();
+    int n = array.size();
     heapElements.clear();
 
     for (int i = n / 2 - 1; i >= 0; i--)
     {
         if (shouldReset) return;
 
-        heapifyMax(heap, n, i);
+        heapifyMax(n, i);
 
         waitForStep();
         visualize();
@@ -1428,17 +1489,18 @@ void MainWindow::buildMaxdHeap(std::vector<int>& heap)
     }
 }
 
-void MainWindow::popMax(std::vector<int>& heap, int n)
+void MainWindow::popMax(int n)
 {
     if (n == 0) return;
 
-    std::swap(heap[0], heap[n - 1]);
+    std::swap(array[0], array[n - 1]);
+    arrayAccessCount+=2;
 
     waitForStep();
     visualize();
     wait();
 
-    heapifyMax(heap, n - 1, 0);
+    heapifyMax(n - 1, 0);
 
     waitForStep();
     visualize();
@@ -1447,7 +1509,7 @@ void MainWindow::popMax(std::vector<int>& heap, int n)
 
 void MainWindow::heapSortAscending()
 {
-    buildMaxdHeap(array);
+    buildMaxdHeap();
     waitForStep();
     visualize();
     wait();
@@ -1456,7 +1518,7 @@ void MainWindow::heapSortAscending()
     {
         if (shouldReset) return;
 
-        popMax(array, array.size()-i);
+        popMax(array.size()-i);
 
         waitForStep();
         visualize();
@@ -1464,7 +1526,7 @@ void MainWindow::heapSortAscending()
     }
 }
 
-void MainWindow::heapifyMin(std::vector<int>& heap, int n, int i)
+void MainWindow::heapifyMin(int n, int i)
 {
     int smallest = i;
     int left = 2 * i + 1;
@@ -1485,8 +1547,6 @@ void MainWindow::heapifyMin(std::vector<int>& heap, int n, int i)
     }
 
     if (left < n)
-        comparisonCount++;
-        arrayAccessCount++;
     {
         if (std::find(heapElements.begin(), heapElements.end(), left) == heapElements.end())
         {
@@ -1497,19 +1557,17 @@ void MainWindow::heapifyMin(std::vector<int>& heap, int n, int i)
             wait();
         }
 
-        if (heap[left] < heap[smallest])
+        comparisonCount++;
+        arrayAccessCount+=2;
+
+        if (array[left] < array[smallest])
         {
             smallest = left;
-            comparisonCount++;
-            arrayAccessCount++;
         }
     }
 
     if (right < n)
     {
-        comparisonCount++;
-        arrayAccessCount++;
-
         if (std::find(heapElements.begin(), heapElements.end(), right) == heapElements.end())
         {
             heapElements.push_back(right);
@@ -1519,36 +1577,37 @@ void MainWindow::heapifyMin(std::vector<int>& heap, int n, int i)
             wait();
         }
 
-        if (heap[right] < heap[smallest])
+        comparisonCount++;
+        arrayAccessCount+=2;
+
+        if (array[right] < array[smallest])
         {
             smallest = right;
-            comparisonCount++;
-            arrayAccessCount++;
         }
     }
 
     if (smallest != i)
     {
-        std::swap(heap[i], heap[smallest]);
-        arrayAccessCount += 4;
+        std::swap(array[i], array[smallest]);
+        arrayAccessCount += 2;
         waitForStep();
         visualize();
         playSound(i, smallest);
         wait();
 
-        heapifyMin(heap, n, smallest);
+        heapifyMin(n, smallest);
     }
 }
-void MainWindow::buildMindHeap(std::vector<int>& heap)
+void MainWindow::buildMindHeap()
 {
-    int n = heap.size();
+    int n = array.size();
     heapElements.clear();
 
     for (int i = n / 2 - 1; i >= 0; i--)
     {
         if (shouldReset) return;
 
-        heapifyMin(heap, n, i);
+        heapifyMin(n, i);
 
         waitForStep();
         visualize();
@@ -1556,17 +1615,18 @@ void MainWindow::buildMindHeap(std::vector<int>& heap)
     }
 }
 
-void MainWindow::popMin(std::vector<int>& heap, int n)
+void MainWindow::popMin(int n)
 {
     if (n == 0) return;
 
-    std::swap(heap[0], heap[n - 1]);
+    std::swap(array[0], array[n - 1]);
+    arrayAccessCount+=2;
 
     waitForStep();
     visualize();
     wait();
 
-    heapifyMin(heap, n - 1, 0);
+    heapifyMin(n - 1, 0);
 
     waitForStep();
     visualize();
@@ -1575,7 +1635,7 @@ void MainWindow::popMin(std::vector<int>& heap, int n)
 
 void MainWindow::heapSortDescending()
 {
-    buildMindHeap(array);
+    buildMindHeap();
     waitForStep();
     visualize();
     wait();
@@ -1584,7 +1644,7 @@ void MainWindow::heapSortDescending()
     {
         if (shouldReset) return;
 
-        popMin(array, array.size() - i);
+        popMin(array.size() - i);
 
         waitForStep();
         visualize();
@@ -1613,8 +1673,10 @@ void MainWindow::insertionSortAscending()
 
         while (index > 0 && array[index - 1] > array[index])
         {
-            comparisonCount++;
             if (shouldReset) return;
+
+            arrayAccessCount+=2;
+            comparisonCount++;
 
             bar1Index = index - 1;
             bar2Index = index;
@@ -1625,7 +1687,7 @@ void MainWindow::insertionSortAscending()
             wait();
 
             std::swap(array[index], array[index - 1]);
-            arrayAccessCount+=4;
+            arrayAccessCount+=2;
 
             waitForStep();
             visualize();
@@ -1666,8 +1728,10 @@ void MainWindow::insertionSortDescending()
 
         while (index > 0 && array[index - 1] < array[index])
         {
-            comparisonCount++;
             if (shouldReset) return;
+
+            arrayAccessCount+=2;
+            comparisonCount++;
 
             bar1Index = index - 1;
             bar2Index = index;
@@ -1678,7 +1742,7 @@ void MainWindow::insertionSortDescending()
             wait();
 
             std::swap(array[index], array[index - 1]);
-            arrayAccessCount+=4;
+            arrayAccessCount+=2;
 
             waitForStep();
             visualize();
@@ -1737,8 +1801,6 @@ void MainWindow::bogoSort()
         }
     }
 }
-
-
 
 QRect originalGeometry, originalTextLabelGeometry;
 void MainWindow::on_fullScreenButton_clicked()

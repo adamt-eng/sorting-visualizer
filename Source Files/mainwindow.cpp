@@ -59,8 +59,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
 
-    this->statusBar()->setSizeGripEnabled(false); // Disables the resize icon for the window
-
     generateArray();
 
     setAlgorithmsComplexity(ui->comboBox);

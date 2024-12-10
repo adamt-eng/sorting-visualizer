@@ -130,6 +130,8 @@ void MainWindow::on_startButton_clicked()
 
         redBar1Index = redBar2Index = greenBarIndex = blueBarIndex = -1;
 
+        sortedElements.clear();
+
         // Read sorting method and order
         sortingAlgorithm = ui->comboBox->currentText().toStdString();
         isAscending = ui->ascendingRadioButton->isChecked();
@@ -293,7 +295,10 @@ void MainWindow::on_startButton_clicked()
     else
     {
         shouldReset = true;
+    }
 
+    if (shouldReset)
+    {
         generateArray();
     }
 
@@ -527,8 +532,8 @@ void MainWindow::visualize()
         }
 
         if (i == redBar1Index || i == redBar2Index) currentColor = Qt::red;
-        else if (std::find(sortedElements.begin(), sortedElements.end(), i) != sortedElements.end() || i == greenBarIndex) currentColor = Qt::green;
         else if (i == blueBarIndex) currentColor = QColor(3, 181, 252);
+        else if (std::find(sortedElements.begin(), sortedElements.end(), i) != sortedElements.end() || i == greenBarIndex) currentColor = Qt::green;
 
         painter.fillRect(QRectF(xPos, height - barHeight, barWidth, barHeight), currentColor);
 
@@ -628,8 +633,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         ui->textLabel->setGeometry(originalTextLabelGeometry);
 
         visualize();
-
-        QMessageBox::information(this, "Notification", "Fullscreen mode exited");
     }
     else if ((event->key() == Qt::Key_F || event->key() == Qt::Key_F11) && !this->isFullScreen())
     {
@@ -781,15 +784,11 @@ void MainWindow::mergeAscending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        greenBarIndex = start + k;
-
         comparisonCount++;
         arrayAccessCount+=3;
 
-        waitForStep();
         visualize();
         playSound(i, j);
-        wait();
 
         if (array[i] <= array[j])
         {
@@ -805,46 +804,32 @@ void MainWindow::mergeAscending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        greenBarIndex = start + k;
-
         arrayAccessCount++;
 
         temp[k++] = array[i++];
 
-        waitForStep();
         visualize();
-        wait();
     }
 
     while (j <= end)
     {
         if (shouldReset) return;
 
-        greenBarIndex = start + k;
-
         arrayAccessCount++;
 
         temp[k++] = array[j++];
 
-        waitForStep();
         visualize();
-        wait();
     }
 
     for (int l = 0; l < temp.size(); l++)
     {
-        greenBarIndex = start + l;
-
         arrayAccessCount++;
 
         array[start + l] = temp[l]; // Copy into original array so we can visualize it
 
-        if (start == 0 && end == elementsCount - 1)
-        {
-            sortedElements.push_back(start + l);
-        }
+        sortedElements.push_back(start + l);
 
-        waitForStep();
         visualize();
         playSound(start + l, l);
         wait();
@@ -863,9 +848,7 @@ void MainWindow::mergeSortAscending(int start, int end)
     redBar2Index = end;
     blueBarIndex = mid;
 
-    waitForStep();
     visualize();
-    wait();
 
     mergeAscending(start, mid, end); // Merge both halves
 }
@@ -888,15 +871,11 @@ void MainWindow::mergeDescending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        greenBarIndex = start + k;
-
         comparisonCount++;
         arrayAccessCount+=3;
 
-        waitForStep();
         visualize();
         playSound(i, j);
-        wait();
 
         if (array[i] >= array[j])
         {
@@ -912,14 +891,11 @@ void MainWindow::mergeDescending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        greenBarIndex = start + k;
         arrayAccessCount++;
 
         temp[k++] = array[i++];
 
-        waitForStep();
         visualize();
-        wait();
     }
 
     while (j <= end)
@@ -939,18 +915,12 @@ void MainWindow::mergeDescending(int start, int mid, int end)
 
     for (int l = 0; l < temp.size(); l++)
     {
-        greenBarIndex = start + l;
-
         arrayAccessCount++;
 
         array[start + l] = temp[l]; // Copy into original array so we can visualize it
 
-        if (start == 0 && end == elementsCount - 1)
-        {
-            sortedElements.push_back(start + l);
-        }
+        sortedElements.push_back(start + l);
 
-        waitForStep();
         visualize();
         playSound(start + l, l);
         wait();
@@ -969,9 +939,7 @@ void MainWindow::mergeSortDescending(int start, int end)
     redBar2Index = end;
     blueBarIndex = mid;
 
-    waitForStep();
     visualize();
-    wait();
 
     mergeDescending(start, mid, end); // Merge both halves
 }

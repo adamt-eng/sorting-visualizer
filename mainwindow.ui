@@ -328,7 +328,7 @@
       <item>
        <widget class="QSpinBox" name="delay">
         <property name="focusPolicy">
-         <enum>Qt::FocusPolicy::StrongFocus</enum>
+         <enum>Qt::FocusPolicy::WheelFocus</enum>
         </property>
         <property name="minimum">
          <number>1</number>
@@ -553,7 +553,7 @@
      </rect>
     </property>
     <property name="focusPolicy">
-     <enum>Qt::FocusPolicy::NoFocus</enum>
+     <enum>Qt::FocusPolicy::WheelFocus</enum>
     </property>
     <property name="text">
      <string>TextLabel</string>
@@ -606,7 +606,7 @@
       <item>
        <widget class="QSpinBox" name="elementsCount">
         <property name="focusPolicy">
-         <enum>Qt::FocusPolicy::StrongFocus</enum>
+         <enum>Qt::FocusPolicy::WheelFocus</enum>
         </property>
         <property name="minimum">
          <number>2</number>

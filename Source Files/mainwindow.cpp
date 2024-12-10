@@ -315,7 +315,7 @@ void MainWindow::visualize()
     QPainter painter(&pixmap);
 
     int textHeight = 20;
-    painter.setPen(Qt::white);
+    painter.setPen(barColor);
     painter.setFont(QFont("Arial", 10, QFont::Bold));
 
     QString complexity = getAlgorithmComplexity(sortingAlgorithm);

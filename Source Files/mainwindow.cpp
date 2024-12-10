@@ -1953,7 +1953,7 @@ void MainWindow::on_fullScreenButton_clicked()
 }
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Escape && this->isFullScreen())
+    if ((event->key() == Qt::Key_Escape || event->key() == Qt::Key_F11 || event->key() == Qt::Key_F) && this->isFullScreen())
     {
         this->statusBar()->show();
         this->showNormal();
@@ -1984,6 +1984,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         visualize();
 
         QMessageBox::information(this, "Notification", "Fullscreen mode exited");
+    }
+    else if ((event->key() == Qt::Key_F || event->key() == Qt::Key_F11) && !this->isFullScreen())
+    {
+        on_fullScreenButton_clicked();
     }
     else
     {

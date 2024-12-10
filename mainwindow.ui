@@ -18,9 +18,12 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>1280</width>
+    <width>360</width>
     <height>780</height>
    </size>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::FocusPolicy::NoFocus</enum>
   </property>
   <property name="contextMenuPolicy">
    <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
@@ -325,7 +328,7 @@
       <item>
        <widget class="QSpinBox" name="delay">
         <property name="focusPolicy">
-         <enum>Qt::FocusPolicy::NoFocus</enum>
+         <enum>Qt::FocusPolicy::StrongFocus</enum>
         </property>
         <property name="minimum">
          <number>1</number>
@@ -546,8 +549,11 @@
       <x>180</x>
       <y>20</y>
       <width>1081</width>
-      <height>741</height>
+      <height>731</height>
      </rect>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::FocusPolicy::NoFocus</enum>
     </property>
     <property name="text">
      <string>TextLabel</string>
@@ -600,7 +606,7 @@
       <item>
        <widget class="QSpinBox" name="elementsCount">
         <property name="focusPolicy">
-         <enum>Qt::FocusPolicy::NoFocus</enum>
+         <enum>Qt::FocusPolicy::StrongFocus</enum>
         </property>
         <property name="minimum">
          <number>2</number>

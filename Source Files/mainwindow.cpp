@@ -655,6 +655,36 @@ void MainWindow::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
+// Event Handler for window resize event, this makes sure that new window size is fully utilized for a better visualization
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    static int originalRightMargin = 0;
+    static int originalBottomMargin = 0;
+    static bool marginsInitialized = false;
+
+    if (!marginsInitialized)
+    {
+        QRect centralWidgetGeometry = ui->centralwidget->geometry();
+        QRect textLabelGeometry = ui->textLabel->geometry();
+
+        originalRightMargin = centralWidgetGeometry.width() - textLabelGeometry.right();
+        originalBottomMargin = centralWidgetGeometry.height() - textLabelGeometry.bottom();
+        marginsInitialized = true;
+    }
+
+    QRect currentGeometry = ui->textLabel->geometry();
+    QRect centralWidgetGeometry = ui->centralwidget->geometry();
+
+    int newWidth = centralWidgetGeometry.width() - currentGeometry.x() - originalRightMargin;
+    int newHeight = centralWidgetGeometry.height() - currentGeometry.y() - originalBottomMargin;
+
+    ui->textLabel->setGeometry(currentGeometry.x(), currentGeometry.y(), newWidth, newHeight);
+
+    QMainWindow::resizeEvent(event);
+
+    visualize();
+}
+
 // Algorithms
 void MainWindow::bubbleSortAscending()
 {

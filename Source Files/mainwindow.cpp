@@ -1,8 +1,8 @@
-#include "../Header Files/mainwindow.h"
-#include ".././ui_mainwindow.h"
-#include "../Header Files/soundplayer.h"
-#include "../Source Files/vector.cpp"
+// Standard Library Includes
+#include <algorithm>
+#include <random>
 
+// Qt Includes
 #include <QRandomGenerator>
 #include <QThread>
 #include <QPainter>
@@ -12,23 +12,58 @@
 #include <QRect>
 #include <QKeyEvent>
 
-#include <algorithm>
-#include <random>
-
+// SDL Includes
 #include <SDL2/SDL.h>
 
-// This boolean is used to avoid calling generateArray() again before the first visualization,
-// as it was already called in the constructor of the UI
-bool firstTry;
+// Project Includes
+#include "../Header Files/mainwindow.h"
+#include ".././ui_mainwindow.h"
+#include "../Header Files/soundplayer.h"
+#include "../Source Files/vector.cpp"
+
+// Array to be sorted
+vector<int> array;
+
+// Flags and Status Variables
+bool stepTriggered;
+bool shouldReset;
+
+// Sorting Configuration
+bool isAscending = true; // Sort ascendingly or descendingly
+bool isContinuous; // Continuous or step-by-step sorting
+int delayInMilliseconds;
+int elementsCount;
+int maxHeight; // Biggest element in the array (currently always equals to elementsCount but this is kept as we might change it)
+std::string sortingAlgorithm;
+
+// Sorting Statistics
+int comparisonCount = 0;
+int arrayAccessCount = 0;
+
+// Visual Elements
+int redBar1Index = -1, redBar2Index = -1, greenBarIndex = -1, blueBarIndex = -1;
+QColor backgroundColor = Qt::black, barColor = Qt::white;
+vector<int> sortedElements; // Elements to be marked green
+QRect originalGeometry, originalTextLabelGeometry;
+
+// Sound Player
+SoundPlayer player;
+bool variableSound; // Whether the user chose "Variable" sound or any other option
+
+// Heap Sort Specific Variables
+vector<int> heapElements;
+vector<QColor> heapLevelColors = { QColor::fromHsl(30, 150, 200), QColor::fromHsl(120, 150, 200), QColor::fromHsl(180, 150, 200), QColor::fromHsl(240, 150, 200), QColor::fromHsl(300, 150, 200) };
 
 // UI Constructor
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     this->statusBar()->setSizeGripEnabled(false); // Disables the resize icon for the window
 
     generateArray();
-    firstTry = true;
+
+    setAlgorithmsComplexity(ui->comboBox);
 }
 
 // UI Destructor
@@ -37,79 +72,57 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-SoundPlayer player;
-bool variableSound;
-
-vector<int> sortedElements;
-
-QColor backgroundColor = Qt::black;
-QColor barColor = Qt::white;
-
-int bar1Index = -1, bar2Index = -1, bar3Index = -1, bar4Index = -1;
-
-vector<int> heapElements;
-vector<QColor> heapLevelColors = { QColor::fromHsl(30, 150, 200), QColor::fromHsl(120, 150, 200), QColor::fromHsl(180, 150, 200), QColor::fromHsl(240, 150, 200), QColor::fromHsl(300, 150, 200) };
-
-vector<int> array;
-std::string sortingAlgorithm;
-bool isAscending = true;
-bool isContinuous;
-bool stepTriggered;
-int delayInMilliseconds;
-bool shouldReset = false;
-int elementsCount;
-int maxHeight;
-
-int comparisonCount = 0;
-int arrayAccessCount = 0;
-
-QString getAlgorithmComplexity(const std::string& algorithm)
+// Function to set each algorithm's complexity as it's data in the comboBox for faster retrieval when visualizing
+void MainWindow::setAlgorithmsComplexity(QComboBox *comboBox)
 {
-    if (algorithm == "Bubble Sort") return "O(n^2)";
-    if (algorithm == "Merge Sort") return "O(n log n)";
-    if (algorithm == "Quick Sort") return "O(n log n)";
-    if (algorithm == "Counting Sort") return "O(n + k)";
-    if (algorithm == "Radix Sort") return "O(nk)";
-    if (algorithm == "Selection Sort") return "O(n^2)";
-    if (algorithm == "Insertion Sort") return "O(n^2)";
-    if (algorithm == "Heap Sort") return "O(n log n)";
-    if (algorithm == "Cocktail Sort") return "O(n^2)";
-    if (algorithm == "Gnome Sort") return "O(n^2)";
-    if (algorithm == "Bogo Sort") return "O((n-1)!)";
-    return "N/A";
-}
+    vector<QString> algorithms =
+        {
+        "Bubble Sort",
+        "Merge Sort",
+        "Quick Sort",
+        "Counting Sort",
+        "Radix Sort",
+        "Selection Sort",
+        "Insertion Sort",
+        "Heap Sort",
+        "Cocktail Sort",
+        "Gnome Sort",
+        "Bogo Sort"
+    };
 
-// Function to generate array
-void MainWindow::generateArray()
-{
-    if (firstTry)
+    vector<QString> complexities = {
+        "O(n^2)",
+        "O(n log n)",
+        "O(n log n)",
+        "O(n + k)",
+        "O(nk)",
+        "O(n^2)",
+        "O(n^2)",
+        "O(n log n)",
+        "O(n^2)",
+        "O(n^2)",
+        "O((n-1)!)"
+    };
+
+    for (int i = 0; i < comboBox->count(); ++i)
     {
-        firstTry = false;
-        return;
+        QString algorithm = comboBox->itemText(i);
+        for (size_t j = 0; j < algorithms.size(); ++j)
+        {
+            if (algorithms[j] == algorithm)
+            {
+                comboBox->setItemData(i, complexities[j]);
+                break;
+            }
+        }
     }
-
-    // Clear array
-    array.clear();
-
-    elementsCount = ui->elementsCount->value();
-
-    for (int i = 1; i <= elementsCount; ++i) array.push_back(i);
-
-    maxHeight = *std::max_element(array.begin(), array.end());
-
-    // Shuffle the array randomly
-    std::shuffle(array.begin(), array.end(), std::mt19937{std::random_device{}()});
-
-    visualize();
 }
 
-// Start visualization button
+// Event Handler for startButton
 void MainWindow::on_startButton_clicked()
 {
     if (ui->startButton->text() == "Start")
     {
-        heapElements.clear();
-
         ui->startButton->setText("Reset");
 
         shouldReset = false;
@@ -117,9 +130,7 @@ void MainWindow::on_startButton_clicked()
         comparisonCount = 0;
         arrayAccessCount = 0;
 
-        bar1Index = bar2Index = bar3Index = bar4Index = -1;
-
-        generateArray();
+        redBar1Index = redBar2Index = greenBarIndex = blueBarIndex = -1;
 
         // Read sorting method and order
         sortingAlgorithm = ui->comboBox->currentText().toStdString();
@@ -162,6 +173,7 @@ void MainWindow::on_startButton_clicked()
 
         // Disable all controls to prevent modification
         ui->nextStepButton->setEnabled(!isContinuous);
+        ui->generateArrayButton->setEnabled(false);
         ui->soundComboBox->setEnabled(false);
         ui->continuousRadioButton->setEnabled(false);
         ui->stepByStepRadioButton->setEnabled(false);
@@ -279,20 +291,22 @@ void MainWindow::on_startButton_clicked()
                 sortedElements.push_back(i);
             }
         }
-
-        bar1Index = bar2Index = bar3Index = bar4Index = -1;
-
-        visualize();
-
-        sortedElements.clear();
     }
     else
     {
         shouldReset = true;
+
+        generateArray();
     }
+
+    redBar1Index = redBar2Index = greenBarIndex = blueBarIndex = -1;
+    heapElements.clear();
+
+    visualize();
 
     // Re-enable controls
     ui->startButton->setText("Start");
+    ui->generateArrayButton->setEnabled(true);
     ui->soundComboBox->setEnabled(true);
     ui->comboBox->setEnabled(true);
     ui->elementsCount->setEnabled(true);
@@ -303,139 +317,26 @@ void MainWindow::on_startButton_clicked()
     ui->descendingRadioButton->setEnabled(true);
 }
 
-// Visualization function
-void MainWindow::visualize()
+// Event Handler for generateArrayButton
+void MainWindow::on_generateArrayButton_clicked()
 {
-    int width = ui->textLabel->width();
-    int height = ui->textLabel->height();
-
-    QPixmap pixmap(width, height);
-    pixmap.fill(backgroundColor);
-
-    QPainter painter(&pixmap);
-
-    int textHeight = 20;
-    painter.setPen(barColor);
-    painter.setFont(QFont("Arial", 10, QFont::Bold));
-
-    QString complexity = getAlgorithmComplexity(sortingAlgorithm);
-    QString algorithmText = QString("Algorithm: %1").arg(QString::fromStdString(sortingAlgorithm));
-    QString complexityText = QString("Complexity: %1").arg(complexity);
-
-    if (isAscending)
-    {
-        painter.drawText(10, textHeight, algorithmText);
-        painter.drawText(10, 2 * textHeight, complexityText);
-
-        QString comparisonText = QString("Comparisons: %1").arg(comparisonCount);
-        QString accessText = QString("Array Accesses: %1").arg(arrayAccessCount);
-
-        painter.drawText(10, 3 * textHeight, comparisonText);
-        painter.drawText(10, 4 * textHeight, accessText);
-    }
-    else
-    {
-        int algorithmTextWidth = painter.fontMetrics().horizontalAdvance(algorithmText);
-        int complexityTextWidth = painter.fontMetrics().horizontalAdvance(complexityText);
-
-        painter.drawText(width - algorithmTextWidth - 10, textHeight, algorithmText);
-        painter.drawText(width - complexityTextWidth - 10, 2 * textHeight, complexityText);
-
-        QString comparisonText = QString("Comparisons: %1").arg(comparisonCount);
-        QString accessText = QString("Array Accesses: %1").arg(arrayAccessCount);
-
-        int comparisonTextWidth = painter.fontMetrics().horizontalAdvance(comparisonText);
-        int accessTextWidth = painter.fontMetrics().horizontalAdvance(accessText);
-
-        painter.drawText(width - comparisonTextWidth - 10, 3 * textHeight, comparisonText);
-        painter.drawText(width - accessTextWidth - 10, 4 * textHeight, accessText);
-    }
-
-    double gapWidth = 1.0;
-    double barWidth = (width - (elementsCount - 1) * gapWidth) / elementsCount;
-
-    // If barWidth is less than 1, make it 1 and reduce gapWidth
-    if (barWidth < 1.0)
-    {
-        barWidth = 1.0;
-        gapWidth = (width - elementsCount * barWidth) / (elementsCount - 1);
-    }
-
-    double xPos = 0;
-
-    for (int i = 0; i < elementsCount; ++i)
-    {
-        int barHeight = (array[i] * (height - 5 * textHeight)) / maxHeight;
-
-        QColor currentColor = barColor;
-
-        if (std::find(heapElements.begin(), heapElements.end(), i) != heapElements.end())
-        {
-            int level = static_cast<int>(std::log2(i + 1));
-            currentColor = heapLevelColors[level % heapLevelColors.size()];
-        }
-
-        if (i == bar1Index || i == bar2Index) currentColor = Qt::red;
-        else if (std::find(sortedElements.begin(), sortedElements.end(), i) != sortedElements.end() || i == bar3Index) currentColor = Qt::green;
-        else if (i == bar4Index) currentColor = QColor(3, 181, 252);
-
-        painter.fillRect(QRectF(xPos, height - barHeight, barWidth, barHeight), currentColor);
-
-        xPos += barWidth + gapWidth;
-    }
-
-    ui->textLabel->setPixmap(pixmap);
+    generateArray();
 }
 
-// Delay function to wait the time specified by the user in delayInMilliseconds
-void MainWindow::wait()
-{
-    if (!isContinuous) return;
-    QTime dieTime = QTime::currentTime().addMSecs(delayInMilliseconds);
-    while (QTime::currentTime() < dieTime)
-    {
-        if (shouldReset) return; // For if the user uses a high delay but tries to reset
-        else QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    }
-}
-
-// Update delay as user changes it
-void MainWindow::on_delay_textChanged(const QString &arg1)
-{
-    delayInMilliseconds = ui->delay->value();
-}
+// Update delayInMilliseconds as user changes it, this allows the user to change the delay while sorting is already happening
 void MainWindow::on_delay_valueChanged(int arg1)
 {
     delayInMilliseconds = ui->delay->value();
 }
 
-// Update graph in realtime when user changes the elements count
-bool beingUpdated;
-void MainWindow::revisualize()
-{
-    if (!beingUpdated)
-    {
-        beingUpdated = true;
-        visualize();
-        generateArray();
-        beingUpdated = false;
-    }
-}
-void MainWindow::on_elementsCount_valueChanged(int arg1)
-{
-    revisualize();
-}
-void MainWindow::on_elementsCount_textChanged(const QString &arg1)
-{
-    revisualize();
-}
-
-// Theme control
+// Event Handler for invertThemeCheckBox, this function swaps the barColor and backgroundColor to invert the theme colors
 void MainWindow::on_invertThemeCheckBox_checkStateChanged(const Qt::CheckState &arg1)
 {
     std::swap(barColor, backgroundColor);
     visualize();
 }
+
+// Event Handler for themeComboBox
 void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
 {
     if (arg1 == "Default")
@@ -504,11 +405,7 @@ void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
     }
 }
 
-// Next step trigger
-void MainWindow::on_nextStepButton_clicked()
-{
-    stepTriggered = true;
-}
+// This function is called within the sorting algorithms to wait for user input to change the state of stepTriggered
 void MainWindow::waitForStep()
 {
     if (!isContinuous)
@@ -521,7 +418,129 @@ void MainWindow::waitForStep()
     }
 }
 
-// Sound control
+// Event Handler for nextStepButton
+void MainWindow::on_nextStepButton_clicked()
+{
+    stepTriggered = true;
+}
+
+// Delay function to wait the time specified by the user in delayInMilliseconds
+void MainWindow::wait()
+{
+    if (!isContinuous) return;
+    QTime dieTime = QTime::currentTime().addMSecs(delayInMilliseconds);
+    while (QTime::currentTime() < dieTime)
+    {
+        if (shouldReset) return; // For if the user uses a high delay but tries to reset
+        else QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    }
+}
+
+// Function to generate array
+void MainWindow::generateArray()
+{
+    // Clear array
+    array.clear();
+
+    elementsCount = ui->elementsCount->value();
+
+    for (int i = 1; i <= elementsCount; ++i) array.push_back(i);
+
+    maxHeight = *std::max_element(array.begin(), array.end());
+
+    // Shuffle the array randomly
+    std::shuffle(array.begin(), array.end(), std::mt19937{std::random_device{}()});
+
+    sortedElements.clear();
+
+    visualize();
+}
+
+// Visualization function
+void MainWindow::visualize()
+{
+    int width = ui->textLabel->width();
+    int height = ui->textLabel->height();
+
+    QPixmap pixmap(width, height);
+    pixmap.fill(backgroundColor);
+
+    QPainter painter(&pixmap);
+
+    int textHeight = 20;
+    painter.setPen(barColor);
+    painter.setFont(QFont("Arial", 10, QFont::Bold));
+
+    QString complexity = ui->comboBox->currentData().toString();
+    QString algorithmText = QString("Algorithm: %1").arg(QString::fromStdString(sortingAlgorithm));
+    QString complexityText = QString("Complexity: %1").arg(complexity);
+
+    if (isAscending)
+    {
+        painter.drawText(10, textHeight, algorithmText);
+        painter.drawText(10, 2 * textHeight, complexityText);
+
+        QString comparisonText = QString("Comparisons: %1").arg(comparisonCount);
+        QString accessText = QString("Array Accesses: %1").arg(arrayAccessCount);
+
+        painter.drawText(10, 3 * textHeight, comparisonText);
+        painter.drawText(10, 4 * textHeight, accessText);
+    }
+    else
+    {
+        int algorithmTextWidth = painter.fontMetrics().horizontalAdvance(algorithmText);
+        int complexityTextWidth = painter.fontMetrics().horizontalAdvance(complexityText);
+
+        painter.drawText(width - algorithmTextWidth - 10, textHeight, algorithmText);
+        painter.drawText(width - complexityTextWidth - 10, 2 * textHeight, complexityText);
+
+        QString comparisonText = QString("Comparisons: %1").arg(comparisonCount);
+        QString accessText = QString("Array Accesses: %1").arg(arrayAccessCount);
+
+        int comparisonTextWidth = painter.fontMetrics().horizontalAdvance(comparisonText);
+        int accessTextWidth = painter.fontMetrics().horizontalAdvance(accessText);
+
+        painter.drawText(width - comparisonTextWidth - 10, 3 * textHeight, comparisonText);
+        painter.drawText(width - accessTextWidth - 10, 4 * textHeight, accessText);
+    }
+
+    double gapWidth = 1.0;
+    double barWidth = (width - (elementsCount - 1) * gapWidth) / elementsCount;
+
+    // If barWidth is less than 1, make it 1 and reduce gapWidth
+    if (barWidth < 1.0)
+    {
+        barWidth = 1.0;
+        gapWidth = (width - elementsCount * barWidth) / (elementsCount - 1);
+    }
+
+    double xPos = 0;
+
+    for (int i = 0; i < elementsCount; ++i)
+    {
+        int barHeight = (array[i] * (height - 5 * textHeight)) / maxHeight;
+
+        QColor currentColor = barColor;
+
+        if (std::find(heapElements.begin(), heapElements.end(), i) != heapElements.end())
+        {
+            int level = static_cast<int>(std::log2(i + 1));
+            currentColor = heapLevelColors[level % heapLevelColors.size()];
+        }
+
+        if (i == redBar1Index || i == redBar2Index) currentColor = Qt::red;
+        else if (std::find(sortedElements.begin(), sortedElements.end(), i) != sortedElements.end() || i == greenBarIndex) currentColor = Qt::green;
+        else if (i == blueBarIndex) currentColor = QColor(3, 181, 252);
+
+        painter.fillRect(QRectF(xPos, height - barHeight, barWidth, barHeight), currentColor);
+
+        xPos += barWidth + gapWidth;
+    }
+
+    ui->textLabel->setPixmap(pixmap);
+}
+
+// Function to handle playing sounds, whether that's a WAV file or a frequency with ADSR
 void MainWindow::playSound(int i, int j)
 {
     if (ui->soundComboBox->currentText() == "No Sound") return;
@@ -552,6 +571,90 @@ void MainWindow::playSound(int i, int j)
     }
 }
 
+// Event Handler for fullScreenButton
+void MainWindow::on_fullScreenButton_clicked()
+{
+    originalGeometry = this->geometry();
+    originalTextLabelGeometry = ui->textLabel->geometry();
+
+    this->statusBar()->hide();
+    this->showFullScreen();
+
+    QList<QWidget*> allWidgets = this->centralWidget()->findChildren<QWidget*>();
+    for (auto widget : allWidgets)
+    {
+        if (qobject_cast<QRadioButton*>(widget)
+            || qobject_cast<QSpinBox*>(widget)
+            || qobject_cast<QComboBox*>(widget)
+            || qobject_cast<QCheckBox*>(widget)
+            || qobject_cast<QPushButton*>(widget))
+        {
+            widget->setEnabled(false);
+        }
+    }
+
+    ui->textLabel->setGeometry(this->centralWidget()->geometry());
+
+    visualize();
+}
+
+// Event Handler for keyboard shortcuts (Escape, F11, Right Arrow, and F keys are handled)
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if ((event->key() == Qt::Key_Escape || event->key() == Qt::Key_F11 || event->key() == Qt::Key_F) && this->isFullScreen())
+    {
+        this->statusBar()->show();
+        this->showNormal();
+        this->setGeometry(originalGeometry);
+
+        if (ui->startButton->text() == "Start")
+        {
+            QList<QWidget*> allWidgets = this->centralWidget()->findChildren<QWidget*>();
+            for (auto widget : allWidgets)
+            {
+                widget->setEnabled(true);
+            }
+
+            ui->nextStepButton->setEnabled(false);
+        }
+        else
+        {
+            ui->delay->setEnabled(true);
+            ui->themeComboBox->setEnabled(true);
+            ui->invertThemeCheckBox->setEnabled(true);
+            ui->fullScreenButton->setEnabled(true);
+            ui->startButton->setEnabled(true);
+            ui->nextStepButton->setEnabled(!isContinuous);
+        }
+
+        ui->textLabel->setGeometry(originalTextLabelGeometry);
+
+        visualize();
+
+        QMessageBox::information(this, "Notification", "Fullscreen mode exited");
+    }
+    else if ((event->key() == Qt::Key_F || event->key() == Qt::Key_F11) && !this->isFullScreen())
+    {
+        on_fullScreenButton_clicked();
+    }
+    else if (event->key() == Qt::Key_Right && !isContinuous && ui->startButton->text() == "Reset")
+    {
+        stepTriggered = true;
+    }
+    else
+    {
+        QMainWindow::keyPressEvent(event);
+    }
+}
+
+// Event Handler for the close event, this is to ensure that the program has stopped all processes before attempting to close
+// Resetting handles this already so it's used
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    shouldReset = true;
+    event->accept();
+}
+
 // Algorithms
 void MainWindow::bubbleSortAscending()
 {
@@ -561,8 +664,8 @@ void MainWindow::bubbleSortAscending()
         {
             if (shouldReset) return;
 
-            bar1Index = j;
-            bar2Index = j + 1;
+            redBar1Index = j;
+            redBar2Index = j + 1;
 
             comparisonCount++;
             arrayAccessCount += 2;
@@ -586,8 +689,8 @@ void MainWindow::bubbleSortAscending()
 
         sortedElements.push_back(elementsCount - i - 1);
 
-        bar1Index = -1;
-        bar2Index = -1;
+        redBar1Index = -1;
+        redBar2Index = -1;
 
         visualize();
     }
@@ -600,8 +703,8 @@ void MainWindow::bubbleSortDescending()
         {
             if (shouldReset) return;
 
-            bar1Index = j;
-            bar2Index = j + 1;
+            redBar1Index = j;
+            redBar2Index = j + 1;
 
             comparisonCount++;
             arrayAccessCount += 2;
@@ -625,8 +728,8 @@ void MainWindow::bubbleSortDescending()
 
         sortedElements.push_back(elementsCount - i - 1);
 
-        bar1Index = -1;
-        bar2Index = -1;
+        redBar1Index = -1;
+        redBar2Index = -1;
 
         visualize();
     }
@@ -638,9 +741,9 @@ void MainWindow::mergeAscending(int start, int mid, int end)
 
     int i = start, j = mid + 1, k = 0;
 
-    bar1Index = start;
-    bar2Index = end;
-    bar4Index = mid;
+    redBar1Index = start;
+    redBar2Index = end;
+    blueBarIndex = mid;
 
     waitForStep();
     visualize();
@@ -650,7 +753,7 @@ void MainWindow::mergeAscending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar3Index = start + k;
+        greenBarIndex = start + k;
 
         comparisonCount++;
         arrayAccessCount+=3;
@@ -674,7 +777,7 @@ void MainWindow::mergeAscending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar3Index = start + k;
+        greenBarIndex = start + k;
 
         arrayAccessCount++;
 
@@ -689,7 +792,7 @@ void MainWindow::mergeAscending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar3Index = start + k;
+        greenBarIndex = start + k;
 
         arrayAccessCount++;
 
@@ -702,7 +805,7 @@ void MainWindow::mergeAscending(int start, int mid, int end)
 
     for (int l = 0; l < temp.size(); l++)
     {
-        bar3Index = start + l;
+        greenBarIndex = start + l;
 
         arrayAccessCount++;
 
@@ -728,9 +831,9 @@ void MainWindow::mergeSortAscending(int start, int end)
     mergeSortAscending(start, mid); // First half sort
     mergeSortAscending(mid + 1, end); // Second half sort
 
-    bar1Index = start;
-    bar2Index = end;
-    bar4Index = mid;
+    redBar1Index = start;
+    redBar2Index = end;
+    blueBarIndex = mid;
 
     waitForStep();
     visualize();
@@ -745,9 +848,9 @@ void MainWindow::mergeDescending(int start, int mid, int end)
 
     int i = start, j = mid + 1, k = 0;
 
-    bar1Index = start;
-    bar2Index = end;
-    bar4Index = mid;
+    redBar1Index = start;
+    redBar2Index = end;
+    blueBarIndex = mid;
 
     waitForStep();
     visualize();
@@ -757,7 +860,7 @@ void MainWindow::mergeDescending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar3Index = start + k;
+        greenBarIndex = start + k;
 
         comparisonCount++;
         arrayAccessCount+=3;
@@ -781,7 +884,7 @@ void MainWindow::mergeDescending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar3Index = start + k;
+        greenBarIndex = start + k;
         arrayAccessCount++;
 
         temp[k++] = array[i++];
@@ -795,7 +898,7 @@ void MainWindow::mergeDescending(int start, int mid, int end)
     {
         if (shouldReset) return;
 
-        bar3Index = start + k;
+        greenBarIndex = start + k;
 
         arrayAccessCount++;
 
@@ -808,7 +911,7 @@ void MainWindow::mergeDescending(int start, int mid, int end)
 
     for (int l = 0; l < temp.size(); l++)
     {
-        bar3Index = start + l;
+        greenBarIndex = start + l;
 
         arrayAccessCount++;
 
@@ -834,9 +937,9 @@ void MainWindow::mergeSortDescending(int start, int end)
     mergeSortDescending(start, mid); // First half sort
     mergeSortDescending(mid + 1, end); // Second half sort
 
-    bar1Index = start;
-    bar2Index = end;
-    bar4Index = mid;
+    redBar1Index = start;
+    redBar2Index = end;
+    blueBarIndex = mid;
 
     waitForStep();
     visualize();
@@ -860,7 +963,7 @@ int MainWindow::partitionAscending(int start, int end)
     {
         if (shouldReset) return -1;
 
-        bar4Index = j;
+        blueBarIndex = j;
 
         arrayAccessCount++;
         comparisonCount++;
@@ -889,7 +992,7 @@ int MainWindow::partitionAscending(int start, int end)
 
     arrayAccessCount+=2;
 
-    bar4Index = i;
+    blueBarIndex = i;
 
     waitForStep();
     visualize();
@@ -902,8 +1005,8 @@ void MainWindow::quickSortAscending(int start, int end)
 {
     if (shouldReset || start >= end) return;
 
-    bar1Index = start;
-    bar2Index = end;
+    redBar1Index = start;
+    redBar2Index = end;
 
     waitForStep();
     visualize();
@@ -936,7 +1039,7 @@ int MainWindow::partitionDescending(int start, int end)
     {
         if (shouldReset) return -1;
 
-        bar4Index = j;
+        blueBarIndex = j;
 
         arrayAccessCount++;
         comparisonCount++;
@@ -965,7 +1068,7 @@ int MainWindow::partitionDescending(int start, int end)
 
     arrayAccessCount+=2;
 
-    bar4Index = i;
+    blueBarIndex = i;
 
     waitForStep();
     visualize();
@@ -978,8 +1081,8 @@ void MainWindow::quickSortDescending(int start, int end)
 {
     if (shouldReset || start >= end) return;
 
-    bar1Index = start;
-    bar2Index = end;
+    redBar1Index = start;
+    redBar2Index = end;
 
     waitForStep();
     visualize();
@@ -1028,7 +1131,7 @@ void MainWindow::countingSort(int place)
 
             arrayAccessCount++;
 
-            bar4Index = i;
+            blueBarIndex = i;
 
             waitForStep();
             visualize();
@@ -1047,7 +1150,7 @@ void MainWindow::countingSort(int place)
 
             arrayAccessCount++;
 
-            bar4Index = i;
+            blueBarIndex = i;
 
             waitForStep();
             visualize();
@@ -1056,7 +1159,7 @@ void MainWindow::countingSort(int place)
         }
     }
 
-    bar4Index = -1;
+    blueBarIndex = -1;
     visualize();
 
     // Copy back the sorted array and visualize each step
@@ -1068,7 +1171,7 @@ void MainWindow::countingSort(int place)
 
         arrayAccessCount++;
 
-        bar1Index = i;
+        redBar1Index = i;
 
         if (place == 0)
         {
@@ -1081,7 +1184,7 @@ void MainWindow::countingSort(int place)
         wait();
     }
 
-    bar1Index = -1;
+    redBar1Index = -1;
     visualize();
 }
 
@@ -1098,7 +1201,7 @@ void MainWindow::radixSort()
     {
         sortedElements.push_back(i);
 
-        bar1Index = i;
+        redBar1Index = i;
 
         waitForStep();
         visualize();
@@ -1116,7 +1219,7 @@ void MainWindow::selectionSortAscending()
 
         int currentMinIndex = i;
 
-        bar1Index = currentMinIndex;
+        redBar1Index = currentMinIndex;
         waitForStep();
         visualize();
         wait();
@@ -1125,8 +1228,8 @@ void MainWindow::selectionSortAscending()
         {
             if (shouldReset) return;
 
-            bar1Index = j;
-            bar2Index = currentMinIndex;
+            redBar1Index = j;
+            redBar2Index = currentMinIndex;
 
             comparisonCount++;
             arrayAccessCount+=2;
@@ -1174,7 +1277,7 @@ void MainWindow::selectionSortDescending()
 
         int currentMaxIndex = i;
 
-        bar1Index = currentMaxIndex;
+        redBar1Index = currentMaxIndex;
         waitForStep();
         visualize();
         wait();
@@ -1183,8 +1286,8 @@ void MainWindow::selectionSortDescending()
         {
             if (shouldReset) return;
 
-            bar1Index = j;
-            bar2Index = currentMaxIndex;
+            redBar1Index = j;
+            redBar2Index = currentMaxIndex;
 
             comparisonCount++;
             arrayAccessCount+=2;
@@ -1242,8 +1345,8 @@ void MainWindow::cocktailSortAscending()
         {
             if (shouldReset) return;
 
-            bar1Index = i;
-            bar2Index = i + 1;
+            redBar1Index = i;
+            redBar2Index = i + 1;
 
             comparisonCount++;
             arrayAccessCount+=2;
@@ -1280,8 +1383,8 @@ void MainWindow::cocktailSortAscending()
         {
             if (shouldReset) return;
 
-            bar1Index = i;
-            bar2Index = i + 1;
+            redBar1Index = i;
+            redBar2Index = i + 1;
 
             comparisonCount++;
             arrayAccessCount+=2;
@@ -1328,8 +1431,8 @@ void MainWindow::cocktailSortDescending()
         {
             if (shouldReset) return;
 
-            bar1Index = i;
-            bar2Index = i + 1;
+            redBar1Index = i;
+            redBar2Index = i + 1;
 
             comparisonCount++;
             arrayAccessCount+=2;
@@ -1366,8 +1469,8 @@ void MainWindow::cocktailSortDescending()
         {
             if (shouldReset) return;
 
-            bar1Index = i;
-            bar2Index = i + 1;
+            redBar1Index = i;
+            redBar2Index = i + 1;
 
             comparisonCount++;
             arrayAccessCount+=2;
@@ -1420,8 +1523,8 @@ void MainWindow::gnomeSortAscending()
             }
             else
             {
-                bar1Index = index;
-                bar2Index = index - 1;
+                redBar1Index = index;
+                redBar2Index = index - 1;
 
                 sortedElements.push_back(index - 1);
 
@@ -1467,8 +1570,8 @@ void MainWindow::gnomeSortDescending()
             }
             else
             {
-                bar1Index = index;
-                bar2Index = index - 1;
+                redBar1Index = index;
+                redBar2Index = index - 1;
 
                 sortedElements.push_back(index - 1);
 
@@ -1499,7 +1602,7 @@ void MainWindow::heapifyMax(int n, int i)
     int left = 2 * i + 1;
     int right = 2 * i + 2;
 
-    bar1Index = i;
+    redBar1Index = i;
     waitForStep();
     visualize();
     wait();
@@ -1633,7 +1736,7 @@ void MainWindow::heapifyMin(int n, int i)
     int left = 2 * i + 1;
     int right = 2 * i + 2;
 
-    bar1Index = i;
+    redBar1Index = i;
     waitForStep();
     visualize();
     wait();
@@ -1767,10 +1870,10 @@ void MainWindow::insertionSortAscending()
 
         waitForStep();
 
-        bar3Index = i;
-        bar1Index = -1;
-        bar2Index = -1;
-        bar4Index = -1;
+        greenBarIndex = i;
+        redBar1Index = -1;
+        redBar2Index = -1;
+        blueBarIndex = -1;
 
         waitForStep();
         visualize();
@@ -1785,9 +1888,9 @@ void MainWindow::insertionSortAscending()
             arrayAccessCount+=2;
             comparisonCount++;
 
-            bar1Index = index - 1;
-            bar2Index = index;
-            bar3Index = i;
+            redBar1Index = index - 1;
+            redBar2Index = index;
+            greenBarIndex = i;
 
             waitForStep();
             visualize();
@@ -1812,10 +1915,10 @@ void MainWindow::insertionSortAscending()
             }
         }
 
-        bar3Index = -1;
-        bar1Index = -1;
-        bar2Index = -1;
-        bar4Index = index;
+        greenBarIndex = -1;
+        redBar1Index = -1;
+        redBar2Index = -1;
+        blueBarIndex = index;
 
         waitForStep();
         visualize();
@@ -1830,10 +1933,10 @@ void MainWindow::insertionSortDescending()
 
         waitForStep();
 
-        bar3Index = i;
-        bar1Index = -1;
-        bar2Index = -1;
-        bar4Index = -1;
+        greenBarIndex = i;
+        redBar1Index = -1;
+        redBar2Index = -1;
+        blueBarIndex = -1;
 
         waitForStep();
         visualize();
@@ -1848,9 +1951,9 @@ void MainWindow::insertionSortDescending()
             arrayAccessCount+=2;
             comparisonCount++;
 
-            bar1Index = index - 1;
-            bar2Index = index;
-            bar3Index = i;
+            redBar1Index = index - 1;
+            redBar2Index = index;
+            greenBarIndex = i;
 
             waitForStep();
             visualize();
@@ -1875,10 +1978,10 @@ void MainWindow::insertionSortDescending()
             }
         }
 
-        bar3Index = -1;
-        bar1Index = -1;
-        bar2Index = -1;
-        bar4Index = index;
+        greenBarIndex = -1;
+        redBar1Index = -1;
+        redBar2Index = -1;
+        blueBarIndex = index;
 
         waitForStep();
         visualize();
@@ -1914,8 +2017,8 @@ void MainWindow::bogoSort()
             std::shuffle(array.begin(), array.end(), std::mt19937{std::random_device{}()});
             arrayAccessCount += elementsCount; // Each shuffle accesses all elements
 
-            bar1Index = -1;
-            bar2Index = -1;
+            redBar1Index = -1;
+            redBar2Index = -1;
 
             waitForStep();
             visualize();
@@ -1923,80 +2026,4 @@ void MainWindow::bogoSort()
             wait();
         }
     }
-}
-
-QRect originalGeometry, originalTextLabelGeometry;
-void MainWindow::on_fullScreenButton_clicked()
-{
-    originalGeometry = this->geometry();
-    originalTextLabelGeometry = ui->textLabel->geometry();
-
-    this->statusBar()->hide();
-    this->showFullScreen();
-
-    QList<QWidget*> allWidgets = this->centralWidget()->findChildren<QWidget*>();
-    for (auto widget : allWidgets)
-    {
-        if (qobject_cast<QRadioButton*>(widget)
-            || qobject_cast<QSpinBox*>(widget)
-            || qobject_cast<QComboBox*>(widget)
-            || qobject_cast<QCheckBox*>(widget)
-            || qobject_cast<QPushButton*>(widget))
-        {
-            widget->setEnabled(false);
-        }
-    }
-
-    ui->textLabel->setGeometry(this->centralWidget()->geometry());
-
-    visualize();
-}
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
-    if ((event->key() == Qt::Key_Escape || event->key() == Qt::Key_F11 || event->key() == Qt::Key_F) && this->isFullScreen())
-    {
-        this->statusBar()->show();
-        this->showNormal();
-        this->setGeometry(originalGeometry);
-
-        if (ui->startButton->text() == "Start")
-        {
-            QList<QWidget*> allWidgets = this->centralWidget()->findChildren<QWidget*>();
-            for (auto widget : allWidgets)
-            {
-                widget->setEnabled(true);
-            }
-
-            ui->nextStepButton->setEnabled(false);
-        }
-        else
-        {
-            ui->delay->setEnabled(true);
-            ui->themeComboBox->setEnabled(true);
-            ui->invertThemeCheckBox->setEnabled(true);
-            ui->fullScreenButton->setEnabled(true);
-            ui->startButton->setEnabled(true);
-            ui->nextStepButton->setEnabled(!isContinuous);
-        }
-
-        ui->textLabel->setGeometry(originalTextLabelGeometry);
-
-        visualize();
-
-        QMessageBox::information(this, "Notification", "Fullscreen mode exited");
-    }
-    else if ((event->key() == Qt::Key_F || event->key() == Qt::Key_F11) && !this->isFullScreen())
-    {
-        on_fullScreenButton_clicked();
-    }
-    else
-    {
-        QMainWindow::keyPressEvent(event);
-    }
-}
-
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    shouldReset = true;
-    event->accept();
 }

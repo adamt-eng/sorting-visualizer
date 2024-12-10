@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <qcombobox.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,23 +21,21 @@ public:
 
 private slots:
     void on_startButton_clicked();
-    void on_elementsCount_valueChanged(int arg1);
-    void on_elementsCount_textChanged(const QString &arg1);
     void on_nextStepButton_clicked();
     void on_themeComboBox_currentTextChanged(const QString &arg1);
     void on_invertThemeCheckBox_checkStateChanged(const Qt::CheckState &arg1);
     void on_fullScreenButton_clicked();
-    void on_delay_textChanged(const QString &arg1);
     void on_delay_valueChanged(int arg1);
+    void on_generateArrayButton_clicked();
 
 private:
     Ui::MainWindow *ui;
 
+    void setAlgorithmsComplexity(QComboBox *comboBox);
     void generateArray();
     void visualize();
     void playSound(int i, int j);
     void wait();
-    void revisualize();
     void waitForStep();
 
     void bubbleSortAscending();

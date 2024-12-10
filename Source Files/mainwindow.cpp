@@ -40,6 +40,8 @@ MainWindow::~MainWindow()
 SoundPlayer player;
 bool variableSound;
 
+vector<int> sortedElements;
+
 QColor backgroundColor = Qt::black;
 QColor barColor = Qt::white;
 
@@ -270,8 +272,19 @@ void MainWindow::on_startButton_clicked()
             bogoSort();
         }
 
+        if (!shouldReset)
+        {
+            for (int i = 0; i < elementsCount; ++i)
+            {
+                sortedElements.push_back(i);
+            }
+        }
+
         bar1Index = bar2Index = bar3Index = bar4Index = -1;
+
         visualize();
+
+        sortedElements.clear();
     }
     else
     {
@@ -363,8 +376,8 @@ void MainWindow::visualize()
         }
 
         if (i == bar1Index || i == bar2Index) currentColor = Qt::red;
-        if (i == bar3Index) currentColor = Qt::green;
-        if (i == bar4Index) currentColor = QColor(3, 181, 252);
+        else if (std::find(sortedElements.begin(), sortedElements.end(), i) != sortedElements.end() || i == bar3Index) currentColor = Qt::green;
+        else if (i == bar4Index) currentColor = QColor(3, 181, 252);
 
         painter.fillRect(QRectF(xPos, height - barHeight, barWidth, barHeight), currentColor);
 
@@ -571,6 +584,8 @@ void MainWindow::bubbleSortAscending()
             }
         }
 
+        sortedElements.push_back(elementsCount - i - 1);
+
         bar1Index = -1;
         bar2Index = -1;
 
@@ -607,6 +622,8 @@ void MainWindow::bubbleSortDescending()
                 wait();
             }
         }
+
+        sortedElements.push_back(elementsCount - i - 1);
 
         bar1Index = -1;
         bar2Index = -1;
@@ -690,6 +707,11 @@ void MainWindow::mergeAscending(int start, int mid, int end)
         arrayAccessCount++;
 
         array[start + l] = temp[l]; // Copy into original array so we can visualize it
+
+        if (start == 0 && end == elementsCount - 1)
+        {
+            sortedElements.push_back(start + l);
+        }
 
         waitForStep();
         visualize();
@@ -792,6 +814,11 @@ void MainWindow::mergeDescending(int start, int mid, int end)
 
         array[start + l] = temp[l]; // Copy into original array so we can visualize it
 
+        if (start == 0 && end == elementsCount - 1)
+        {
+            sortedElements.push_back(start + l);
+        }
+
         waitForStep();
         visualize();
         playSound(start + l, l);
@@ -823,8 +850,6 @@ int MainWindow::partitionAscending(int start, int end)
     int pivot = array[end]; // We chose the end as the pivot index
     int i = start - 1;
 
-    bar4Index = end;
-
     arrayAccessCount++;
 
     waitForStep();
@@ -835,7 +860,7 @@ int MainWindow::partitionAscending(int start, int end)
     {
         if (shouldReset) return -1;
 
-        bar3Index = j;
+        bar4Index = j;
 
         arrayAccessCount++;
         comparisonCount++;
@@ -864,7 +889,7 @@ int MainWindow::partitionAscending(int start, int end)
 
     arrayAccessCount+=2;
 
-    bar3Index = i;
+    bar4Index = i;
 
     waitForStep();
     visualize();
@@ -888,8 +913,12 @@ void MainWindow::quickSortAscending(int start, int end)
     int pivotIndex = partitionAscending(start, end);
     if (pivotIndex == -1) return;
 
+    sortedElements.push_back(pivotIndex);
+
     quickSortAscending(start, pivotIndex - 1);
     quickSortAscending(pivotIndex + 1, end);
+
+    visualize();
 }
 
 int MainWindow::partitionDescending(int start, int end)
@@ -897,7 +926,6 @@ int MainWindow::partitionDescending(int start, int end)
     int pivot = array[end]; // We chose the end as the pivot index
     int i = start - 1;
 
-    bar4Index = end;
     arrayAccessCount++;
 
     waitForStep();
@@ -908,7 +936,7 @@ int MainWindow::partitionDescending(int start, int end)
     {
         if (shouldReset) return -1;
 
-        bar3Index = j;
+        bar4Index = j;
 
         arrayAccessCount++;
         comparisonCount++;
@@ -937,7 +965,7 @@ int MainWindow::partitionDescending(int start, int end)
 
     arrayAccessCount+=2;
 
-    bar3Index = i;
+    bar4Index = i;
 
     waitForStep();
     visualize();
@@ -959,8 +987,9 @@ void MainWindow::quickSortDescending(int start, int end)
     wait();
 
     int pivotIndex = partitionDescending(start, end);
-
     if (pivotIndex == -1) return;
+
+    sortedElements.push_back(pivotIndex);
 
     quickSortDescending(start, pivotIndex - 1);
     quickSortDescending(pivotIndex + 1, end);
@@ -1041,6 +1070,11 @@ void MainWindow::countingSort(int place)
 
         bar1Index = i;
 
+        if (place == 0)
+        {
+            sortedElements.push_back(i);
+        }
+
         waitForStep();
         visualize();
         playSound(i, i);
@@ -1059,6 +1093,19 @@ void MainWindow::radixSort()
     {
         countingSort(i);
     }
+
+    for (int i = 0; i < elementsCount; ++i)
+    {
+        sortedElements.push_back(i);
+
+        bar1Index = i;
+
+        waitForStep();
+        visualize();
+        playSound(i, i);
+        wait();
+    }
+
 }
 
 void MainWindow::selectionSortAscending()
@@ -1105,7 +1152,19 @@ void MainWindow::selectionSortAscending()
             playSound(currentMinIndex, i);
             wait();
         }
+
+        sortedElements.push_back(i);
+        waitForStep();
+        visualize();
+        playSound(i, i);
+        wait();
     }
+
+    sortedElements.push_back(elementsCount - 1);
+    waitForStep();
+    visualize();
+    playSound(elementsCount - 1, elementsCount - 1);
+    wait();
 }
 void MainWindow::selectionSortDescending()
 {
@@ -1151,7 +1210,19 @@ void MainWindow::selectionSortDescending()
             playSound(currentMaxIndex, i);
             wait();
         }
+
+        sortedElements.push_back(i);
+        waitForStep();
+        visualize();
+        playSound(i, i);
+        wait();
     }
+
+    sortedElements.push_back(elementsCount - 1);
+    waitForStep();
+    visualize();
+    playSound(elementsCount - 1, elementsCount - 1);
+    wait();
 }
 
 void MainWindow::cocktailSortAscending()
@@ -1195,6 +1266,10 @@ void MainWindow::cocktailSortAscending()
             }
         }
 
+        sortedElements.push_back(end);
+        visualize();
+        wait();
+
         if (!swapped) break;
 
         swapped = false;
@@ -1228,6 +1303,10 @@ void MainWindow::cocktailSortAscending()
                 swapped = true;
             }
         }
+
+        sortedElements.push_back(start);
+        visualize();
+        wait();
 
         ++start;
     }
@@ -1273,6 +1352,10 @@ void MainWindow::cocktailSortDescending()
             }
         }
 
+        // sortedElements.push_back(end);
+        // visualize();
+        // wait();
+
         if (!swapped) break;
 
         swapped = false;
@@ -1307,6 +1390,10 @@ void MainWindow::cocktailSortDescending()
             }
         }
 
+        // sortedElements.push_back(start);
+        // visualize();
+        // wait();
+
         ++start;
     }
 }
@@ -1336,6 +1423,8 @@ void MainWindow::gnomeSortAscending()
                 bar1Index = index;
                 bar2Index = index - 1;
 
+                sortedElements.push_back(index - 1);
+
                 waitForStep();
                 visualize();
                 wait();
@@ -1351,6 +1440,10 @@ void MainWindow::gnomeSortAscending()
             }
         }
     }
+
+    sortedElements.push_back(elementsCount - 1);
+    visualize();
+    wait();
 }
 void MainWindow::gnomeSortDescending()
 {
@@ -1377,6 +1470,8 @@ void MainWindow::gnomeSortDescending()
                 bar1Index = index;
                 bar2Index = index - 1;
 
+                sortedElements.push_back(index - 1);
+
                 waitForStep();
                 visualize();
                 wait();
@@ -1392,6 +1487,10 @@ void MainWindow::gnomeSortDescending()
             }
         }
     }
+
+    sortedElements.push_back(elementsCount - 1);
+    visualize();
+    wait();
 }
 
 void MainWindow::heapifyMax(int n, int i)
@@ -1468,7 +1567,6 @@ void MainWindow::heapifyMax(int n, int i)
     }
 }
 
-
 void MainWindow::buildMaxdHeap()
 {
     int n = array.size();
@@ -1515,12 +1613,18 @@ void MainWindow::heapSortAscending()
     {
         if (shouldReset) return;
 
-        popMax(array.size()-i);
+        popMax(array.size() - i);
+
+        sortedElements.push_back(array.size() - i - 1);
 
         waitForStep();
         visualize();
         wait();
     }
+
+    sortedElements.push_back(0);
+    visualize();
+    wait();
 }
 
 void MainWindow::heapifyMin(int n, int i)
@@ -1643,10 +1747,16 @@ void MainWindow::heapSortDescending()
 
         popMin(array.size() - i);
 
+        sortedElements.push_back(array.size() - i - 1);
+
         waitForStep();
         visualize();
         wait();
     }
+
+    sortedElements.push_back(0);
+    visualize();
+    wait();
 }
 
 void MainWindow::insertionSortAscending()
@@ -1692,6 +1802,14 @@ void MainWindow::insertionSortAscending()
             wait();
 
             index--;
+        }
+
+        for (int j = 0; j <= i; j++)
+        {
+            if (std::find(sortedElements.begin(), sortedElements.end(), j) == sortedElements.end())
+            {
+                sortedElements.push_back(j);
+            }
         }
 
         bar3Index = -1;
@@ -1747,6 +1865,14 @@ void MainWindow::insertionSortDescending()
             wait();
 
             index--;
+        }
+
+        for (int j = 0; j <= i; j++)
+        {
+            if (std::find(sortedElements.begin(), sortedElements.end(), j) == sortedElements.end())
+            {
+                sortedElements.push_back(j);
+            }
         }
 
         bar3Index = -1;

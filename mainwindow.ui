@@ -59,10 +59,10 @@
        <x>22</x>
        <y>31</y>
        <width>101</width>
-       <height>81</height>
+       <height>82</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="stepLayout">
+     <layout class="QVBoxLayout" name="stepControlLayout">
       <property name="spacing">
        <number>6</number>
       </property>
@@ -80,9 +80,6 @@
         <property name="autoExclusive">
          <bool>true</bool>
         </property>
-        <attribute name="buttonGroup">
-         <string notr="true">modeButtonGroup</string>
-        </attribute>
        </widget>
       </item>
       <item>
@@ -96,9 +93,6 @@
         <property name="autoExclusive">
          <bool>true</bool>
         </property>
-        <attribute name="buttonGroup">
-         <string notr="true">modeButtonGroup</string>
-        </attribute>
        </widget>
       </item>
       <item>
@@ -123,7 +117,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="inputSettingsGroupBox">
+   <widget class="QGroupBox" name="algorithmSettingsGroupBox">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -133,7 +127,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>Input Settings</string>
+     <string>Algorithm Settings</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -150,7 +144,7 @@
        <height>51</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="ascendingFormLayout">
+     <layout class="QVBoxLayout" name="orderLayout">
       <property name="spacing">
        <number>3</number>
       </property>
@@ -215,7 +209,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox">
+       <widget class="QComboBox" name="algorithmComboBox">
         <property name="font">
          <font>
           <pointsize>8</pointsize>
@@ -326,7 +320,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="delay">
+       <widget class="QSpinBox" name="delaySpinBox">
         <property name="focusPolicy">
          <enum>Qt::FocusPolicy::WheelFocus</enum>
         </property>
@@ -386,7 +380,7 @@
        <x>20</x>
        <y>80</y>
        <width>101</width>
-       <height>71</height>
+       <height>72</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="themeLayout">
@@ -565,7 +559,7 @@
      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
     </property>
    </widget>
-   <widget class="QGroupBox" name="arrayGroupBox">
+   <widget class="QGroupBox" name="arraySettingsGroupBox">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -592,7 +586,7 @@
        <height>51</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="elementsLayout">
+     <layout class="QVBoxLayout" name="elementsCountLayout">
       <property name="spacing">
        <number>6</number>
       </property>
@@ -653,9 +647,9 @@
      </layout>
     </widget>
    </widget>
-   <zorder>arrayGroupBox</zorder>
+   <zorder>arraySettingsGroupBox</zorder>
    <zorder>stepControlGroupBox</zorder>
-   <zorder>inputSettingsGroupBox</zorder>
+   <zorder>algorithmSettingsGroupBox</zorder>
    <zorder>animationSettingsGroupBox</zorder>
    <zorder>textLabel</zorder>
   </widget>
@@ -663,7 +657,4 @@
  </widget>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="modeButtonGroup"/>
- </buttongroups>
 </ui>

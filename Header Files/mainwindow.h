@@ -26,7 +26,7 @@ private slots:
     void on_themeComboBox_currentTextChanged(const QString &arg1);
     void on_invertThemeCheckBox_checkStateChanged(const Qt::CheckState &arg1);
     void on_fullScreenButton_clicked();
-    void on_delay_valueChanged(int arg1);
+    void on_delaySpinBox_valueChanged(int arg1);
     void on_generateArrayButton_clicked();
 
 private:
@@ -39,45 +39,29 @@ private:
     void wait();
     void waitForStep();
 
-    void bubbleSortAscending();
-    void bubbleSortDescending();
+    void bubbleSort();
 
-    void mergeAscending(int start, int mid, int end);
-    void mergeDescending(int start, int mid, int end);
-    void mergeSortAscending(int start, int end);
-    void mergeSortDescending(int start, int end);
+    void mergeSort(int start, int end);
 
-    int partitionAscending(int start, int end);
-    int partitionDescending(int start, int end);
-    void quickSortAscending(int start, int end);
-    void quickSortDescending(int start, int end);
+    void quickSort(int start, int end);
 
     void countingSort(int place);
 
     void radixSort();
 
-    void selectionSortAscending();
-    void selectionSortDescending();
+    void selectionSort();
 
-    void cocktailSortAscending();
-    void cocktailSortDescending();
+    void cocktailSort();
 
-    void gnomeSortAscending();
-    void gnomeSortDescending();
+    void gnomeSort();
 
-    void heapifyMax(int n, int i);
-    void buildMaxdHeap();
-    void popMax(int n);
-    void heapSortAscending();
-
-    void heapifyMin(int n, int i);
-    void buildMindHeap();
-    void popMin(int n);
-    void heapSortDescending();
-
-    void insertionSortAscending();
-    void insertionSortDescending();
+    void insertionSort();
 
     void bogoSort();
+
+    void heapify(int n, int i);
+    void pop(int n);
+    void buildHeap();
+    void heapSort();
 };
 #endif // MAINWINDOW_H

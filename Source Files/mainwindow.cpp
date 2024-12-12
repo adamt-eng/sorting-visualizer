@@ -17,8 +17,8 @@
 #include <SDL2/SDL.h>
 
 // Project Includes
-#include "../Header Files/mainwindow.h"
 #include ".././ui_mainwindow.h"
+#include "../Header Files/mainwindow.h"
 #include "../Header Files/soundplayer.h"
 #include "../Source Files/vector.cpp"
 
@@ -54,7 +54,7 @@ bool variableSound; // Whether the user chose "Variable" sound or any other opti
 
 // Heap Sort Specific Variables
 vector<int> heapElements;
-vector<QColor> heapLevelColors = { QColor::fromHsl(30, 150, 200), QColor::fromHsl(120, 150, 200), QColor::fromHsl(180, 150, 200), QColor::fromHsl(240, 150, 200), QColor::fromHsl(300, 150, 200) };
+vector<QColor> heapLevelColors = { QColor::fromHsl(0, 250, 230), QColor::fromHsl(30, 250, 230), QColor::fromHsl(60, 250, 230), QColor::fromHsl(120, 250, 230), QColor::fromHsl(180, 250, 230), QColor::fromHsl(240, 250, 230), QColor::fromHsl(300, 250, 230) };
 
 // UI Constructor
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -458,6 +458,7 @@ void MainWindow::visualize()
     double gapWidth = 1.0;
     double barWidth = (width - (elementsCount - 1) * gapWidth) / elementsCount;
 
+
     // If barWidth is less than 1, make it 1 and reduce gapWidth
     if (barWidth < 1.0)
     {
@@ -473,7 +474,7 @@ void MainWindow::visualize()
 
         QColor currentColor = barColor;
 
-        if (std::find(heapElements.begin(), heapElements.end(), i) != heapElements.end())
+        if (!heapElements.isEmpty() && std::find(heapElements.begin(), heapElements.end(), i) != heapElements.end())
         {
             int level = static_cast<int>(std::log2(i + 1));
             currentColor = heapLevelColors[level % heapLevelColors.size()];
@@ -637,16 +638,16 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 // Algorithms
 void MainWindow::bubbleSort()
 {
-    for (int i = 0; i < elementsCount - 1; i++)
+    for (int i = 0; i < elementsCount - 1; ++i)
     {
-        for (int j = 0; j < elementsCount - i - 1; j++)
+        for (int j = 0; j < elementsCount - i - 1; ++j)
         {
             if (shouldReset) return;
 
             redBar1Index = j;
             redBar2Index = j + 1;
 
-            comparisonCount++;
+            ++comparisonCount;
             arrayAccessCount += 2;
 
             waitForStep();
@@ -707,8 +708,8 @@ void MainWindow::mergeSort(int start, int end)
     {
         if (shouldReset) return;
 
-        comparisonCount++;
-        arrayAccessCount+=3;
+        ++comparisonCount;
+        arrayAccessCount += 3;
 
         visualize();
         playSound(i, j);
@@ -727,7 +728,7 @@ void MainWindow::mergeSort(int start, int end)
     {
         if (shouldReset) return;
 
-        arrayAccessCount++;
+        ++arrayAccessCount;
 
         temp[k++] = array[i++];
 
@@ -740,7 +741,7 @@ void MainWindow::mergeSort(int start, int end)
 
         greenBarIndex = start + k;
 
-        arrayAccessCount++;
+        ++arrayAccessCount;
 
         temp[k++] = array[j++];
 
@@ -749,9 +750,9 @@ void MainWindow::mergeSort(int start, int end)
         wait();
     }
 
-    for (int l = 0; l < temp.size(); l++)
+    for (int l = 0; l < temp.size(); ++l)
     {
-        arrayAccessCount++;
+        ++arrayAccessCount;
 
         array[start + l] = temp[l]; // Copy into original array so we can visualize it
 
@@ -778,20 +779,20 @@ void MainWindow::quickSort(int start, int end)
     int pivot = array[end]; // We chose the end as the pivot index
     int i = start - 1;
 
-    arrayAccessCount++;
+    ++arrayAccessCount;
 
     waitForStep();
     visualize();
     wait();
 
-    for (int j = start; j < end; j++)
+    for (int j = start; j < end; ++j)
     {
         if (shouldReset) return;
 
         blueBarIndex = j;
 
-        arrayAccessCount++;
-        comparisonCount++;
+        ++arrayAccessCount;
+        ++comparisonCount;
 
         waitForStep();
         visualize();
@@ -799,9 +800,9 @@ void MainWindow::quickSort(int start, int end)
 
         if (comparator(pivot, array[j]))
         {
-            i++;
+            ++i;
             std::swap(array[i], array[j]);
-            arrayAccessCount+=2;
+            arrayAccessCount += 2;
 
             waitForStep();
             visualize();
@@ -812,10 +813,10 @@ void MainWindow::quickSort(int start, int end)
 
     // After the loop, i + 1 points to the correct position for the pivot
     // So, swap between the elements in that position and the pivot index
-    i++;
+    ++i;
     std::swap(array[i], array[end]);
 
-    arrayAccessCount+=2;
+    arrayAccessCount += 2;
 
     blueBarIndex = i;
 
@@ -841,8 +842,8 @@ void MainWindow::countingSort(int place)
     for (int i = 0; i < elementsCount; ++i)
     {
         int index = (place == 0) ? array[i] : (array[i] / place) % 10;
-        count[index]++;
-        arrayAccessCount++;
+        ++count[index];
+        ++arrayAccessCount;
     }
 
     // Build cumulative count
@@ -859,9 +860,9 @@ void MainWindow::countingSort(int place)
             int element = array[i];
             int index = (place == 0) ? element : (element / place) % 10;
             output[count[index] - 1] = element;
-            count[index]--;
+            --count[index];
 
-            arrayAccessCount++;
+            ++arrayAccessCount;
 
             blueBarIndex = i;
 
@@ -878,9 +879,9 @@ void MainWindow::countingSort(int place)
             int element = array[i];
             int index = (place == 0) ? element : (element / place) % 10;
             output[elementsCount - count[index]] = element;
-            count[index]--;
+            --count[index];
 
-            arrayAccessCount++;
+            ++arrayAccessCount;
 
             blueBarIndex = i;
 
@@ -901,7 +902,7 @@ void MainWindow::countingSort(int place)
 
         array[i] = output[i];
 
-        arrayAccessCount++;
+        ++arrayAccessCount;
 
         redBar1Index = i;
 
@@ -945,7 +946,7 @@ void MainWindow::radixSort()
 
 void MainWindow::selectionSort()
 {
-    for (int i = 0; i < elementsCount - 1; i++)
+    for (int i = 0; i < elementsCount - 1; ++i)
     {
         if (shouldReset) return;
 
@@ -956,15 +957,15 @@ void MainWindow::selectionSort()
         visualize();
         wait();
 
-        for (int j = i + 1; j < elementsCount; j++)
+        for (int j = i + 1; j < elementsCount; ++j)
         {
             if (shouldReset) return;
 
             redBar1Index = j;
             redBar2Index = currentIndex;
 
-            comparisonCount++;
-            arrayAccessCount+=2;
+            ++comparisonCount;
+            arrayAccessCount += 2;
 
             waitForStep();
             visualize();
@@ -980,7 +981,7 @@ void MainWindow::selectionSort()
         if (currentIndex != i)
         {
             std::swap(array[currentIndex], array[i]);
-            arrayAccessCount+=2;
+            arrayAccessCount += 2;
 
             waitForStep();
             visualize();
@@ -1022,8 +1023,8 @@ void MainWindow::cocktailSort()
             redBar1Index = i;
             redBar2Index = i + 1;
 
-            comparisonCount++;
-            arrayAccessCount+=2;
+            ++comparisonCount;
+            arrayAccessCount += 2;
 
             waitForStep();
             visualize();
@@ -1032,7 +1033,7 @@ void MainWindow::cocktailSort()
             if (comparator(array[i], array[i + 1]))
             {
                 std::swap(array[i], array[i + 1]);
-                arrayAccessCount+=2;
+                arrayAccessCount += 2;
 
                 waitForStep();
                 visualize();
@@ -1060,8 +1061,8 @@ void MainWindow::cocktailSort()
             redBar1Index = i;
             redBar2Index = i + 1;
 
-            comparisonCount++;
-            arrayAccessCount+=2;
+            ++comparisonCount;
+            arrayAccessCount += 2;
 
             waitForStep();
             visualize();
@@ -1070,7 +1071,7 @@ void MainWindow::cocktailSort()
             if (comparator(array[i], array[i + 1]))
             {
                 std::swap(array[i], array[i + 1]);
-                arrayAccessCount+=2;
+                arrayAccessCount += 2;
 
                 waitForStep();
                 visualize();
@@ -1098,16 +1099,16 @@ void MainWindow::gnomeSort()
 
         if (index == 0)
         {
-            index++;
+            ++index;
         }
         else
         {
-            comparisonCount++;
-            arrayAccessCount+=2;
+            ++comparisonCount;
+            arrayAccessCount += 2;
 
             if (comparator(array[index], array[index - 1]))
             {
-                index++;
+                ++index;
             }
             else
             {
@@ -1121,8 +1122,8 @@ void MainWindow::gnomeSort()
                 wait();
 
                 std::swap(array[index], array[index - 1]);
-                arrayAccessCount+=2;
-                index--;
+                arrayAccessCount += 2;
+                --index;
 
                 waitForStep();
                 visualize();
@@ -1139,7 +1140,7 @@ void MainWindow::gnomeSort()
 
 void MainWindow::insertionSort()
 {
-    for (int i = 1; i < elementsCount; i++)
+    for (int i = 1; i < elementsCount; ++i)
     {
         if (shouldReset) return;
 
@@ -1160,8 +1161,8 @@ void MainWindow::insertionSort()
         {
             if (shouldReset) return;
 
-            arrayAccessCount+=2;
-            comparisonCount++;
+            arrayAccessCount += 2;
+            ++comparisonCount;
 
             redBar1Index = index - 1;
             redBar2Index = index;
@@ -1172,17 +1173,17 @@ void MainWindow::insertionSort()
             wait();
 
             std::swap(array[index], array[index - 1]);
-            arrayAccessCount+=2;
+            arrayAccessCount += 2;
 
             waitForStep();
             visualize();
             playSound(index, index - 1);
             wait();
 
-            index--;
+            --index;
         }
 
-        for (int j = 0; j <= i; j++)
+        for (int j = 0; j <= i; ++j)
         {
             if (std::find(sortedElements.begin(), sortedElements.end(), j) == sortedElements.end())
             {
@@ -1212,9 +1213,9 @@ void MainWindow::bogoSort()
 
         // Check if the array is sorted
         sorted = true;
-        for (int i = 0; i < elementsCount - 1; i++)
+        for (int i = 0; i < elementsCount - 1; ++i)
         {
-            comparisonCount++; // Increment comparison count
+            ++comparisonCount; // Increment comparison count
             arrayAccessCount += 2; // Access array[i] and array[i + 1]
 
             if (array[i] > array[i + 1])
@@ -1250,33 +1251,18 @@ void MainWindow::heapify(int n, int i)
     int left = 2 * i + 1;
     int right = 2 * i + 2;
 
-    redBar1Index = i;
-    waitForStep();
+    redBar1Index = redBar2Index = blueBarIndex = -1;
     visualize();
-    wait();
-
-    if (std::find(heapElements.begin(), heapElements.end(), i) == heapElements.end())
-    {
-        heapElements.push_back(i);
-        waitForStep();
-        visualize();
-        playSound(i, i);
-        wait();
-    }
 
     if (left < n)
     {
+        ++comparisonCount;
+        arrayAccessCount += 2;
+
         if (std::find(heapElements.begin(), heapElements.end(), left) == heapElements.end())
         {
             heapElements.push_back(left);
-            waitForStep();
-            visualize();
-            playSound(left, left);
-            wait();
         }
-
-        comparisonCount++;
-        arrayAccessCount+=2;
 
         if (comparator(array[left], array[extreme]))
         {
@@ -1286,17 +1272,13 @@ void MainWindow::heapify(int n, int i)
 
     if (right < n)
     {
+        ++comparisonCount;
+        arrayAccessCount += 2;
+
         if (std::find(heapElements.begin(), heapElements.end(), right) == heapElements.end())
         {
             heapElements.push_back(right);
-            waitForStep();
-            visualize();
-            playSound(right, right);
-            wait();
         }
-
-        comparisonCount++;
-        arrayAccessCount+=2;
 
         if (comparator(array[right], array[extreme]))
         {
@@ -1304,10 +1286,31 @@ void MainWindow::heapify(int n, int i)
         }
     }
 
+    blueBarIndex = extreme;
+
+    waitForStep();
+    visualize();
+    wait();
+
+    blueBarIndex = -1;
+
+    if (std::find(heapElements.begin(), heapElements.end(), i) == heapElements.end())
+    {
+        heapElements.push_back(i);
+    }
+
     if (extreme != i)
     {
+        redBar1Index = i;
+        redBar2Index = extreme;
+
+        waitForStep();
+        visualize();
+        wait();
+
         std::swap(array[i], array[extreme]);
         arrayAccessCount += 2;
+
         waitForStep();
         visualize();
         playSound(i, extreme);
@@ -1321,7 +1324,7 @@ void MainWindow::pop(int n)
     if (n == 0) return;
 
     std::swap(array[0], array[n - 1]);
-    arrayAccessCount+=2;
+    arrayAccessCount += 2;
 
     waitForStep();
     visualize();
@@ -1335,34 +1338,30 @@ void MainWindow::pop(int n)
 }
 void MainWindow::buildHeap()
 {
-    int n = array.size();
-    heapElements.clear();
-
-    for (int i = n / 2 - 1; i >= 0; i--)
+    for (int i = elementsCount / 2 - 1; i >= 0; --i)
     {
         if (shouldReset) return;
 
-        heapify(n, i);
-
-        waitForStep();
-        visualize();
-        wait();
+        heapify(elementsCount, i);
     }
 }
 void MainWindow::heapSort()
 {
     buildHeap();
+
+    redBar1Index = redBar2Index = blueBarIndex = -1;
+
     waitForStep();
     visualize();
     wait();
 
-    for (int i = 0; i < array.size() - 1; i++)
+    for (int i = 0; i < elementsCount - 1; ++i)
     {
         if (shouldReset) return;
 
-        pop(array.size() - i);
+        pop(elementsCount - i);
 
-        sortedElements.push_back(array.size() - i - 1);
+        sortedElements.push_back(elementsCount - i - 1);
 
         waitForStep();
         visualize();
@@ -1371,5 +1370,4 @@ void MainWindow::heapSort()
 
     sortedElements.push_back(0);
     visualize();
-    wait();
 }

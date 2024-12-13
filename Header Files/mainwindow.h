@@ -28,6 +28,7 @@ private slots:
     void on_fullScreenButton_clicked();
     void on_delaySpinBox_valueChanged(int arg1);
     void on_generateArrayButton_clicked();
+    void on_pauseButton_clicked();
 
 private:
     Ui::MainWindow *ui;

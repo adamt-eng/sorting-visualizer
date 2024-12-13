@@ -4,7 +4,6 @@
 #include <functional>
 
 // Qt Includes
-#include <QRandomGenerator>
 #include <QThread>
 #include <QPainter>
 #include <QPixmap>
@@ -28,6 +27,7 @@ vector<int> array;
 // Flags and Status Variables
 bool stepTriggered;
 bool shouldReset;
+bool isPaused;
 
 // Sorting Configuration
 bool isAscending = true; // Sort ascendingly or descendingly
@@ -125,20 +125,16 @@ void MainWindow::on_startButton_clicked()
     {
         ui->startButton->setText("Reset");
 
-        shouldReset = false;
-
+        // Reset variables
         comparisonCount = 0;
         arrayAccessCount = 0;
-
-        redBar1Index = redBar2Index = greenBarIndex = blueBarIndex = -1;
-
+        shouldReset = false;
         sortedElements.clear();
 
-        // Read sorting method and order
+        // Read new configuration
         sortingAlgorithm = ui->algorithmComboBox->currentText().toStdString();
         isAscending = ui->ascendingRadioButton->isChecked();
-        comparator = isAscending ? [](int a, int b) { return a > b; }
-                                 : [](int a, int b) { return a < b; };
+        comparator = isAscending ? [](int a, int b) { return a > b; } : [](int a, int b) { return a < b; };
         delayInMilliseconds = ui->delaySpinBox->value();
         isContinuous = ui->continuousRadioButton->isChecked();
 
@@ -169,24 +165,32 @@ void MainWindow::on_startButton_clicked()
 
                 if (!wavLoaded)
                 {
-                    QMessageBox::warning(this, "Warning", "Failed to load audio file, sound will be set to variable.");
+                    QMessageBox::warning(this, "Warning", "Failed to load audio file, 'Variable' sound option will be used instead.");
                     variableSound = true;
                 }
             }
         }
 
-        // Disable all controls to prevent modification
-        ui->nextStepButton->setEnabled(!isContinuous);
-        ui->generateArrayButton->setEnabled(false);
-        ui->soundComboBox->setEnabled(false);
-        ui->continuousRadioButton->setEnabled(false);
-        ui->stepByStepRadioButton->setEnabled(false);
+        // Disable specific controls to prevent modification while sorting
+
+        // Algorithm Settings
+        ui->pauseButton->setEnabled(isContinuous); // Only enable pauseButton if sorting mode is continuous
         ui->algorithmComboBox->setEnabled(false);
-        ui->elementsCount->setEnabled(false);
         ui->ascendingRadioButton->setEnabled(false);
         ui->descendingRadioButton->setEnabled(false);
 
-        // Set the timer event based on user selection of sorting method and order
+        // Array Settings
+        ui->elementsCount->setEnabled(false);
+        ui->generateArrayButton->setEnabled(false);
+
+        // Step Control
+        ui->nextStepButton->setEnabled(!isContinuous);
+        ui->continuousRadioButton->setEnabled(false);
+        ui->stepByStepRadioButton->setEnabled(false);
+
+        // Animation Settings
+        ui->soundComboBox->setEnabled(false);
+
         if (sortingAlgorithm == "Bubble Sort")
         {
             bubbleSort();
@@ -250,22 +254,56 @@ void MainWindow::on_startButton_clicked()
         generateArray();
     }
 
+    // Reset variables and update visualization
     redBar1Index = redBar2Index = greenBarIndex = blueBarIndex = -1;
     heapElements.clear();
-
     visualize();
 
-    // Re-enable controls
+    // Reset buttons text
     ui->startButton->setText("Start");
-    ui->generateArrayButton->setEnabled(true);
-    ui->soundComboBox->setEnabled(true);
+    ui->pauseButton->setText("Pause");
+
+    // Reset isPaused
+    isPaused = false;
+
+    // Re-enable controls
+
+    // Algorithm Settings
+    ui->pauseButton->setEnabled(false);
     ui->algorithmComboBox->setEnabled(true);
+    ui->ascendingRadioButton->setEnabled(true);
+    ui->descendingRadioButton->setEnabled(true);
+
+    // Array Settings
     ui->elementsCount->setEnabled(true);
+    ui->generateArrayButton->setEnabled(true);
+
+    // Step Control
     ui->nextStepButton->setEnabled(false);
     ui->continuousRadioButton->setEnabled(true);
     ui->stepByStepRadioButton->setEnabled(true);
-    ui->ascendingRadioButton->setEnabled(true);
-    ui->descendingRadioButton->setEnabled(true);
+
+    // Animation Settings
+    ui->soundComboBox->setEnabled(true);
+}
+
+// Event Handler for pauseButton
+void MainWindow::on_pauseButton_clicked()
+{
+    isPaused = !isPaused;
+
+    if (isPaused)
+    {
+        ui->pauseButton->setText("Resume");
+        while (isPaused)
+        {
+            QCoreApplication::processEvents();
+        }
+    }
+    else
+    {
+        ui->pauseButton->setText("Pause");
+    }
 }
 
 // Event Handler for generateArrayButton
@@ -404,6 +442,8 @@ void MainWindow::generateArray()
 
     sortedElements.clear();
 
+    sortingAlgorithm = "";
+
     visualize();
 }
 
@@ -422,9 +462,19 @@ void MainWindow::visualize()
     painter.setPen(barColor);
     painter.setFont(QFont("Arial", 10, QFont::Bold));
 
+    bool algorithmSpecified = sortingAlgorithm.length() != 0;
+
+    if (shouldReset)
+    {
+        algorithmSpecified = false;
+    }
+
     QString complexity = ui->algorithmComboBox->currentData().toString();
-    QString algorithmText = QString("Algorithm: %1").arg(QString::fromStdString(sortingAlgorithm));
-    QString complexityText = QString("Complexity: %1").arg(complexity);
+    QString algorithmText = QString("Algorithm: %1").arg(QString::fromStdString(algorithmSpecified ? sortingAlgorithm : "N/A"));
+    QString complexityText = QString("Complexity: %1").arg(algorithmSpecified ? complexity : "N/A");
+
+    comparisonCount = algorithmSpecified ? comparisonCount : 0;
+    arrayAccessCount = algorithmSpecified ? arrayAccessCount : 0;
 
     if (isAscending)
     {
@@ -457,7 +507,6 @@ void MainWindow::visualize()
 
     double gapWidth = 1.0;
     double barWidth = (width - (elementsCount - 1) * gapWidth) / elementsCount;
-
 
     // If barWidth is less than 1, make it 1 and reduce gapWidth
     if (barWidth < 1.0)
@@ -568,6 +617,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             }
 
             ui->nextStepButton->setEnabled(false);
+            ui->pauseButton->setEnabled(false);
         }
         else
         {
@@ -577,6 +627,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             ui->fullScreenButton->setEnabled(true);
             ui->startButton->setEnabled(true);
             ui->nextStepButton->setEnabled(!isContinuous);
+            ui->pauseButton->setEnabled(isContinuous);
         }
 
         ui->textLabel->setGeometry(originalTextLabelGeometry);
@@ -590,6 +641,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     else if (event->key() == Qt::Key_Right && !isContinuous && ui->startButton->text() == "Reset")
     {
         stepTriggered = true;
+    }
+    else if (event->key() == Qt::Key_Space && isContinuous && ui->startButton->text() == "Reset")
+    {
+        on_pauseButton_clicked();
     }
     else
     {

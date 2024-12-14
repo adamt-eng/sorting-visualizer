@@ -15,6 +15,8 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    void changeEvent(QEvent *event) override;
 
 public:
     MainWindow(QWidget *parent = nullptr);
@@ -29,10 +31,13 @@ private slots:
     void on_delaySpinBox_valueChanged(int arg1);
     void on_generateArrayButton_clicked();
     void on_pauseButton_clicked();
+    void on_horizontalSlider_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;
 
+    void resizeTextLabel();
+    void updateHorizontalSlider();
     void setAlgorithmsComplexity(QComboBox *comboBox);
     void generateArray();
     void visualize();

@@ -39,14 +39,13 @@ std::string sortingAlgorithm;
 std::function<bool(int, int)> comparator;
 
 // Sorting Statistics
-int comparisonCount = 0;
-int arrayAccessCount = 0;
+int comparisonCount, arrayAccessCount = 0;
 
 // Visual Elements
 int redBar1Index = -1, redBar2Index = -1, greenBarIndex = -1, blueBarIndex = -1;
 QColor backgroundColor = Qt::black, barColor = Qt::white;
 vector<int> sortedElements; // Elements to be marked green
-QRect originalGeometry, originalTextLabelGeometry;
+int originalRightMarginTextLabel, originalBottomMarginTextLabel;
 
 // Sound Player
 SoundPlayer player;
@@ -64,6 +63,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     generateArray();
 
     setAlgorithmsComplexity(ui->algorithmComboBox);
+
+    ui->textLabel->installEventFilter(this);
+
+    on_horizontalSlider_valueChanged(10);
 }
 
 // UI Destructor
@@ -312,6 +315,24 @@ void MainWindow::on_generateArrayButton_clicked()
     generateArray();
 }
 
+// Event Handler for horizontalSlider
+void MainWindow::on_horizontalSlider_valueChanged(int value)
+{
+    // Set minimum value to 10 (yet allow 0 to disable the text completely)
+    if (value > 0 && value < 10)
+    {
+        ui->horizontalSlider->setValue(10);
+        return;
+    }
+
+    QFontMetrics fm(QFont("Arial", ui->horizontalSlider->sliderPosition(), QFont::Bold));
+
+    int fullScreenButtonSection = 30 + ui->fullScreenButton->width();
+    setMinimumWidth(fullScreenButtonSection + ui->textLabel->x() +  2 * (fm.horizontalAdvance(QString(ui->algorithmComboBox->currentText()))));
+
+    visualize();
+}
+
 // Update delayInMilliseconds as user changes it, this allows the user to change the delaySpinBox while sorting is already happening
 void MainWindow::on_delaySpinBox_valueChanged(int arg1)
 {
@@ -458,51 +479,27 @@ void MainWindow::visualize()
 
     QPainter painter(&pixmap);
 
-    int textHeight = 20;
-    painter.setPen(barColor);
-    painter.setFont(QFont("Arial", 10, QFont::Bold));
+    int fontSize = ui->horizontalSlider->sliderPosition();
+    int lineHeight = painter.fontMetrics().lineSpacing();
 
-    bool algorithmSpecified = sortingAlgorithm.length() != 0;
-
-    if (shouldReset)
+    if (fontSize != 0)
     {
-        algorithmSpecified = false;
-    }
+        painter.setPen(barColor);
+        painter.setFont(QFont("Arial", fontSize, QFont::Bold));
 
-    QString complexity = ui->algorithmComboBox->currentData().toString();
-    QString algorithmText = QString("Algorithm: %1").arg(QString::fromStdString(algorithmSpecified ? sortingAlgorithm : "N/A"));
-    QString complexityText = QString("Complexity: %1").arg(algorithmSpecified ? complexity : "N/A");
+        lineHeight = std::max((double)lineHeight, painter.font().pointSizeF() * 1.9);
 
-    comparisonCount = algorithmSpecified ? comparisonCount : 0;
-    arrayAccessCount = algorithmSpecified ? arrayAccessCount : 0;
+        bool algorithmSpecified = (sortingAlgorithm.length() != 0);
 
-    if (isAscending)
-    {
-        painter.drawText(10, textHeight, algorithmText);
-        painter.drawText(10, 2 * textHeight, complexityText);
+        if (shouldReset || !algorithmSpecified)
+        {
+            comparisonCount = arrayAccessCount = 0;
+        }
 
-        QString comparisonText = QString("Comparisons: %1").arg(comparisonCount);
-        QString accessText = QString("Array Accesses: %1").arg(arrayAccessCount);
-
-        painter.drawText(10, 3 * textHeight, comparisonText);
-        painter.drawText(10, 4 * textHeight, accessText);
-    }
-    else
-    {
-        int algorithmTextWidth = painter.fontMetrics().horizontalAdvance(algorithmText);
-        int complexityTextWidth = painter.fontMetrics().horizontalAdvance(complexityText);
-
-        painter.drawText(width - algorithmTextWidth - 10, textHeight, algorithmText);
-        painter.drawText(width - complexityTextWidth - 10, 2 * textHeight, complexityText);
-
-        QString comparisonText = QString("Comparisons: %1").arg(comparisonCount);
-        QString accessText = QString("Array Accesses: %1").arg(arrayAccessCount);
-
-        int comparisonTextWidth = painter.fontMetrics().horizontalAdvance(comparisonText);
-        int accessTextWidth = painter.fontMetrics().horizontalAdvance(accessText);
-
-        painter.drawText(width - comparisonTextWidth - 10, 3 * textHeight, comparisonText);
-        painter.drawText(width - accessTextWidth - 10, 4 * textHeight, accessText);
+        painter.drawText(fontSize - 1, 5 + lineHeight, QString("Algorithm: %1").arg(algorithmSpecified ? QString::fromStdString(sortingAlgorithm) : "N/A"));
+        painter.drawText(fontSize - 1, 5 + lineHeight * 2, QString("Complexity: %1").arg(algorithmSpecified ? ui->algorithmComboBox->currentData().toString() : "N/A"));
+        painter.drawText(fontSize - 1, 5 + lineHeight * 3, QString("Comparisons: %1").arg(comparisonCount));
+        painter.drawText(fontSize - 1, 5 + lineHeight * 4, QString("Array Accesses: %1").arg(arrayAccessCount));
     }
 
     double gapWidth = 1.0;
@@ -519,7 +516,7 @@ void MainWindow::visualize()
 
     for (int i = 0; i < elementsCount; ++i)
     {
-        int barHeight = (array[i] * (height - 5 * textHeight)) / maxHeight;
+        int barHeight = (array[i] * (height - 6 * lineHeight)) / maxHeight;
 
         QColor currentColor = barColor;
 
@@ -539,6 +536,14 @@ void MainWindow::visualize()
     }
 
     ui->textLabel->setPixmap(pixmap);
+
+    // Update fullScreenButton location
+    QRect textLabelGeometry = ui->textLabel->geometry();
+
+    int newButtonX = textLabelGeometry.right() - ui->fullScreenButton->width() - 15;
+    int newButtonY = textLabelGeometry.top() + 15;
+
+    ui->fullScreenButton->setGeometry(newButtonX, newButtonY, ui->fullScreenButton->width(), ui->fullScreenButton->height());
 }
 
 // Function to handle playing sounds, whether that's a WAV file or a frequency with ADSR
@@ -575,38 +580,23 @@ void MainWindow::playSound(int i, int j)
 // Event Handler for fullScreenButton
 void MainWindow::on_fullScreenButton_clicked()
 {
-    originalGeometry = this->geometry();
-    originalTextLabelGeometry = ui->textLabel->geometry();
+    static QRect originalTextLabelGeometry;
+    static QRect preFullScreenGeometry;
+    static bool wasMaximizedBeforeFullScreen = false;
 
-    this->statusBar()->hide();
-    this->showFullScreen();
-
-    QList<QWidget*> allWidgets = this->centralWidget()->findChildren<QWidget*>();
-    for (auto widget : allWidgets)
-    {
-        if (qobject_cast<QRadioButton*>(widget)
-            || qobject_cast<QSpinBox*>(widget)
-            || qobject_cast<QComboBox*>(widget)
-            || qobject_cast<QCheckBox*>(widget)
-            || qobject_cast<QPushButton*>(widget))
-        {
-            widget->setEnabled(false);
-        }
-    }
-
-    ui->textLabel->setGeometry(this->centralWidget()->geometry());
-
-    visualize();
-}
-
-// Event Handler for keyboard shortcuts (Escape, F11, Right Arrow, and F keys are handled)
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
-    if ((event->key() == Qt::Key_Escape || event->key() == Qt::Key_F11 || event->key() == Qt::Key_F) && this->isFullScreen())
+    if (this->isFullScreen())
     {
         this->statusBar()->show();
         this->showNormal();
-        this->setGeometry(originalGeometry);
+
+        if (wasMaximizedBeforeFullScreen)
+        {
+            this->showMaximized();
+        }
+        else
+        {
+            this->setGeometry(preFullScreenGeometry);
+        }
 
         if (ui->startButton->text() == "Start")
         {
@@ -624,17 +614,54 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             ui->delaySpinBox->setEnabled(true);
             ui->themeComboBox->setEnabled(true);
             ui->invertThemeCheckBox->setEnabled(true);
-            ui->fullScreenButton->setEnabled(true);
             ui->startButton->setEnabled(true);
             ui->nextStepButton->setEnabled(!isContinuous);
             ui->pauseButton->setEnabled(isContinuous);
         }
 
-        ui->textLabel->setGeometry(originalTextLabelGeometry);
+        ui->fullScreenButton->setEnabled(true);
+        ui->fullScreenButton->show();
 
-        visualize();
+        ui->textLabel->setGeometry(originalTextLabelGeometry);
     }
-    else if ((event->key() == Qt::Key_F || event->key() == Qt::Key_F11) && !this->isFullScreen())
+    else
+    {
+        wasMaximizedBeforeFullScreen = this->isMaximized();
+        if (!wasMaximizedBeforeFullScreen)
+        {
+            preFullScreenGeometry = this->geometry();
+        }
+
+        originalTextLabelGeometry = ui->textLabel->geometry();
+
+        this->statusBar()->hide();
+        this->showFullScreen();
+
+        QList<QWidget*> allWidgets = this->centralWidget()->findChildren<QWidget*>();
+        for (auto widget : allWidgets)
+        {
+            if (qobject_cast<QRadioButton*>(widget)
+                || qobject_cast<QSpinBox*>(widget)
+                || qobject_cast<QComboBox*>(widget)
+                || qobject_cast<QCheckBox*>(widget)
+                || qobject_cast<QPushButton*>(widget)
+                || qobject_cast<QSlider*>(widget))
+            {
+                widget->setEnabled(false);
+            }
+        }
+
+        ui->fullScreenButton->hide();
+        ui->textLabel->setGeometry(this->centralWidget()->geometry());
+    }
+
+    visualize();
+}
+
+// Event Handler for keyboard shortcuts (Escape, F11, Right Arrow, and F keys are handled)
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if ((event->key() == Qt::Key_Escape && this->isFullScreen()) || (event->key() == Qt::Key_F11) || (event->key() == Qt::Key_F))
     {
         on_fullScreenButton_clicked();
     }
@@ -652,6 +679,22 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 }
 
+// Event filter to show fullScreenButton only when mouse cursor is in the upper 30% space of textLabel when in fullscreen
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (this->isFullScreen() && watched == ui->textLabel && event->type() == QEvent::MouseMove)
+    {
+        bool inUpperArea = static_cast<QMouseEvent *>(event)->pos().y() <= ui->textLabel->height() * 0.3;
+
+        ui->fullScreenButton->setEnabled(inUpperArea);
+        ui->fullScreenButton->setVisible(inUpperArea);
+
+        return true;
+    }
+
+    return QMainWindow::eventFilter(watched, event);
+}
+
 // Event Handler for the close event, this is to ensure that the program has stopped all processes before attempting to close
 // Resetting handles this already so it's used
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -663,31 +706,55 @@ void MainWindow::closeEvent(QCloseEvent *event)
 // Event Handler for window resize event, this makes sure that new window size is fully utilized for a better visualization
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    static int originalRightMargin = 0;
-    static int originalBottomMargin = 0;
-    static bool marginsInitialized = false;
+    resizeTextLabel();
+    QMainWindow::resizeEvent(event);
+}
 
-    if (!marginsInitialized)
+// Function to modify the maximum value of horizontalSlider depending on available space up to 30% of the pixmap's height
+void MainWindow::updateHorizontalSlider()
+{
+    int maxHeightForText = ui->textLabel->pixmap().height() * 0.3;
+    int fontSize = 1;
+
+    while (true)
     {
-        QRect centralWidgetGeometry = ui->centralwidget->geometry();
-        QRect textLabelGeometry = ui->textLabel->geometry();
+        if (4 * (QFont("Arial", fontSize, QFont::Bold).pointSizeF() * 1.25) > maxHeightForText)
+        {
+            fontSize--;
+            break;
+        }
 
-        originalRightMargin = centralWidgetGeometry.width() - textLabelGeometry.right();
-        originalBottomMargin = centralWidgetGeometry.height() - textLabelGeometry.bottom();
-        marginsInitialized = true;
+        fontSize++;
     }
 
-    QRect currentGeometry = ui->textLabel->geometry();
+    ui->horizontalSlider->setMaximum(fontSize);
+}
+
+// Function to resize textLabel to fit the centralWidget
+void MainWindow::resizeTextLabel()
+{
     QRect centralWidgetGeometry = ui->centralwidget->geometry();
+    QRect textLabelGeometry = ui->textLabel->geometry();
 
-    int newWidth = centralWidgetGeometry.width() - currentGeometry.x() - originalRightMargin;
-    int newHeight = centralWidgetGeometry.height() - currentGeometry.y() - originalBottomMargin;
+    int newTextLabelWidth = centralWidgetGeometry.width() - textLabelGeometry.x() - 20;
+    int newTextLabelHeight = centralWidgetGeometry.height() - textLabelGeometry.y() - 10;
 
-    ui->textLabel->setGeometry(currentGeometry.x(), currentGeometry.y(), newWidth, newHeight);
+    ui->textLabel->setGeometry(textLabelGeometry.x(), textLabelGeometry.y(), newTextLabelWidth, newTextLabelHeight);
 
-    QMainWindow::resizeEvent(event);
+    updateHorizontalSlider();
 
     visualize();
+}
+
+// Event Handler for calling updateHorizontalSlider() when window gets maximized
+void MainWindow::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::WindowStateChange && Qt::WindowMaximized)
+    {
+        updateHorizontalSlider();
+    }
+
+    QMainWindow::changeEvent(event);
 }
 
 // Algorithms

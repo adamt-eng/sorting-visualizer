@@ -34,6 +34,9 @@
   <property name="windowTitle">
    <string>Sorting Algorithms Visualizer</string>
   </property>
+  <property name="windowIcon">
+   <iconset theme="QIcon::ThemeIcon::MediaPlaybackStart"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="stepControlGroupBox">
     <property name="geometry">

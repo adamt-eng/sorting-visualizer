@@ -383,7 +383,7 @@
       <x>20</x>
       <y>463</y>
       <width>151</width>
-      <height>291</height>
+      <height>231</height>
      </rect>
     </property>
     <property name="title">
@@ -412,39 +412,20 @@
       <number>0</number>
      </property>
      <item>
-      <layout class="QVBoxLayout" name="themeLayout">
-       <property name="spacing">
-        <number>8</number>
-       </property>
+      <layout class="QGridLayout" name="themeGridLayout">
        <property name="leftMargin">
         <number>16</number>
        </property>
        <property name="topMargin">
-        <number>6</number>
+        <number>10</number>
        </property>
        <property name="rightMargin">
         <number>16</number>
        </property>
-       <property name="bottomMargin">
-        <number>4</number>
+       <property name="horizontalSpacing">
+        <number>6</number>
        </property>
-       <item>
-        <widget class="QLabel" name="themeLabel">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Theme:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
-         </property>
-        </widget>
-       </item>
-       <item>
+       <item row="1" column="0">
         <widget class="QComboBox" name="themeComboBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -515,10 +496,10 @@
          </item>
         </widget>
        </item>
-       <item>
+       <item row="1" column="1">
         <widget class="QCheckBox" name="invertThemeCheckBox">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -530,7 +511,23 @@
           <string/>
          </property>
          <property name="text">
-          <string>Invert</string>
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="themeLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Theme:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
          </property>
         </widget>
        </item>
@@ -544,13 +541,13 @@
           <number>16</number>
          </property>
          <property name="topMargin">
-          <number>8</number>
+          <number>10</number>
          </property>
          <property name="rightMargin">
           <number>16</number>
          </property>
          <property name="bottomMargin">
-          <number>8</number>
+          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="soundLabel">
@@ -619,13 +616,13 @@
           <number>16</number>
          </property>
          <property name="topMargin">
-          <number>6</number>
+          <number>10</number>
          </property>
          <property name="rightMargin">
           <number>16</number>
          </property>
          <property name="bottomMargin">
-          <number>8</number>
+          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="delayLabel">
@@ -670,13 +667,13 @@
           <number>16</number>
          </property>
          <property name="topMargin">
-          <number>12</number>
+          <number>10</number>
          </property>
          <property name="rightMargin">
           <number>16</number>
          </property>
          <property name="bottomMargin">
-          <number>8</number>
+          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="soundLabel_2">
@@ -899,6 +896,78 @@
      </size>
     </property>
    </widget>
+   <widget class="QGroupBox" name="switchGroupBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>700</y>
+      <width>151</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_8">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" name="switchLayout">
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <property name="leftMargin">
+        <number>16</number>
+       </property>
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+       <property name="rightMargin">
+        <number>16</number>
+       </property>
+       <property name="bottomMargin">
+        <number>10</number>
+       </property>
+       <item>
+        <widget class="QPushButton" name="switchButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::FocusPolicy::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>Graph Visualizer</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <zorder>switchGroupBox</zorder>
    <zorder>arraySettingsGroupBox</zorder>
    <zorder>stepControlGroupBox</zorder>
    <zorder>algorithmSettingsGroupBox</zorder>

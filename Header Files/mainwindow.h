@@ -32,6 +32,7 @@ private slots:
     void on_generateArrayButton_clicked();
     void on_pauseButton_clicked();
     void on_horizontalSlider_valueChanged(int value);
+    void on_switchButton_clicked();
 
 private:
     Ui::MainWindow *ui;

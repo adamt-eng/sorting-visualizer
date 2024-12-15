@@ -18,6 +18,7 @@
 // Project Includes
 #include ".././ui_mainwindow.h"
 #include "../Header Files/mainwindow.h"
+//#include "../Header Files/secondwindow.h"
 #include "../Header Files/soundplayer.h"
 #include "../Source Files/vector.cpp"
 
@@ -1493,3 +1494,15 @@ void MainWindow::heapSort()
     sortedElements.push_back(0);
     visualize();
 }
+
+#include <QApplication>
+#include "../Header Files/secondwindow.h"
+
+// Event handler to switch to the graph visualizer window
+void MainWindow::on_switchButton_clicked()
+{
+    SecondWindow *secondWindow = new SecondWindow();
+    secondWindow->show();
+    this->hide();
+}
+

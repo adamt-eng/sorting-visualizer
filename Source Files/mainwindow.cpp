@@ -18,7 +18,6 @@
 // Project Includes
 #include ".././ui_mainwindow.h"
 #include "../Header Files/mainwindow.h"
-//#include "../Header Files/secondwindow.h"
 #include "../Header Files/soundplayer.h"
 #include "../Source Files/vector.cpp"
 
@@ -620,7 +619,9 @@ void MainWindow::on_fullScreenButton_clicked()
             ui->pauseButton->setEnabled(isContinuous);
         }
 
+        ui->horizontalSlider->setEnabled(true);
         ui->fullScreenButton->setEnabled(true);
+        ui->switchButton->setEnabled(true);
         ui->fullScreenButton->show();
 
         ui->textLabel->setGeometry(originalTextLabelGeometry);
@@ -1501,6 +1502,8 @@ void MainWindow::heapSort()
 // Event handler to switch to the graph visualizer window
 void MainWindow::on_switchButton_clicked()
 {
+    shouldReset = true;
+
     SecondWindow *secondWindow = new SecondWindow();
     secondWindow->show();
     this->hide();

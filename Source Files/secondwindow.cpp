@@ -64,7 +64,7 @@ void SecondWindow::runAlgorithm() {
 }
 
 void SecondWindow::printAdjacencyList() {
-    vector<list<Pair<int, int>>> adjList = testGraph.getAdjacencyListVector();
+    vector<std::vector<Pair<int, int>>> adjList = testGraph.getAdjacencyListVector();
     cout << "Adjacency List:" << endl;
     for (int i = 0; i < adjList.size(); i++) {
         for (auto it = adjList[i].begin(); it != adjList[i].end(); ++it) {

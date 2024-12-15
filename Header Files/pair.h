@@ -8,8 +8,6 @@ public:
     T first;
     U second;
     Pair(const T& f = T(), const U& s = U());
-    void setFirst(const T& f);
-    void setSecond(const U& s);
 
     bool operator<(const Pair& other) const;
     bool operator>(const Pair& other) const;

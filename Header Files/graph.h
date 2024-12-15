@@ -1,7 +1,5 @@
 #ifndef GRAPH_H
 #define GRAPH_H
-#include <vector>
-#include <list>
 #include <QGraphicsScene>
 #include <QGraphicsEllipseItem>
 #include <QGraphicsLineItem>
@@ -71,14 +69,14 @@ public:
     void Dijkstra(int startNode, int goalNode, QGraphicsScene *scene);
     void addEdge(Node* node1, Node* node2, int weight, QGraphicsScene *scene, bool &success);
     int getVertices();
-    const list<Pair<int, int>>& getAdjacencyList(int u) const;
-    const std::vector<list<Pair<int, int>>>& getAdjacencyListVector() const;
+    const std::vector<Pair<int, int>>& getAdjacencyList(int u) const;
+    const std::vector<std::vector<Pair<int, int>>>& getAdjacencyListVector() const;
 
 
 private:
     int static nodeCounter;
     int vertices_;
-    std::vector<list<Pair<int, int>>> adjList_;
+    std::vector<std::vector<Pair<int, int>>> adjList_;
 };
 
 #endif // GRAPH_H

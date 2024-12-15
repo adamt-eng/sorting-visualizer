@@ -2,8 +2,6 @@
 #include "../Source Files/pair.cpp"
 #include <queue>
 #include <stack>
-#include <vector>
-#include <list>
 #include <QThread>
 #include <QGraphicsView>
 #include <QCoreApplication>
@@ -240,10 +238,10 @@ int Graph::getVertices(){
     return vertices_;
 }
 
-const list<Pair<int, int>>& Graph::getAdjacencyList(int u) const {
+const std::vector<Pair<int, int>>& Graph::getAdjacencyList(int u) const {
     return adjList_[u];
 }
 
-const vector<list<Pair<int, int>>>& Graph::getAdjacencyListVector() const{
+const std::vector<std::vector<Pair<int, int>>>& Graph::getAdjacencyListVector() const{
     return adjList_;
 }

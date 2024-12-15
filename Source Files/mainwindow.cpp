@@ -532,6 +532,16 @@ void MainWindow::visualize()
 
         painter.fillRect(QRectF(xPos, height - barHeight, barWidth, barHeight), currentColor);
 
+        // Draw bar value on the bar at the bottom
+        double barValueFontSize = std::min(barWidth * 0.8, barHeight * 1.0) / 1.5;
+
+        if (barValueFontSize >= 5)
+        {
+            painter.setPen(backgroundColor);
+            painter.setFont(QFont("Arial", barValueFontSize, QFont::Bold));
+            painter.drawText(QRectF(xPos, height - barHeight, barWidth, barHeight), Qt::AlignCenter | Qt::AlignBottom, QString::number(array[i]));
+        }
+
         xPos += barWidth + gapWidth;
     }
 

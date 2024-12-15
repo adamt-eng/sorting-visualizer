@@ -1,6 +1,7 @@
 #include "../Header Files/secondwindow.h"
 #include ".././ui_secondwindow.h"
 #include "../Header Files/graph.h"
+#include "../Source Files/pair.cpp"
 #include <iostream>
 #include <QMouseEvent>
 #include <QInputDialog>
@@ -63,7 +64,7 @@ void SecondWindow::runAlgorithm() {
 }
 
 void SecondWindow::printAdjacencyList() {
-    vector<list<pair<int, int>>> adjList = testGraph.getAdjacencyListVector();
+    vector<list<Pair<int, int>>> adjList = testGraph.getAdjacencyListVector();
     cout << "Adjacency List:" << endl;
     for (int i = 0; i < adjList.size(); i++) {
         for (auto it = adjList[i].begin(); it != adjList[i].end(); ++it) {

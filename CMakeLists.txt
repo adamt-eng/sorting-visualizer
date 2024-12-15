@@ -25,9 +25,9 @@ set(PROJECT_SOURCES
     "Header Files/soundplayer.h"
     "Header Files/mainwindow.h"
     "Header Files/vector.h"
-	"Header Files/secondwindow.h"
+    "Header Files/secondwindow.h"
     "Header Files/graph.h"
-	"Source Files/secondwindow.cpp"
+    "Source Files/secondwindow.cpp"
     "Source Files/graph.cpp"
     mainwindow.ui
     secondwindow.ui
@@ -39,6 +39,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         "Header Files/soundplayer.h"
         "Source Files/soundplayer.cpp"
+        "Header Files/pair.h"
+        "Source Files/pair.cpp"
         resources.qrc
     )
 # Define target properties for Android with Qt 6 as:

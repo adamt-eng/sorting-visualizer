@@ -8,6 +8,8 @@
 #include <QGraphicsTextItem>
 #include <QBrush>
 #include <QPen>
+#include "../Header Files/pair.h"
+
 using namespace std;
 
 class Graph {
@@ -69,14 +71,14 @@ public:
     void Dijkstra(int startNode, int goalNode, QGraphicsScene *scene);
     void addEdge(Node* node1, Node* node2, int weight, QGraphicsScene *scene, bool &success);
     int getVertices();
-    const list<pair<int, int>>& getAdjacencyList(int u) const;
-    const std::vector<list<pair<int, int>>>& getAdjacencyListVector() const;
+    const list<Pair<int, int>>& getAdjacencyList(int u) const;
+    const std::vector<list<Pair<int, int>>>& getAdjacencyListVector() const;
 
 
 private:
     int static nodeCounter;
     int vertices_;
-    std::vector<list<pair<int, int>>> adjList_;
+    std::vector<list<Pair<int, int>>> adjList_;
 };
 
 #endif // GRAPH_H

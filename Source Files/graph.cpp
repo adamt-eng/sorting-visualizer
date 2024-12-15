@@ -1,5 +1,5 @@
 #include "../Header Files/graph.h"
-#include <iostream>
+#include "../Source Files/pair.cpp"
 #include <queue>
 #include <stack>
 #include <vector>
@@ -180,7 +180,7 @@ void Graph::DFS(int startNode, int goalNode, QGraphicsScene *scene) {
 
 void Graph::Dijkstra(int startNode, int goalNode, QGraphicsScene *scene) {
     // Priority queue to select the node with the smallest distance
-    using NodeDistPair = std::pair<int, int>; // {distance, node}
+    using NodeDistPair = Pair<int, int>; // {distance, node}
     std::priority_queue<NodeDistPair, std::vector<NodeDistPair>, std::greater<>> pq;
 
     // Distance vector, initialized to infinity
@@ -240,10 +240,10 @@ int Graph::getVertices(){
     return vertices_;
 }
 
-const list<pair<int, int>>& Graph::getAdjacencyList(int u) const {
+const list<Pair<int, int>>& Graph::getAdjacencyList(int u) const {
     return adjList_[u];
 }
 
-const vector<list<pair<int, int>>>& Graph::getAdjacencyListVector() const{
+const vector<list<Pair<int, int>>>& Graph::getAdjacencyListVector() const{
     return adjList_;
 }

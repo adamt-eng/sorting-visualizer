@@ -53,39 +53,13 @@ MainWindow::~MainWindow()
 // Function to set each algorithm's complexity as it's data in the comboBox for faster retrieval when visualizing
 void MainWindow::setAlgorithmsComplexity(QComboBox *comboBox)
 {
-    gui::vector<QString> algorithms =
-        {
-        "Bubble Sort",
-        "Merge Sort",
-        "Quick Sort",
-        "Counting Sort",
-        "Radix Sort",
-        "Selection Sort",
-        "Insertion Sort",
-        "Heap Sort",
-        "Cocktail Sort",
-        "Gnome Sort",
-        "Bogo Sort"
-    };
-
-    gui::vector<QString> complexities = {
-        "O(n^2)",
-        "O(n log n)",
-        "O(n log n)",
-        "O(n + k)",
-        "O(nk)",
-        "O(n^2)",
-        "O(n^2)",
-        "O(n log n)",
-        "O(n^2)",
-        "O(n^2)",
-        "O((n-1)!)"
-    };
+    QString algorithms[11] = { "Bubble Sort", "Merge Sort", "Quick Sort", "Counting Sort", "Radix Sort", "Selection Sort", "Insertion Sort", "Heap Sort", "Cocktail Sort", "Gnome Sort", "Bogo Sort" };
+    QString complexities[11] = { "O(n^2)", "O(n log n)", "O(n log n)", "O(n + k)", "O(nk)", "O(n^2)", "O(n^2)", "O(n log n)", "O(n^2)", "O(n^2)","O((n-1)!)" };
 
     for (int i = 0; i < comboBox->count(); ++i)
     {
         QString algorithm = comboBox->itemText(i);
-        for (size_t j = 0; j < algorithms.size(); ++j)
+        for (int j = 0; j < 11; ++j)
         {
             if (algorithms[j] == algorithm)
             {
@@ -513,7 +487,7 @@ void MainWindow::visualize()
         if (!heapElements.isEmpty() && std::find(heapElements.begin(), heapElements.end(), i) != heapElements.end())
         {
             int level = static_cast<int>(std::log2(i + 1));
-            currentColor = heapLevelColors[level % heapLevelColors.size()];
+            currentColor = heapLevelColors[level % 7];
         }
 
         if (i == redBar1Index || i == redBar2Index) currentColor = Qt::red;

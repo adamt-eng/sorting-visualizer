@@ -1,6 +1,5 @@
 #include"../../Header Files/Data Structures/vector.h"
 #include <cstddef>
-#include <initializer_list>
 
 namespace gui
 {
@@ -21,15 +20,6 @@ namespace gui
     {
         for (int i = 0; i < newSize; ++i) {
             arr[i] = initialValue;
-        }
-    }
-    template<typename T>
-    vector<T>::vector(std::initializer_list<T> initList)
-        : mySize(initList.size()), myCapacity(initList.size()), arr(new T[initList.size()])
-    {
-        std::size_t index = 0;
-        for (const T& element : initList) {
-            arr[index++] = element;
         }
     }
 

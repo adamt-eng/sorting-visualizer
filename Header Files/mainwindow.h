@@ -48,7 +48,15 @@ public:
     gui::vector<int> sortedElements; // Elements to be marked green
 
     // Heap Sort Specific Variables
-    gui::vector<QColor> heapLevelColors = { QColor::fromHsl(0, 250, 230), QColor::fromHsl(30, 250, 230), QColor::fromHsl(60, 250, 230), QColor::fromHsl(120, 250, 230), QColor::fromHsl(180, 250, 230), QColor::fromHsl(240, 250, 230), QColor::fromHsl(300, 250, 230) };
+    QColor heapLevelColors[7] = {
+        QColor::fromHsl(0, 250, 230),
+        QColor::fromHsl(30, 250, 230),
+        QColor::fromHsl(60, 250, 230),
+        QColor::fromHsl(120, 250, 230),
+        QColor::fromHsl(180, 250, 230),
+        QColor::fromHsl(240, 250, 230),
+        QColor::fromHsl(300, 250, 230)
+    };
     gui::vector<int> heapElements;
 
     // Flags and Status Variables

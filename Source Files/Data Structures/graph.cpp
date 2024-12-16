@@ -178,9 +178,8 @@ void Graph::DFS(int startNode, int goalNode, QGraphicsScene *scene) {
 }
 
 void Graph::Dijkstra(int startNode, int goalNode, QGraphicsScene *scene) {
-    // Priority queue to select the node with the smallest distance
-    using NodeDistPair = Pair<int, int>; // {distance, node}
-    PriorityQueue<NodeDistPair, std::vector<NodeDistPair>, std::greater<>> pq;
+    // Custom PriorityQueue: Stores {node, priority}
+    PriorityQueue<int> pq;
 
     // Distance vector, initialized to infinity
     std::vector<int> dist(vertices_, INT_MAX);
@@ -189,8 +188,8 @@ void Graph::Dijkstra(int startNode, int goalNode, QGraphicsScene *scene) {
     // Visited vector
     std::vector<bool> visited(vertices_, false);
 
-    // Push the start node into the priority queue
-    pq.push({0, startNode});
+    // Push the start node with a priority of 0 (distance to itself)
+    pq.push(startNode, 0);
     nodes[startNode]->setBrush(Qt::green); // Color start node as green
 
     // Mark the goal node as red initially
@@ -200,7 +199,8 @@ void Graph::Dijkstra(int startNode, int goalNode, QGraphicsScene *scene) {
     QCoreApplication::processEvents();
 
     while (!pq.empty()) {
-        int currentNode = pq.top().second;
+        // Get the node with the smallest distance (priority)
+        int currentNode = pq.top();
         pq.pop();
 
         // Skip if the node is already visited
@@ -223,7 +223,9 @@ void Graph::Dijkstra(int startNode, int goalNode, QGraphicsScene *scene) {
             // Relaxation step
             if (dist[currentNode] + weight < dist[neighborNode]) {
                 dist[neighborNode] = dist[currentNode] + weight;
-                pq.push({dist[neighborNode], neighborNode});
+
+                // Push neighbor into the priority queue with updated distance as priority
+                pq.push(neighborNode, dist[neighborNode]);
             }
         }
     }
@@ -233,6 +235,7 @@ void Graph::Dijkstra(int startNode, int goalNode, QGraphicsScene *scene) {
         node->setBrush(Qt::blue);
     }
 }
+
 
 
 int Graph::getVertices(){

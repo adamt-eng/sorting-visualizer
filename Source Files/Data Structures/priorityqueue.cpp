@@ -31,27 +31,26 @@ template<typename PriorityQueueElement>
 void PriorityQueue<PriorityQueueElement>::push(PriorityQueueElement vertex, int priority){
     Node* newNode = new Node(vertex,priority);
 
-    if (empty() || myFront->priority > priority) {
+    Node* current = myFront;
+    Node* prev = nullptr;
+
+    while (current != nullptr && current->priority <= priority) {
+        prev = current;
+        current = current->next;
+    }
+
+    // If we are inserting before the first element
+    if (prev == nullptr) {
         newNode->next = myFront;
         myFront = newNode;
-
-    // If the queue was empty, update myBack as well
-    if (myBack == nullptr) {
-        myBack = newNode;
-    }
-    else{
-        Node* current = myFront;
-        while (current->next != nullptr && current->next->priority <= priority) {
-            current = current->next;
-        }
-        newNode -> next =current->next;
-        current->next =newNode;
+    } else {
+        prev->next = newNode;
+        newNode->next = current;
     }
 
     if(newNode->next == nullptr){
         myBack = newNode;
     }
- }
 }
 
 template<typename PriorityQueueElement>

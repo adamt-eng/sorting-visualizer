@@ -3,12 +3,19 @@ template<typename T>
 Stack<T>::Stack():myTop(0){}
 
 template<typename T>
+Stack<T>::~Stack() {
+    while (!empty()) {
+        pop();
+    }
+}
+
+template<typename T>
 void Stack<T>::pop(){
     if(!empty())
     {
-    Stack<T>::Nodeptr ptr = myTop;
+        Stack<T>::NodePtr ptr = myTop;
         myTop = myTop->next;
-    delete ptr;
+        delete ptr;
     }
 }
 
@@ -23,7 +30,7 @@ bool Stack<T>::empty(){return myTop == 0;}
 
 template<typename T>
 void Stack<T>::push(T item){
-    Stack<T>::Nodeptr ptr = myTop;
+    Stack<T>::NodePtr ptr = myTop;
     myTop = new Stack<T>::Node(item);
     myTop->next = ptr;
 }

@@ -12,8 +12,9 @@ private:
     };
     Node* myTop;
 public:
-    typedef Node* Nodeptr;
+    typedef Node* NodePtr;
     Stack();
+    ~Stack();
     void pop();
     T top();
     bool empty();

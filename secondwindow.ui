@@ -57,14 +57,17 @@
    <widget class="QLabel" name="messageUpdate">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>30</y>
-      <width>481</width>
-      <height>20</height>
+      <x>1000</x>
+      <y>10</y>
+      <width>241</width>
+      <height>111</height>
      </rect>
     </property>
     <property name="text">
      <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
     </property>
    </widget>
    <widget class="QCheckBox" name="weightVisibilityCheckbox">
@@ -85,7 +88,7 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>261</width>
+      <width>381</width>
       <height>121</height>
      </rect>
     </property>
@@ -165,9 +168,9 @@
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>420</x>
       <y>10</y>
-      <width>261</width>
+      <width>561</width>
       <height>121</height>
      </rect>
     </property>
@@ -214,9 +217,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="startBox"/>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
@@ -236,6 +236,9 @@
        </item>
        <item row="2" column="1">
         <widget class="QLineEdit" name="weightInputLineEdit"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="startBox"/>
        </item>
       </layout>
      </item>

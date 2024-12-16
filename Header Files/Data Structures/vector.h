@@ -1,5 +1,4 @@
 #include <cstddef>
-#include <initializer_list>
 
 namespace gui
 {
@@ -14,7 +13,6 @@ namespace gui
         typedef T* iterator;
         vector();
         vector(int newCapacity);
-        vector(std::initializer_list<T> initList);
         template<size_t N>
         vector(const T (&arr)[N]);
         vector(int newSize, const T& initialValue);

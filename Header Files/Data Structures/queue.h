@@ -10,7 +10,8 @@ private:
         QueueElement data;
         Node(QueueElement item):next(0){data = item;}
     };
-    Node* myTop;
+    Node* myFront;
+    Node* myBack;
 public:
     typedef Node* Nodeptr;
     Queue();

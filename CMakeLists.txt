@@ -53,6 +53,9 @@ set(PROJECT_SOURCES
     "Header Files/Data Structures/list.h"
     "Source Files/Data Structures/list.cpp"
 
+    "Header Files/Data Structures/priorityqueue.h"
+    "Source Files/Data Structures/priorityqueue.cpp"
+
     mainwindow.ui
     secondwindow.ui
 )

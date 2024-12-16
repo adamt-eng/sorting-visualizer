@@ -1,5 +1,5 @@
-#include "../Header Files/graph.h"
-#include "../Source Files/pair.cpp"
+#include "../../Header Files/Data Structures/graph.h"
+#include "pair.cpp"
 #include <queue>
 #include <stack>
 #include <QThread>

@@ -6,9 +6,7 @@
 #include <QGraphicsTextItem>
 #include <QBrush>
 #include <QPen>
-#include "../Header Files/pair.h"
-
-using namespace std;
+#include "pair.h"
 
 class Graph {
 public:

@@ -1,7 +1,7 @@
 #ifndef SECONDWINDOW_H
 #define SECONDWINDOW_H
 
-#include "../Header Files/graph.h"
+#include "Data Structures/graph.h"
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>

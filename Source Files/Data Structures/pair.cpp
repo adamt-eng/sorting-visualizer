@@ -1,4 +1,4 @@
-#include "../Header Files/pair.h"
+#include "../../Header Files/Data Structures/pair.h"
 
 template <typename T, typename U>
 Pair<T,U>::Pair(const T& f, const U& s) : first(f), second(s) {}

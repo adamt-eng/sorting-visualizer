@@ -19,16 +19,40 @@ include_directories(${SDL2_INCLUDE_DIR})
 
 set(PROJECT_SOURCES
     "Source Files/main.cpp"
+
     "Source Files/mainwindow.cpp"
-    "Source Files/soundplayer.cpp"
-    "Source Files/vector.cpp"
-    "Header Files/soundplayer.h"
     "Header Files/mainwindow.h"
-    "Header Files/vector.h"
+
+    "Source Files/soundplayer.cpp"
+    "Header Files/soundplayer.h"
+
     "Header Files/secondwindow.h"
-    "Header Files/graph.h"
     "Source Files/secondwindow.cpp"
-    "Source Files/graph.cpp"
+
+    "Header Files/soundplayer.h"
+    "Source Files/soundplayer.cpp"
+
+    "Header Files/algorithms.h"
+    "Source Files/algorithms.cpp"
+
+    "Source Files/Data Structures/vector.cpp"
+    "Header Files/Data Structures/vector.h"
+
+    "Header Files/Data Structures/graph.h"
+    "Source Files/Data Structures/graph.cpp"
+
+    "Header Files/Data Structures/pair.h"
+    "Source Files/Data Structures/pair.cpp"
+
+    "Header Files/Data Structures/stack.h"
+    "Source Files/Data Structures/stack.cpp"
+
+    "Header Files/Data Structures/queue.h"
+    "Source Files/Data Structures/queue.cpp"
+
+    "Header Files/Data Structures/list.h"
+    "Source Files/Data Structures/list.cpp"
+
     mainwindow.ui
     secondwindow.ui
 )
@@ -37,10 +61,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(gui
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        "Header Files/soundplayer.h"
-        "Source Files/soundplayer.cpp"
-        "Header Files/pair.h"
-        "Source Files/pair.cpp"
         resources.qrc
     )
 # Define target properties for Android with Qt 6 as:

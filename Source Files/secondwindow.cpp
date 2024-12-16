@@ -1,7 +1,7 @@
 #include "../Header Files/secondwindow.h"
 #include ".././ui_secondwindow.h"
-#include "../Header Files/graph.h"
-#include "../Source Files/pair.cpp"
+#include "../Header Files/Data Structures/graph.h"
+#include "../Source Files/Data Structures/pair.cpp"
 #include <iostream>
 #include <QMouseEvent>
 #include <QInputDialog>

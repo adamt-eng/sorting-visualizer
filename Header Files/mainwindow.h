@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <qcombobox.h>
+#include "../Source Files/Data Structures/vector.cpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -11,6 +12,7 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
@@ -21,6 +23,48 @@ protected:
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    void visualize();
+    void playSound(int i, int j);
+    void wait();
+    void waitForStep();
+
+    // Array to be sorted
+    gui::vector<int> array;
+
+    // Flags and Status Variables
+    bool stepTriggered;
+    bool isPaused;
+
+    // Sorting Configuration
+    bool isSorted;
+    bool isContinuous; // Continuous or step-by-step sorting
+    int delayInMilliseconds;
+    std::string sortingAlgorithm;
+
+    // Visual Elements
+    QColor backgroundColor = Qt::black, barColor = Qt::white;
+    int originalRightMarginTextLabel, originalBottomMarginTextLabel;
+    gui::vector<int> sortedElements; // Elements to be marked green
+
+    // Heap Sort Specific Variables
+    gui::vector<QColor> heapLevelColors = { QColor::fromHsl(0, 250, 230), QColor::fromHsl(30, 250, 230), QColor::fromHsl(60, 250, 230), QColor::fromHsl(120, 250, 230), QColor::fromHsl(180, 250, 230), QColor::fromHsl(240, 250, 230), QColor::fromHsl(300, 250, 230) };
+    gui::vector<int> heapElements;
+
+    // Flags and Status Variables
+    bool shouldReset;
+
+    // Sorting Configuration
+    bool isAscending = true; // Sort ascendingly or descendingly
+    int elementsCount;
+    int maxHeight; // Biggest element in the array (currently always equals to elementsCount but this is kept as we might change it)
+    std::function<bool(int, int)> comparator;
+
+    // Sorting Statistics
+    int comparisonCount, arrayAccessCount = 0;
+
+    // Visual Elements
+    int redBar1Index = -1, redBar2Index = -1, greenBarIndex = -1, blueBarIndex = -1;
 
 private slots:
     void on_startButton_clicked();
@@ -42,34 +86,5 @@ private:
     void updateHorizontalSlider();
     void setAlgorithmsComplexity(QComboBox *comboBox);
     void generateArray();
-    void visualize();
-    void playSound(int i, int j);
-    void wait();
-    void waitForStep();
-
-    void bubbleSort();
-
-    void mergeSort(int start, int end);
-
-    void quickSort(int start, int end);
-
-    void countingSort(int place);
-
-    void radixSort();
-
-    void selectionSort();
-
-    void cocktailSort();
-
-    void gnomeSort();
-
-    void insertionSort();
-
-    void bogoSort();
-
-    void heapify(int n, int i);
-    void pop(int n);
-    void buildHeap();
-    void heapSort();
 };
 #endif // MAINWINDOW_H

@@ -30,6 +30,7 @@ bool shouldReset;
 bool isPaused;
 
 // Sorting Configuration
+bool isSorted;
 bool isAscending = true; // Sort ascendingly or descendingly
 bool isContinuous; // Continuous or step-by-step sorting
 int delayInMilliseconds;
@@ -126,6 +127,11 @@ void MainWindow::on_startButton_clicked()
 {
     if (ui->startButton->text() == "Start")
     {
+        if (isSorted && QMessageBox::question(this, "Question", "Do you want to generate a new array?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+        {
+            generateArray();
+        }
+
         ui->startButton->setText("Reset");
 
         // Reset variables
@@ -245,6 +251,8 @@ void MainWindow::on_startButton_clicked()
             {
                 sortedElements.push_back(i);
             }
+
+            isSorted = true;
         }
     }
     else
@@ -311,6 +319,12 @@ void MainWindow::on_pauseButton_clicked()
 
 // Event Handler for generateArrayButton
 void MainWindow::on_generateArrayButton_clicked()
+{
+    generateArray();
+}
+
+// Event Handler to call generateArray() everytime the user changes the elements count
+void MainWindow::on_elementsCount_valueChanged(int arg1)
 {
     generateArray();
 }
@@ -451,6 +465,8 @@ void MainWindow::generateArray()
 {
     // Clear array
     array.clear();
+
+    isSorted = false;
 
     elementsCount = ui->elementsCount->value();
 
@@ -1119,21 +1135,18 @@ void MainWindow::selectionSort()
 
             waitForStep();
             visualize();
-            playSound(currentIndex, i);
             wait();
         }
 
         sortedElements.push_back(i);
         waitForStep();
         visualize();
-        playSound(i, i);
         wait();
     }
 
     sortedElements.push_back(elementsCount - 1);
     waitForStep();
     visualize();
-    playSound(elementsCount - 1, elementsCount - 1);
     wait();
 }
 
@@ -1518,4 +1531,3 @@ void MainWindow::on_switchButton_clicked()
     secondWindow->show();
     this->hide();
 }
-

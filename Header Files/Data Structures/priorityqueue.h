@@ -19,7 +19,7 @@ public:
     ~PriorityQueue();
     void push(PriorityQueueElement vertex, int priority);
     void pop();
-    PriorityQueueElement front();
+    PriorityQueueElement top();
     bool empty();
 };
 

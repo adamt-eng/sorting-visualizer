@@ -21,7 +21,7 @@ template<typename PriorityQueueElement>
 bool PriorityQueue<PriorityQueueElement>::empty(){return myFront == nullptr;}
 
 template<typename PriorityQueueElement>
-PriorityQueueElement PriorityQueue<PriorityQueueElement>::front(){
+PriorityQueueElement PriorityQueue<PriorityQueueElement>::top(){
     if(!empty()){
         return myFront -> data;
     }

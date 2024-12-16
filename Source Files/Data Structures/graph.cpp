@@ -1,7 +1,8 @@
 #include "../../Header Files/Data Structures/graph.h"
 #include "pair.cpp"
 #include "stack.cpp"
-#include <queue>
+#include "queue.cpp"
+#include "priorityqueue.cpp"
 #include <QThread>
 #include <QGraphicsView>
 #include <QCoreApplication>
@@ -82,7 +83,7 @@ void Graph::BFS(int startNode, int goalNode, QGraphicsScene *scene) {
 
     // Create a visited vector to keep track of visited nodes
     std::vector<bool> visited(vertices_, false);
-    std::queue<int> q;
+    Queue<int> q;
 
     // Mark the start node as visited and change its color to green
     visited[startNode] = true;
@@ -179,7 +180,7 @@ void Graph::DFS(int startNode, int goalNode, QGraphicsScene *scene) {
 void Graph::Dijkstra(int startNode, int goalNode, QGraphicsScene *scene) {
     // Priority queue to select the node with the smallest distance
     using NodeDistPair = Pair<int, int>; // {distance, node}
-    std::priority_queue<NodeDistPair, std::vector<NodeDistPair>, std::greater<>> pq;
+    PriorityQueue<NodeDistPair, std::vector<NodeDistPair>, std::greater<>> pq;
 
     // Distance vector, initialized to infinity
     std::vector<int> dist(vertices_, INT_MAX);

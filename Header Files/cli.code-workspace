@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "../../../.vscode/cli"
+		},
+		{
+			"path": "../../../OneDrive/Desktop/HTML"
+		},
+		{
+			"path": "../../../OneDrive/Desktop/Project"
+		},
+		{
+			"path": "../../../OneDrive/Desktop/yum"
+		},
+		{
+			"path": "../../../OneDrive/Desktop/MyShowz-Movie-ticket-booking-website-main"
+		},
+		{
+			"path": "../../../Downloads/yum"
+		},
+		{
+			"path": "../../../.vscode/Belal"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "yum"
+	}
+}

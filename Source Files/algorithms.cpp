@@ -158,9 +158,7 @@ void Algorithms::quickSort(int start, int end)
 
     ++arrayAccessCount;
 
-    mainwindow->waitForStep();
     mainwindow->visualize();
-    mainwindow->wait();
 
     for (int j = start; j < end; ++j)
     {
@@ -171,9 +169,7 @@ void Algorithms::quickSort(int start, int end)
         ++arrayAccessCount;
         ++comparisonCount;
 
-        mainwindow->waitForStep();
         mainwindow->visualize();
-        mainwindow->wait();
 
         if (comparator(pivot, array[j]))
         {

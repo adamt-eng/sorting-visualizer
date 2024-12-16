@@ -1,7 +1,7 @@
 #include "../../Header Files/Data Structures/graph.h"
 #include "pair.cpp"
+#include "stack.cpp"
 #include <queue>
-#include <stack>
 #include <QThread>
 #include <QGraphicsView>
 #include <QCoreApplication>
@@ -131,7 +131,7 @@ void Graph::DFS(int startNode, int goalNode, QGraphicsScene *scene) {
 
     // Create a visited vector to keep track of visited nodes
     std::vector<bool> visited(vertices_, false);
-    std::stack<int> stack;
+    Stack<int> stack;
 
     // Mark the start node as visited and change its color to green
     visited[startNode] = true;

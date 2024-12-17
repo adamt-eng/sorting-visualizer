@@ -766,10 +766,6 @@ void Algorithms::shellSort()
 
 
 
-                mainwindow->waitForStep();
-                mainwindow->visualize();
-                mainwindow->wait();
-
                 array[j] = array[j - gap];
                 j -= gap;
                 comparisonCount++;

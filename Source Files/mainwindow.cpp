@@ -13,6 +13,7 @@
 #include <QKeyEvent>
 
 // SDL Includes
+#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 
 // Project Includes

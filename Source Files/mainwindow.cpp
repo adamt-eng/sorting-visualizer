@@ -81,6 +81,8 @@ void MainWindow::on_startButton_clicked()
             generateArray();
         }
 
+        ui->pauseButton->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
+        ui->startButton->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStop));
         ui->startButton->setText("Reset");
 
         // Reset variables
@@ -220,6 +222,8 @@ void MainWindow::on_startButton_clicked()
     visualize();
 
     // Reset buttons text
+    ui->pauseButton->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
+    ui->startButton->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
     ui->startButton->setText("Start");
     ui->pauseButton->setText("Pause");
 
@@ -254,6 +258,7 @@ void MainWindow::on_pauseButton_clicked()
 
     if (isPaused)
     {
+        ui->pauseButton->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
         ui->pauseButton->setText("Resume");
         while (isPaused)
         {
@@ -262,6 +267,7 @@ void MainWindow::on_pauseButton_clicked()
     }
     else
     {
+        ui->pauseButton->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
         ui->pauseButton->setText("Pause");
     }
 }

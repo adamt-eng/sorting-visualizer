@@ -133,7 +133,16 @@
           <enum>Qt::FocusPolicy::NoFocus</enum>
          </property>
          <property name="text">
-          <string>Next Step -&gt;</string>
+          <string>Next Step</string>
+         </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::MediaSeekForward"/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>14</width>
+           <height>14</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -184,13 +193,13 @@
         <number>16</number>
        </property>
        <property name="topMargin">
-        <number>8</number>
+        <number>4</number>
        </property>
        <property name="rightMargin">
         <number>16</number>
        </property>
        <property name="bottomMargin">
-        <number>2</number>
+        <number>4</number>
        </property>
        <item>
         <widget class="QPushButton" name="startButton">
@@ -205,6 +214,15 @@
          </property>
          <property name="text">
           <string>Start</string>
+         </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::MediaPlaybackStart"/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>14</width>
+           <height>14</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -225,6 +243,15 @@
          <property name="text">
           <string>Pause</string>
          </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::MediaPlaybackPause"/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>14</width>
+           <height>14</height>
+          </size>
+         </property>
         </widget>
        </item>
       </layout>
@@ -238,13 +265,13 @@
         <number>16</number>
        </property>
        <property name="topMargin">
-        <number>6</number>
+        <number>2</number>
        </property>
        <property name="rightMargin">
         <number>16</number>
        </property>
        <property name="bottomMargin">
-        <number>6</number>
+        <number>2</number>
        </property>
        <item>
         <widget class="QComboBox" name="algorithmComboBox">
@@ -333,7 +360,7 @@
         <number>16</number>
        </property>
        <property name="topMargin">
-        <number>2</number>
+        <number>8</number>
        </property>
        <property name="rightMargin">
         <number>16</number>
@@ -861,6 +888,15 @@
          </property>
          <property name="text">
           <string>Generate Array</string>
+         </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>14</width>
+           <height>14</height>
+          </size>
          </property>
         </widget>
        </item>

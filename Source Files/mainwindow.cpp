@@ -55,7 +55,7 @@ MainWindow::~MainWindow()
 void MainWindow::setAlgorithmsComplexity(QComboBox *comboBox)
 {
     QString algorithms[12] = { "Bubble Sort", "Merge Sort", "Quick Sort", "Counting Sort", "Radix Sort", "Selection Sort", "Insertion Sort", "Heap Sort", "Cocktail Sort", "Gnome Sort", "Bogo Sort","Shell Sort" };
-    QString complexities[12] = { "O(n^2)", "O(n log n)", "O(n log n)", "O(n + k)", "O(nk)", "O(n^2)", "O(n^2)", "O(n log n)", "O(n^2)", "O(n^2)","O((n-1)!)","O(n²)" };
+    QString complexities[12] = { "O(n²)", "O(n log n)", "O(n log n)", "O(n + k)", "O(nk)", "O(n²)", "O(n²)", "O(n log n)", "O(n²)", "O(n²)", "O((n-1)!)", "O(n²)" };
 
     for (int i = 0; i < comboBox->count(); ++i)
     {
@@ -327,27 +327,22 @@ void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
         backgroundColor = Qt::black;
         barColor = Qt::white;
     }
-    else if (arg1 == "Night Glow")
+    else if (arg1 == "Night")
     {
         backgroundColor = QColor(0, 31, 63);
         barColor = QColor(255, 220, 0);
     }
-    else if (arg1 == "Retro Pop")
+    else if (arg1 == "Retro")
     {
         backgroundColor = QColor(243, 240, 224);
         barColor = QColor(0, 116, 217);
     }
-    else if (arg1 == "Solar Burst")
+    else if (arg1 == "Solar")
     {
         backgroundColor = QColor(51, 51, 51);
         barColor = QColor(255, 133, 27);
     }
-    else if (arg1 == "Zen Garden")
-    {
-        backgroundColor = QColor(61, 153, 112);
-        barColor = QColor(221, 221, 221);
-    }
-    else if (arg1 == "Tropical Drift")
+    else if (arg1 == "Tropical")
     {
         backgroundColor = QColor(55, 163, 163);
         barColor = QColor(255, 255, 255);
@@ -357,7 +352,7 @@ void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
         backgroundColor = QColor(237, 231, 246);
         barColor = QColor(96, 50, 168);
     }
-    else if (arg1 == "Bold Sunset")
+    else if (arg1 == "Sunset")
     {
         backgroundColor = QColor(44, 62, 80);
         barColor = QColor(241, 196, 15);
@@ -372,10 +367,50 @@ void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
         backgroundColor = QColor(90, 61, 49);
         barColor = QColor(255, 127, 80);
     }
-    else if (arg1 == "Frosty Chill")
+    else if (arg1 == "Frosty")
     {
         backgroundColor = QColor(50, 150, 200);
         barColor = QColor(220, 240, 255);
+    }
+    else if (arg1 == "Aurora")
+    {
+        backgroundColor = QColor(12, 24, 48);
+        barColor = QColor(168, 226, 140);
+    }
+    else if (arg1 == "Blossom")
+    {
+        backgroundColor = QColor(230, 200, 255);
+        barColor = QColor(255, 105, 180);
+    }
+    else if (arg1 == "Steel")
+    {
+        backgroundColor = QColor(48, 57, 66);
+        barColor = QColor(100, 149, 237);
+    }
+    else if (arg1 == "Crimson")
+    {
+        backgroundColor = QColor(33, 33, 33);
+        barColor = QColor(255, 0, 51);
+    }
+    else if (arg1 == "Inferno")
+    {
+        backgroundColor = QColor(10, 10, 10);
+        barColor = QColor(250, 50, 50);
+    }
+    else if (arg1 == "Whatsapp")
+    {
+        backgroundColor = QColor(30, 36, 40);
+        barColor = QColor(37, 211, 102);
+    }
+    else if (arg1 == "Nebula")
+    {
+        backgroundColor = QColor(20, 20, 40);
+        barColor = QColor(200, 100, 250);
+    }
+    else if (arg1 == "Minecraft")
+    {
+        backgroundColor = QColor(80, 50, 30);
+        barColor = QColor(50, 160, 80);
     }
 
     if (ui->invertThemeCheckBox->isChecked())

@@ -452,21 +452,27 @@
         <number>16</number>
        </property>
        <property name="topMargin">
-        <number>10</number>
-       </property>
-       <property name="rightMargin">
-        <number>16</number>
+        <number>8</number>
        </property>
        <property name="horizontalSpacing">
         <number>6</number>
        </property>
+       <property name="verticalSpacing">
+        <number>4</number>
+       </property>
        <item row="1" column="0">
         <widget class="QComboBox" name="themeComboBox">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>90</width>
+           <height>16777215</height>
+          </size>
          </property>
          <property name="focusPolicy">
           <enum>Qt::FocusPolicy::NoFocus</enum>
@@ -481,6 +487,46 @@
          </item>
          <item>
           <property name="text">
+           <string>Aurora</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Nebula</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Amethyst</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Steel</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Crimson</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Inferno</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Blossom</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Night</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>Cyber</string>
           </property>
          </item>
@@ -491,66 +537,42 @@
          </item>
          <item>
           <property name="text">
-           <string>Night Glow</string>
+           <string>Retro</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Retro Pop</string>
+           <string>Solar</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Solar Burst</string>
+           <string>Tropical</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Zen Garden</string>
+           <string>Sunset</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Tropical Drift</string>
+           <string>Frosty</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Amethyst</string>
+           <string>Whatsapp</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Bold Sunset</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Frosty Chill</string>
+           <string>Minecraft</string>
           </property>
          </item>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="invertThemeCheckBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::FocusPolicy::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
+       <item row="0" column="0" colspan="4">
         <widget class="QLabel" name="themeLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -566,6 +588,25 @@
          </property>
         </widget>
        </item>
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="invertThemeCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::FocusPolicy::NoFocus</enum>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -576,7 +617,7 @@
           <number>16</number>
          </property>
          <property name="topMargin">
-          <number>10</number>
+          <number>8</number>
          </property>
          <property name="rightMargin">
           <number>16</number>
@@ -651,7 +692,7 @@
           <number>16</number>
          </property>
          <property name="topMargin">
-          <number>10</number>
+          <number>8</number>
          </property>
          <property name="rightMargin">
           <number>16</number>
@@ -696,19 +737,19 @@
        <item>
         <layout class="QVBoxLayout" name="statsLayout">
          <property name="spacing">
-          <number>6</number>
+          <number>4</number>
          </property>
          <property name="leftMargin">
           <number>16</number>
          </property>
          <property name="topMargin">
-          <number>10</number>
+          <number>8</number>
          </property>
          <property name="rightMargin">
           <number>16</number>
          </property>
          <property name="bottomMargin">
-          <number>0</number>
+          <number>6</number>
          </property>
          <item>
           <widget class="QLabel" name="statsLabel">

@@ -32,6 +32,7 @@ public:
     void pop(int n);
     void buildHeap();
     void heapSort();
+    void shellSort();
 
 private:
     MainWindow *mainwindow;

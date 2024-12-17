@@ -54,13 +54,13 @@ MainWindow::~MainWindow()
 // Function to set each algorithm's complexity as it's data in the comboBox for faster retrieval when visualizing
 void MainWindow::setAlgorithmsComplexity(QComboBox *comboBox)
 {
-    QString algorithms[11] = { "Bubble Sort", "Merge Sort", "Quick Sort", "Counting Sort", "Radix Sort", "Selection Sort", "Insertion Sort", "Heap Sort", "Cocktail Sort", "Gnome Sort", "Bogo Sort" };
-    QString complexities[11] = { "O(n^2)", "O(n log n)", "O(n log n)", "O(n + k)", "O(nk)", "O(n^2)", "O(n^2)", "O(n log n)", "O(n^2)", "O(n^2)","O((n-1)!)" };
+    QString algorithms[12] = { "Bubble Sort", "Merge Sort", "Quick Sort", "Counting Sort", "Radix Sort", "Selection Sort", "Insertion Sort", "Heap Sort", "Cocktail Sort", "Gnome Sort", "Bogo Sort","Shell Sort" };
+    QString complexities[12] = { "O(n^2)", "O(n log n)", "O(n log n)", "O(n + k)", "O(nk)", "O(n^2)", "O(n^2)", "O(n log n)", "O(n^2)", "O(n^2)","O((n-1)!)","O(n²)" };
 
     for (int i = 0; i < comboBox->count(); ++i)
     {
         QString algorithm = comboBox->itemText(i);
-        for (int j = 0; j < 11; ++j)
+        for (int j = 0; j < 12; ++j)
         {
             if (algorithms[j] == algorithm)
             {
@@ -194,6 +194,10 @@ void MainWindow::on_startButton_clicked()
         else if (sortingAlgorithm == "Bogo Sort")
         {
             algorithms->bogoSort();
+        }
+        else if(sortingAlgorithm == "Shell Sort")
+        {
+            algorithms->shellSort();
         }
 
         if (!shouldReset)

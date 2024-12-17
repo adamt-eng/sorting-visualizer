@@ -31,6 +31,7 @@ void Algorithms::bubbleSort()
             mainwindow->visualize();
             mainwindow->wait();
 
+
             if (comparator(array[j], array[j + 1]))
             {
                 std::swap(array[j], array[j + 1]);
@@ -741,3 +742,52 @@ void Algorithms::heapSort()
     sortedElements.push_back(0);
     mainwindow->visualize();
 }
+
+void Algorithms::shellSort()
+{
+    for (int gap = elementsCount / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < elementsCount; i++) {
+            int temp = array[i];
+            int j = i;
+            arrayAccessCount+=1;
+
+            redBar1Index = temp;
+            redBar2Index = j - gap;
+
+
+
+            mainwindow->waitForStep();
+            mainwindow->visualize();
+            mainwindow->wait();
+
+            while (j >= gap && comparator(array[j - gap], temp)) {
+                redBar1Index = temp;
+                redBar2Index = j;
+
+
+
+                mainwindow->waitForStep();
+                mainwindow->visualize();
+                mainwindow->wait();
+
+                array[j] = array[j - gap];
+                j -= gap;
+                comparisonCount++;
+                arrayAccessCount+=3;
+
+                redBar1Index = temp;
+                redBar2Index = j;
+
+
+
+                mainwindow->waitForStep();
+                mainwindow->visualize();
+                mainwindow->wait();
+            }
+
+            array[j] = temp;
+            arrayAccessCount++;
+        }
+    }
+}
+

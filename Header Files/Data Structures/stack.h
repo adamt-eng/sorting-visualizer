@@ -8,7 +8,8 @@ private:
     public:
         Node* next;
         T data;
-        Node(T item):next(0){data = item;}
+        Node(T item) : data(item), next(0) {}
+        Node(T item, Node* nextNode = 0) : data(item), next(nextNode) {}
     };
     Node* myTop;
 public:
@@ -19,8 +20,6 @@ public:
     T top();
     bool empty();
     void push(T item);
-
-
 };
 
 #endif

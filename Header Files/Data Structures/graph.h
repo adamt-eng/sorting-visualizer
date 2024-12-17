@@ -67,7 +67,6 @@ public:
     void Dijkstra(int startNode, int goalNode, QGraphicsScene *scene);
     void addEdge(Node* node1, Node* node2, int weight, QGraphicsScene *scene, bool &success);
     int getVertices();
-    const std::vector<Pair<int, int>>& getAdjacencyList(int u) const;
     const std::vector<std::vector<Pair<int, int>>>& getAdjacencyListVector() const;
 
 

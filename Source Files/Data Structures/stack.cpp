@@ -1,4 +1,6 @@
 #include "../../Header Files/Data Structures/stack.h"
+#include <iostream>
+
 template<typename T>
 Stack<T>::Stack():myTop(0){}
 
@@ -21,8 +23,13 @@ void Stack<T>::pop(){
 
 template<typename T>
 T Stack<T>::top(){
-    if(!empty())
+    if(!empty()){
         return myTop->data;
+    }
+    else{
+        std::cerr << "Stack is empty!";
+        return -1;
+    }
 }
 
 template<typename T>
@@ -30,7 +37,5 @@ bool Stack<T>::empty(){return myTop == 0;}
 
 template<typename T>
 void Stack<T>::push(T item){
-    Stack<T>::NodePtr ptr = myTop;
-    myTop = new Stack<T>::Node(item);
-    myTop->next = ptr;
+    myTop = new Stack<T>::Node(item, myTop);
 }

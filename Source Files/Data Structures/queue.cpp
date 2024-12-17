@@ -1,4 +1,6 @@
 #include "../../Header Files/Data Structures/queue.h"
+#include <iostream>
+
 template<typename QueueElement>
 Queue<QueueElement>::Queue(){
     myFront = nullptr;
@@ -23,6 +25,10 @@ template<typename QueueElement>
 QueueElement Queue<QueueElement>::front(){
     if(!empty()){
         return myFront -> data;
+    }
+    else{
+        std::cerr << "Queue is empty!";
+        return -1;
     }
 }
 

@@ -236,14 +236,8 @@ void Graph::Dijkstra(int startNode, int goalNode, QGraphicsScene *scene) {
     }
 }
 
-
-
 int Graph::getVertices(){
     return vertices_;
-}
-
-const std::vector<Pair<int, int>>& Graph::getAdjacencyList(int u) const {
-    return adjList_[u];
 }
 
 const std::vector<std::vector<Pair<int, int>>>& Graph::getAdjacencyListVector() const{

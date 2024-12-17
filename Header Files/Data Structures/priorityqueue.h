@@ -14,7 +14,6 @@ private:
     Node* myFront;
     Node* myBack;
 public:
-    typedef Node* Nodeptr;
     PriorityQueue();
     ~PriorityQueue();
     void push(PriorityQueueElement vertex, int priority);

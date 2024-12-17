@@ -8,12 +8,11 @@ private:
     public:
         Node* next;
         QueueElement data;
-        Node(QueueElement item):next(0){data = item;}
+        Node(QueueElement item) : data(item), next(0) {}
     };
     Node* myFront;
     Node* myBack;
 public:
-    typedef Node* Nodeptr;
     Queue();
    ~Queue();
     void push(QueueElement x);

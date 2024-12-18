@@ -24,7 +24,7 @@ namespace gui{
         bool empty();
         int size();
         int capacity();
-        void erase(ListElement x);
+        void erase(int position);
         void insert(ListElement element, int position);
         void insert(ListElement element);
         ListElement& operator [](int index);

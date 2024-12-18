@@ -1,5 +1,7 @@
 #ifndef QUEUE_H
 #define QUEUE_H
+
+#include <iostream>
 template <typename QueueElement>
 class Queue
 {
@@ -14,11 +16,14 @@ private:
     Node* myBack;
 public:
     Queue();
+    Queue(const Queue & original);
    ~Queue();
     void push(QueueElement x);
     void pop();
     QueueElement front();
     bool empty();
+    void display(std::ostream & out) const;
+    friend std::ostream & operator<< (std::ostream & out, const Queue & aList);
 };
 
 #endif // Queue_H

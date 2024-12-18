@@ -6,7 +6,23 @@ Queue<QueueElement>::Queue(){
     myFront = nullptr;
     myBack = nullptr;
 }
+template<typename QueueElement>
+Queue<QueueElement>::Queue(const Queue & original)
+{
+    myFront = myBack = 0;
+    if (!original.empty())
+    {
+        myFront = myBack = new Queue::Node(original.front());
 
+        Queue::Node* origPtr = original.myFront->next;
+        while (origPtr != 0)
+        {
+            myBack->next = new Queue::Node(origPtr->data);
+            myBack = myBack->next;
+            origPtr = origPtr->next;
+        }
+    }
+}
 template<typename QueueElement>
 Queue<QueueElement>::~Queue<QueueElement>(){
     Node* Current = myFront;
@@ -60,4 +76,18 @@ void Queue<QueueElement>::pop(){
         delete Temp;
     }
 }
+template<typename QueueElement>
+//--- Definition of display()
+void Queue<QueueElement>::display(std::ostream & out) const
+{
+    Queue::Node* ptr;
+    for (ptr = myFront; ptr != 0; ptr = ptr->next)
+        out << ptr->data << "  ";
+    out << std::endl;
+}
 
+template<typename QueueElement>
+std::ostream& operator<<(std::ostream& out, const Queue<QueueElement>& aQueue) {
+    aQueue.display(out);
+    return out;
+}

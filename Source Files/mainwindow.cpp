@@ -204,7 +204,7 @@ void MainWindow::on_startButton_clicked()
         {
             for (int i = 0; i < elementsCount; ++i)
             {
-                sortedElements.push_back(i);
+                sortedElements.insert(i);
             }
 
             isSorted = true;
@@ -429,7 +429,7 @@ void MainWindow::generateArray()
 
     elementsCount = ui->elementsCount->value();
 
-    for (int i = 1; i <= elementsCount; ++i) array.push_back(i);
+    for (int i = 1; i <= elementsCount; ++i) array.insert(i);
 
     maxHeight = *std::max_element(array.begin(), array.end());
 
@@ -495,7 +495,7 @@ void MainWindow::visualize()
 
         QColor currentColor = barColor;
 
-        if (!heapElements.isEmpty() && std::find(heapElements.begin(), heapElements.end(), i) != heapElements.end())
+        if (!heapElements.empty() && std::find(heapElements.begin(), heapElements.end(), i) != heapElements.end())
         {
             int level = static_cast<int>(std::log2(i + 1));
             currentColor = heapLevelColors[level % 7];

@@ -45,7 +45,7 @@ void Algorithms::bubbleSort()
             }
         }
 
-        sortedElements.push_back(elementsCount - i - 1);
+        sortedElements.insert(elementsCount - i - 1);
 
         redBar1Index = -1;
         redBar2Index = -1;
@@ -70,7 +70,7 @@ void Algorithms::mergeSort(int start, int end)
     mainwindow->visualize();
 
     // Merge both halves
-    gui::vector<int> temp(end - start + 1,0); // end - start + 1 is the size of merged array
+    gui::List temp(end - start + 1,0); // end - start + 1 is the size of merged array
 
     int i = start, j = mid + 1, k = 0;
 
@@ -134,7 +134,7 @@ void Algorithms::mergeSort(int start, int end)
 
         array[start + l] = temp[l]; // Copy into original array so we can visualize it
 
-        sortedElements.push_back(start + l);
+        sortedElements.insert(start + l);
 
         mainwindow->visualize();
         mainwindow->playSound(start + l, l);
@@ -199,7 +199,7 @@ void Algorithms::quickSort(int start, int end)
     mainwindow->playSound(i, end);
     mainwindow->wait();
 
-    sortedElements.push_back(i);
+    sortedElements.insert(i);
 
     quickSort(start, i - 1);
     quickSort(i + 1, end);
@@ -209,8 +209,8 @@ void Algorithms::countingSort(int place)
 {
     int max = (place == 0) ? (*std::max_element(array.begin(), array.end()) + 1) : 10;
 
-    gui::vector<int> count(max, 0);
-    gui::vector<int> output(elementsCount);
+    gui::List<int> count(max, 0);
+    gui::List<int> output(elementsCount);
 
     // Build the count array
     for (int i = 0; i < elementsCount; ++i)
@@ -282,7 +282,7 @@ void Algorithms::countingSort(int place)
 
         if (place == 0)
         {
-            sortedElements.push_back(i);
+            sortedElements.insert(i);
         }
 
         mainwindow->waitForStep();
@@ -306,7 +306,7 @@ void Algorithms::radixSort()
 
     for (int i = 0; i < elementsCount; ++i)
     {
-        sortedElements.push_back(i);
+        sortedElements.insert(i);
 
         redBar1Index = i;
 
@@ -362,13 +362,13 @@ void Algorithms::selectionSort()
             mainwindow->wait();
         }
 
-        sortedElements.push_back(i);
+        sortedElements.insert(i);
         mainwindow->waitForStep();
         mainwindow->visualize();
         mainwindow->wait();
     }
 
-    sortedElements.push_back(elementsCount - 1);
+    sortedElements.insert(elementsCount - 1);
     mainwindow->waitForStep();
     mainwindow->visualize();
     mainwindow->wait();
@@ -415,7 +415,7 @@ void Algorithms::cocktailSort()
             }
         }
 
-        sortedElements.push_back(end);
+        sortedElements.insert(end);
         mainwindow->visualize();
         mainwindow->wait();
 
@@ -453,7 +453,7 @@ void Algorithms::cocktailSort()
             }
         }
 
-        sortedElements.push_back(start);
+        sortedElements.insert(start);
         mainwindow->visualize();
         mainwindow->wait();
 
@@ -486,7 +486,7 @@ void Algorithms::gnomeSort()
                 redBar1Index = index;
                 redBar2Index = index - 1;
 
-                sortedElements.push_back(index - 1);
+                sortedElements.insert(index - 1);
 
                 mainwindow->waitForStep();
                 mainwindow->visualize();
@@ -504,7 +504,7 @@ void Algorithms::gnomeSort()
         }
     }
 
-    sortedElements.push_back(elementsCount - 1);
+    sortedElements.insert(elementsCount - 1);
     mainwindow->visualize();
     mainwindow->wait();
 }
@@ -558,7 +558,7 @@ void Algorithms::insertionSort()
         {
             if (std::find(sortedElements.begin(), sortedElements.end(), j) == sortedElements.end())
             {
-                sortedElements.push_back(j);
+                sortedElements.insert(j);
             }
         }
 
@@ -632,7 +632,7 @@ void Algorithms::heapify(int n, int i)
 
         if (std::find(heapElements.begin(), heapElements.end(), left) == heapElements.end())
         {
-            heapElements.push_back(left);
+            heapElements.insert(left);
         }
 
         if (comparator(array[left], array[extreme]))
@@ -648,7 +648,7 @@ void Algorithms::heapify(int n, int i)
 
         if (std::find(heapElements.begin(), heapElements.end(), right) == heapElements.end())
         {
-            heapElements.push_back(right);
+            heapElements.insert(right);
         }
 
         if (comparator(array[right], array[extreme]))
@@ -667,7 +667,7 @@ void Algorithms::heapify(int n, int i)
 
     if (std::find(heapElements.begin(), heapElements.end(), i) == heapElements.end())
     {
-        heapElements.push_back(i);
+        heapElements.insert(i);
     }
 
     if (extreme != i)
@@ -732,14 +732,14 @@ void Algorithms::heapSort()
 
         pop(elementsCount - i);
 
-        sortedElements.push_back(elementsCount - i - 1);
+        sortedElements.insert(elementsCount - i - 1);
 
         mainwindow->waitForStep();
         mainwindow->visualize();
         mainwindow->wait();
     }
 
-    sortedElements.push_back(0);
+    sortedElements.insert(0);
     mainwindow->visualize();
 }
 

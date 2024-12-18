@@ -747,6 +747,8 @@ void Algorithms::shellSort()
 {
     for (int gap = elementsCount / 2; gap > 0; gap /= 2) {
         for (int i = gap; i < elementsCount; i++) {
+            if (shouldReset) return;
+
             int temp = array[i];
             int j = i;
             arrayAccessCount+=1;
@@ -758,6 +760,7 @@ void Algorithms::shellSort()
 
             mainwindow->waitForStep();
             mainwindow->visualize();
+            mainwindow->playSound(redBar1Index, redBar2Index);
             mainwindow->wait();
 
             while (j >= gap && comparator(array[j - gap], temp)) {

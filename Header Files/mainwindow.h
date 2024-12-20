@@ -30,7 +30,7 @@ public:
     void waitForStep();
 
     // Array to be sorted
-    gui::vector<int> array;
+    Vector<int> array;
 
     // Flags and Status Variables
     bool stepTriggered;
@@ -45,7 +45,7 @@ public:
     // Visual Elements
     QColor backgroundColor = Qt::black, barColor = Qt::white;
     int originalRightMarginTextLabel, originalBottomMarginTextLabel;
-    gui::vector<int> sortedElements; // Elements to be marked green
+    Vector<int> sortedElements; // Elements to be marked green
 
     // Heap Sort Specific Variables
     QColor heapLevelColors[7] = {
@@ -57,7 +57,7 @@ public:
         QColor::fromHsl(240, 250, 230),
         QColor::fromHsl(300, 250, 230)
     };
-    gui::vector<int> heapElements;
+    Vector<int> heapElements;
 
     // Flags and Status Variables
     bool shouldReset;

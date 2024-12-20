@@ -82,7 +82,7 @@ void Graph::BFS(int startNode, int goalNode, QGraphicsScene *scene) {
     bool endflag = 0;
 
     // Create a visited vector to keep track of visited nodes
-    gui::vector<bool> visited(vertices_, false);
+    Vector<bool> visited(vertices_, false);
     Queue<int> q;
 
     // Mark the start node as visited and change its color to green
@@ -131,7 +131,7 @@ void Graph::DFS(int startNode, int goalNode, QGraphicsScene *scene) {
     bool endflag = 0;
 
     // Create a visited vector to keep track of visited nodes
-    gui::vector<bool> visited(vertices_, false);
+    Vector<bool> visited(vertices_, false);
     Stack<int> stack;
 
     // Mark the start node as visited and change its color to green
@@ -182,11 +182,11 @@ void Graph::Dijkstra(int startNode, int goalNode, QGraphicsScene *scene) {
     PriorityQueue<int> pq;
 
     // Distance vector, initialized to infinity
-    gui::vector<int> dist(vertices_, INT_MAX);
+    Vector<int> dist(vertices_, INT_MAX);
     dist[startNode] = 0;
 
     // Visited vector
-    gui::vector<bool> visited(vertices_, false);
+    Vector<bool> visited(vertices_, false);
 
     // Push the start node with a priority of 0 (distance to itself)
     pq.push(startNode, 0);
@@ -240,6 +240,6 @@ int Graph::getVertices(){
     return vertices_;
 }
 
-const gui::vector<gui::vector<Pair<int, int>>>& Graph::getAdjacencyListVector() const{
+const Vector<Vector<Pair<int, int>>>& Graph::getAdjacencyListVector() const{
     return adjList_;
 }

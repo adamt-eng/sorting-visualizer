@@ -38,13 +38,13 @@ private:
     MainWindow *mainwindow;
 
     // Array to be sorted
-    gui::vector<int>& array;
+    Vector<int>& array;
 
     // Visual Elements
-    gui::vector<int>& sortedElements; // Elements to be marked green
+    Vector<int>& sortedElements; // Elements to be marked green
 
     // Heap Sort Specific Variables
-    gui::vector<int>& heapElements;
+    Vector<int>& heapElements;
 
     // Flags and Status Variables
     bool& shouldReset;

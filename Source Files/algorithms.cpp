@@ -71,7 +71,7 @@ void Algorithms::mergeSort(int start, int end)
     mainwindow->visualize();
 
     // Merge both halves
-    gui::vector temp(end - start + 1,0); // end - start + 1 is the size of merged array
+    Vector temp(end - start + 1,0); // end - start + 1 is the size of merged array
 
     int i = start, j = mid + 1, k = 0;
 
@@ -210,8 +210,8 @@ void Algorithms::countingSort(int place)
 {
     int max = (place == 0) ? (*std::max_element(array.begin(), array.end()) + 1) : 10;
 
-    gui::vector<int> count(max, 0);
-    gui::vector<int> output(elementsCount);
+    Vector<int> count(max, 0);
+    Vector<int> output(elementsCount);
 
     // Build the count array
     for (int i = 0; i < elementsCount; ++i)

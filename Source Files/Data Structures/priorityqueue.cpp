@@ -1,5 +1,5 @@
 #include "../../Header Files/Data Structures/PriorityQueue.h"
-#include <iostream>
+#include <stdexcept>
 
 template<typename PriorityQueueElement>
 PriorityQueue<PriorityQueueElement>::PriorityQueue(){
@@ -27,8 +27,7 @@ PriorityQueueElement PriorityQueue<PriorityQueueElement>::top(){
         return myFront -> data;
     }
     else{
-        std::cerr << "Priority Queue is empty!";
-        return -1;
+        throw std::runtime_error("Priority Queue is empty!");
     }
 }
 

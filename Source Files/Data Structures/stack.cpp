@@ -1,5 +1,5 @@
 #include "../../Header Files/Data Structures/stack.h"
-#include <iostream>
+#include <stdexcept>
 
 template<typename T>
 Stack<T>::Stack():myTop(0){}
@@ -27,8 +27,7 @@ T Stack<T>::top(){
         return myTop->data;
     }
     else{
-        std::cerr << "Stack is empty!";
-        return -1;
+        throw std::runtime_error("Stack is empty!");
     }
 }
 

@@ -43,8 +43,7 @@ QueueElement Queue<QueueElement>::front(){
         return myFront -> data;
     }
     else{
-        std::cerr << "Queue is empty!";
-        return -1;
+        throw std::runtime_error("Queue is empty!");
     }
 }
 

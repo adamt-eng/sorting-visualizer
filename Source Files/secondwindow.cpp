@@ -7,7 +7,6 @@
 #include <QInputDialog>
 #include <QString>
 #include <QWidget>
-using namespace std;
 
 Graph testGraph;
 
@@ -64,13 +63,13 @@ void SecondWindow::runAlgorithm() {
 }
 
 void SecondWindow::printAdjacencyList() {
-    vector<std::vector<Pair<int, int>>> adjList = testGraph.getAdjacencyListVector();
-    cout << "Adjacency List:" << endl;
+    gui::vector<gui::vector<Pair<int, int>>> adjList = testGraph.getAdjacencyListVector();
+    std::cout << "Adjacency List:" << std::endl;
     for (int i = 0; i < adjList.size(); i++) {
         for (auto it = adjList[i].begin(); it != adjList[i].end(); ++it) {
-            cout << "[" << it->first << ", " << it->second << "] ";
+            std::cout << "[" << it->first << ", " << it->second << "] ";
         }
-        cout << endl;
+        std::cout << std::endl;
     }
 }
 
@@ -149,12 +148,12 @@ SecondWindow::~SecondWindow()
 }
 
 #include <QApplication>
-#include "../Header Files/mainwindow.h"
+//#include "../Header Files/mainwindow.h"
 
 void SecondWindow::on_runButton_2_clicked()
 {
-    MainWindow *mainwindow = new MainWindow();
-    mainwindow->show();
-    this->hide();
+   // MainWindow *mainwindow = new MainWindow();
+   // mainwindow->show();
+   // this->hide();
 }
 

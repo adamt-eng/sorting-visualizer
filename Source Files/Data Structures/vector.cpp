@@ -110,7 +110,7 @@ namespace gui
         myCapacity = newSize;
     }
     template<typename T>
-    void vector<T>::resize(int newSize, T value)
+    void vector<T>::resize(int newSize)
     {
         int loop = newSize < mySize?newSize:mySize;
         T* temp = new T[newSize];
@@ -118,10 +118,7 @@ namespace gui
         {
             temp[i] = arr[i];
         }
-        for(int i = loop;i < newSize;i++)
-        {
-            temp[i] = value;
-        }
+
         delete[] arr;
         arr = temp;
         mySize = newSize;
@@ -136,6 +133,21 @@ namespace gui
             reserve(myCapacity);
         }
         arr[mySize] = x;
+        mySize++;
+    }
+    template<typename T>
+    void vector<T>::push_back(T x, int pos)
+    {
+        if(myCapacity - mySize <= 1)
+        {
+            myCapacity = isEmpty()?1:2*myCapacity;
+            reserve(myCapacity);
+        }
+
+        for (int i = mySize; i > pos; --i) {
+            arr[i] = arr[i - 1];
+        }
+        arr[pos] = x;
         mySize++;
     }
 }

@@ -68,8 +68,8 @@ void Graph::addEdge(Node* node1, Node* node2, int weight, QGraphicsScene *scene,
     edges.push_back(newEdge);
 
     scene->addItem(newEdge);
-    adjList_[node1->getNodeNumber()].emplace_back(node2->getNodeNumber(), weight);
-    adjList_[node2->getNodeNumber()].emplace_back(node1->getNodeNumber(), weight); // For undirected graph
+    adjList_[node1->getNodeNumber()].push_back(node2->getNodeNumber(), weight);
+    adjList_[node2->getNodeNumber()].push_back(node1->getNodeNumber(), weight); // For undirected graph
 }
 
 void Graph::changeWeightVisibility(bool check){
@@ -82,7 +82,7 @@ void Graph::BFS(int startNode, int goalNode, QGraphicsScene *scene) {
     bool endflag = 0;
 
     // Create a visited vector to keep track of visited nodes
-    std::vector<bool> visited(vertices_, false);
+    gui::vector<bool> visited(vertices_, false);
     Queue<int> q;
 
     // Mark the start node as visited and change its color to green
@@ -131,7 +131,7 @@ void Graph::DFS(int startNode, int goalNode, QGraphicsScene *scene) {
     bool endflag = 0;
 
     // Create a visited vector to keep track of visited nodes
-    std::vector<bool> visited(vertices_, false);
+    gui::vector<bool> visited(vertices_, false);
     Stack<int> stack;
 
     // Mark the start node as visited and change its color to green
@@ -161,7 +161,7 @@ void Graph::DFS(int startNode, int goalNode, QGraphicsScene *scene) {
         stack.pop();
 
         // Explore the neighbors of the current node
-        for (auto it = adjList_[node].rbegin(); it != adjList_[node].rend(); ++it) {
+        for (auto it = adjList_[node].begin(); it != adjList_[node].end(); ++it) {
             int neighborNode = it->first;
 
             if (!visited[neighborNode]) {
@@ -182,11 +182,11 @@ void Graph::Dijkstra(int startNode, int goalNode, QGraphicsScene *scene) {
     PriorityQueue<int> pq;
 
     // Distance vector, initialized to infinity
-    std::vector<int> dist(vertices_, INT_MAX);
+    gui::vector<int> dist(vertices_, INT_MAX);
     dist[startNode] = 0;
 
     // Visited vector
-    std::vector<bool> visited(vertices_, false);
+    gui::vector<bool> visited(vertices_, false);
 
     // Push the start node with a priority of 0 (distance to itself)
     pq.push(startNode, 0);
@@ -240,6 +240,6 @@ int Graph::getVertices(){
     return vertices_;
 }
 
-const std::vector<std::vector<Pair<int, int>>>& Graph::getAdjacencyListVector() const{
+const gui::vector<gui::vector<Pair<int, int>>>& Graph::getAdjacencyListVector() const{
     return adjList_;
 }

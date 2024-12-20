@@ -1,3 +1,6 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
 #include <cstddef>
 
 namespace gui
@@ -26,10 +29,12 @@ namespace gui
         int size();
         int capacity();
         void reserve(int newSize);
-        void resize(int newSize, T value);
+        void resize(int newSize);
         void push_back(T x);
+        void push_back(T x, int pos);
         iterator begin();
         iterator end();
 
     };
 }
+#endif

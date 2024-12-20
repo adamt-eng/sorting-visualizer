@@ -1,9 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "Data Structures/vector.h"
 #include <QMainWindow>
 #include <qcombobox.h>
-#include "../Source Files/Data Structures/vector.cpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

@@ -7,6 +7,7 @@
 #include <QBrush>
 #include <QPen>
 #include "pair.h"
+#include "../../Source Files/Data Structures/vector.cpp"
 
 class Graph {
 public:
@@ -51,9 +52,9 @@ public:
     };
 
 
-    std::vector<Node*> nodes;
-    std::vector<Edge*> edges;
-    std::vector<QGraphicsTextItem*> weightLabels;
+    gui::vector<Node*> nodes;
+    gui::vector<Edge*> edges;
+    gui::vector<QGraphicsTextItem*> weightLabels;
 
     Graph();
     Graph(int vertices);
@@ -67,13 +68,13 @@ public:
     void Dijkstra(int startNode, int goalNode, QGraphicsScene *scene);
     void addEdge(Node* node1, Node* node2, int weight, QGraphicsScene *scene, bool &success);
     int getVertices();
-    const std::vector<std::vector<Pair<int, int>>>& getAdjacencyListVector() const;
+    const gui::vector<gui::vector<Pair<int, int>>>& getAdjacencyListVector() const;
 
 
 private:
     int static nodeCounter;
     int vertices_;
-    std::vector<std::vector<Pair<int, int>>> adjList_;
+    gui::vector<gui::vector<Pair<int, int>>> adjList_;
 };
 
 #endif // GRAPH_H

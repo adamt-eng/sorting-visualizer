@@ -1,4 +1,5 @@
 #include "../Header Files/algorithms.h"
+#include "Data Structures/vector.cpp"
 #include <random>
 
 Algorithms::Algorithms(MainWindow& m)

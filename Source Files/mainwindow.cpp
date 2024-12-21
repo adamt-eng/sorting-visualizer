@@ -121,21 +121,21 @@ void MainWindow::on_startButton_clicked()
             bool wavLoaded;
             if (choice != "No Sound")
             {
-                if (choice == "Beep")
+                Pair<std::string, std::string> soundMappings[] = {
+                    Pair<std::string, std::string>("Beep", ":/resources/sounds/beep.wav"),
+                    Pair<std::string, std::string>("Duck", ":/resources/sounds/quack.wav"),
+                    Pair<std::string, std::string>("Cat", ":/resources/sounds/meow.wav"),
+                    Pair<std::string, std::string>("Dog", ":/resources/sounds/bark.wav")
+                };
+
+                constexpr int pairCount = sizeof(soundMappings) / sizeof(soundMappings[0]);
+
+                for (int i = 0; i < pairCount; ++i)
                 {
-                    wavLoaded = player.loadWAV(":/resources/sounds/beep.wav");
-                }
-                else if (choice == "Duck")
-                {
-                    wavLoaded = player.loadWAV(":/resources/sounds/quack.wav");
-                }
-                else if (choice == "Cat")
-                {
-                    wavLoaded = player.loadWAV(":/resources/sounds/meow.wav");
-                }
-                else if (choice == "Dog")
-                {
-                    wavLoaded = player.loadWAV(":/resources/sounds/bark.wav");
+                    if (soundMappings[i].first == choice)
+                    {
+                        wavLoaded = player.loadWAV(soundMappings[i].second);
+                    }
                 }
 
                 if (!wavLoaded)
@@ -210,7 +210,7 @@ void MainWindow::on_startButton_clicked()
         {
             algorithms->bogoSort();
         }
-        else if(sortingAlgorithm == "Shell Sort")
+        else if (sortingAlgorithm == "Shell Sort")
         {
             algorithms->shellSort();
         }
@@ -337,95 +337,36 @@ void MainWindow::on_invertThemeCheckBox_checkStateChanged(const Qt::CheckState &
 // Event Handler for themeComboBox
 void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
 {
-    if (arg1 == "Default")
+    Pair<QString, Pair<QColor, QColor>> themeColors[] = {
+        Pair<QString, Pair<QColor, QColor>>("Default", Pair<QColor, QColor>(Qt::black, Qt::white)),
+        Pair<QString, Pair<QColor, QColor>>("Night", Pair<QColor, QColor>(QColor(0, 31, 63), QColor(255, 220, 0))),
+        Pair<QString, Pair<QColor, QColor>>("Retro", Pair<QColor, QColor>(QColor(243, 240, 224), QColor(0, 116, 217))),
+        Pair<QString, Pair<QColor, QColor>>("Solar", Pair<QColor, QColor>(QColor(51, 51, 51), QColor(255, 133, 27))),
+        Pair<QString, Pair<QColor, QColor>>("Tropical", Pair<QColor, QColor>(QColor(55, 163, 163), QColor(255, 255, 255))),
+        Pair<QString, Pair<QColor, QColor>>("Amethyst", Pair<QColor, QColor>(QColor(237, 231, 246), QColor(96, 50, 168))),
+        Pair<QString, Pair<QColor, QColor>>("Sunset", Pair<QColor, QColor>(QColor(44, 62, 80), QColor(241, 196, 15))),
+        Pair<QString, Pair<QColor, QColor>>("Cyber", Pair<QColor, QColor>(QColor(128, 0, 128), QColor(0, 255, 255))),
+        Pair<QString, Pair<QColor, QColor>>("Autumn", Pair<QColor, QColor>(QColor(90, 61, 49), QColor(255, 127, 80))),
+        Pair<QString, Pair<QColor, QColor>>("Frosty", Pair<QColor, QColor>(QColor(50, 150, 200), QColor(220, 240, 255))),
+        Pair<QString, Pair<QColor, QColor>>("Aurora", Pair<QColor, QColor>(QColor(12, 24, 48), QColor(168, 226, 140))),
+        Pair<QString, Pair<QColor, QColor>>("Blossom", Pair<QColor, QColor>(QColor(230, 200, 255), QColor(255, 105, 180))),
+        Pair<QString, Pair<QColor, QColor>>("Steel", Pair<QColor, QColor>(QColor(48, 57, 66), QColor(100, 149, 237))),
+        Pair<QString, Pair<QColor, QColor>>("Crimson", Pair<QColor, QColor>(QColor(33, 33, 33), QColor(255, 0, 51))),
+        Pair<QString, Pair<QColor, QColor>>("Inferno", Pair<QColor, QColor>(QColor(10, 10, 10), QColor(250, 50, 50))),
+        Pair<QString, Pair<QColor, QColor>>("Whatsapp", Pair<QColor, QColor>(QColor(30, 36, 40), QColor(37, 211, 102))),
+        Pair<QString, Pair<QColor, QColor>>("Nebula", Pair<QColor, QColor>(QColor(20, 20, 40), QColor(200, 100, 250))),
+        Pair<QString, Pair<QColor, QColor>>("Minecraft", Pair<QColor, QColor>(QColor(80, 50, 30), QColor(50, 160, 80)))
+    };
+
+    constexpr int themeCount = sizeof(themeColors) / sizeof(themeColors[0]);
+
+    for (int i = 0; i < themeCount; ++i)
     {
-        backgroundColor = Qt::black;
-        barColor = Qt::white;
-    }
-    else if (arg1 == "Night")
-    {
-        backgroundColor = QColor(0, 31, 63);
-        barColor = QColor(255, 220, 0);
-    }
-    else if (arg1 == "Retro")
-    {
-        backgroundColor = QColor(243, 240, 224);
-        barColor = QColor(0, 116, 217);
-    }
-    else if (arg1 == "Solar")
-    {
-        backgroundColor = QColor(51, 51, 51);
-        barColor = QColor(255, 133, 27);
-    }
-    else if (arg1 == "Tropical")
-    {
-        backgroundColor = QColor(55, 163, 163);
-        barColor = QColor(255, 255, 255);
-    }
-    else if (arg1 == "Amethyst")
-    {
-        backgroundColor = QColor(237, 231, 246);
-        barColor = QColor(96, 50, 168);
-    }
-    else if (arg1 == "Sunset")
-    {
-        backgroundColor = QColor(44, 62, 80);
-        barColor = QColor(241, 196, 15);
-    }
-    else if (arg1 == "Cyber")
-    {
-        backgroundColor = QColor(128, 0, 128);
-        barColor = QColor(0, 255, 255);
-    }
-    else if (arg1 == "Autumn")
-    {
-        backgroundColor = QColor(90, 61, 49);
-        barColor = QColor(255, 127, 80);
-    }
-    else if (arg1 == "Frosty")
-    {
-        backgroundColor = QColor(50, 150, 200);
-        barColor = QColor(220, 240, 255);
-    }
-    else if (arg1 == "Aurora")
-    {
-        backgroundColor = QColor(12, 24, 48);
-        barColor = QColor(168, 226, 140);
-    }
-    else if (arg1 == "Blossom")
-    {
-        backgroundColor = QColor(230, 200, 255);
-        barColor = QColor(255, 105, 180);
-    }
-    else if (arg1 == "Steel")
-    {
-        backgroundColor = QColor(48, 57, 66);
-        barColor = QColor(100, 149, 237);
-    }
-    else if (arg1 == "Crimson")
-    {
-        backgroundColor = QColor(33, 33, 33);
-        barColor = QColor(255, 0, 51);
-    }
-    else if (arg1 == "Inferno")
-    {
-        backgroundColor = QColor(10, 10, 10);
-        barColor = QColor(250, 50, 50);
-    }
-    else if (arg1 == "Whatsapp")
-    {
-        backgroundColor = QColor(30, 36, 40);
-        barColor = QColor(37, 211, 102);
-    }
-    else if (arg1 == "Nebula")
-    {
-        backgroundColor = QColor(20, 20, 40);
-        barColor = QColor(200, 100, 250);
-    }
-    else if (arg1 == "Minecraft")
-    {
-        backgroundColor = QColor(80, 50, 30);
-        barColor = QColor(50, 160, 80);
+        if (themeColors[i].first == arg1)
+        {
+            backgroundColor = themeColors[i].second.first;
+            barColor = themeColors[i].second.second;
+        }
     }
 
     if (ui->invertThemeCheckBox->isChecked())

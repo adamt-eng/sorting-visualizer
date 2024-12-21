@@ -21,6 +21,7 @@
 #include "../Header Files/mainwindow.h"
 #include "../Header Files/algorithms.h"
 #include "../Header Files/soundplayer.h"
+#include "../Source Files/Data Structures/pair.cpp"
 
 // Sound Player
 SoundPlayer player;
@@ -54,17 +55,31 @@ MainWindow::~MainWindow()
 // Function to set each algorithm's complexity as it's data in the comboBox for faster retrieval when visualizing
 void MainWindow::setAlgorithmsComplexity(QComboBox *comboBox)
 {
-    QString algorithms[12] = { "Bubble Sort", "Merge Sort", "Quick Sort", "Counting Sort", "Radix Sort", "Selection Sort", "Insertion Sort", "Heap Sort", "Cocktail Sort", "Gnome Sort", "Bogo Sort","Shell Sort" };
-    QString complexities[12] = { "O(n²)", "O(n log n)", "O(n log n)", "O(n + k)", "O(nk)", "O(n²)", "O(n²)", "O(n log n)", "O(n²)", "O(n²)", "O((n-1)!)", "O(n²)" };
+    Pair<QString, QString> algorithmComplexityPairs[] = {
+        Pair<QString, QString>("Bubble Sort", "O(n²)"),
+        Pair<QString, QString>("Merge Sort", "O(n log n)"),
+        Pair<QString, QString>("Quick Sort", "O(n log n)"),
+        Pair<QString, QString>("Counting Sort", "O(n + k)"),
+        Pair<QString, QString>("Radix Sort", "O(nk)"),
+        Pair<QString, QString>("Selection Sort", "O(n²)"),
+        Pair<QString, QString>("Insertion Sort", "O(n²)"),
+        Pair<QString, QString>("Heap Sort", "O(n log n)"),
+        Pair<QString, QString>("Cocktail Sort", "O(n²)"),
+        Pair<QString, QString>("Gnome Sort", "O(n²)"),
+        Pair<QString, QString>("Bogo Sort", "O((n-1)!)"),
+        Pair<QString, QString>("Shell Sort", "O(n²)")
+    };
+
+    constexpr int pairCount = sizeof(algorithmComplexityPairs) / sizeof(algorithmComplexityPairs[0]);
 
     for (int i = 0; i < comboBox->count(); ++i)
     {
         QString algorithm = comboBox->itemText(i);
-        for (int j = 0; j < 12; ++j)
+        for (int j = 0; j < pairCount; ++j)
         {
-            if (algorithms[j] == algorithm)
+            if (algorithmComplexityPairs[j].first == algorithm)
             {
-                comboBox->setItemData(i, complexities[j]);
+                comboBox->setItemData(i, algorithmComplexityPairs[j].second);
                 break;
             }
         }

@@ -12,7 +12,7 @@ public:
 
     Pair& operator=(const Pair& other);
 
-    Pair<T, U> make_pair(const T& first, const U& second);
+    static Pair<T, U> make_pair(const T& first, const U& second);
 
     bool operator<(const Pair& other) const;
     bool operator>(const Pair& other) const;

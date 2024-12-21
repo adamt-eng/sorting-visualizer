@@ -19,7 +19,7 @@ Pair<T, U>& Pair<T, U>::operator=(const Pair& other)
 }
 
 template <typename T, typename U>
-Pair<T, U> make_pair(const T& first, const U& second)
+static Pair<T, U> make_pair(const T& first, const U& second)
 {
     return Pair<T, U>(first, second);
 }

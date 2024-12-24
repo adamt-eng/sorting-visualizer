@@ -44,6 +44,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     on_horizontalSlider_valueChanged(10);
 
     algorithms = new Algorithms(*this);
+
+    this->setFocus();
 }
 
 // UI Destructor

@@ -22,9 +22,6 @@
     <height>780</height>
    </size>
   </property>
-  <property name="focusPolicy">
-   <enum>Qt::FocusPolicy::NoFocus</enum>
-  </property>
   <property name="contextMenuPolicy">
    <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
   </property>

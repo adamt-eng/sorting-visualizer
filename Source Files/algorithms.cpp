@@ -321,16 +321,14 @@ void Algorithms::selectionSort()
             mainwindow->wait();
         }
 
+        redBar1Index = -1;
+        redBar2Index = -1;
+
         sortedElements.push_back(i);
         mainwindow->waitForStep();
         mainwindow->visualize();
         mainwindow->wait();
     }
-
-    sortedElements.push_back(elementsCount - 1);
-    mainwindow->waitForStep();
-    mainwindow->visualize();
-    mainwindow->wait();
 }
 
 void Algorithms::cocktailSort()
@@ -474,17 +472,6 @@ void Algorithms::insertionSort()
     {
         if (shouldReset) return;
 
-        mainwindow->waitForStep();
-
-        greenBarIndex = i;
-        redBar1Index = -1;
-        redBar2Index = -1;
-        blueBarIndex = -1;
-
-        mainwindow->waitForStep();
-        mainwindow->visualize();
-        mainwindow->wait();
-
         int index = i;
 
         while (index > 0 && comparator(array[index - 1], array[index]))
@@ -496,7 +483,6 @@ void Algorithms::insertionSort()
 
             redBar1Index = index - 1;
             redBar2Index = index;
-            greenBarIndex = i;
 
             mainwindow->waitForStep();
             mainwindow->visualize();
@@ -521,7 +507,6 @@ void Algorithms::insertionSort()
             }
         }
 
-        greenBarIndex = -1;
         redBar1Index = -1;
         redBar2Index = -1;
         blueBarIndex = index;
@@ -529,6 +514,8 @@ void Algorithms::insertionSort()
         mainwindow->waitForStep();
         mainwindow->visualize();
         mainwindow->wait();
+
+        blueBarIndex = -1;
     }
 }
 

@@ -25,7 +25,6 @@
 
 // Sound Player
 SoundPlayer player;
-bool variableSound; // Whether the user chose "Variable" sound or any other option
 
 // Algorithms class contains the implementation of the sorting algorithms
 Algorithms * algorithms;
@@ -116,38 +115,7 @@ void MainWindow::on_startButton_clicked()
         delayInMilliseconds = ui->delaySpinBox->value();
         isContinuous = ui->continuousRadioButton->isChecked();
 
-        std::string choice = ui->soundComboBox->currentText().toStdString();
-        variableSound = (choice == "Variable");
-
-        if (!variableSound)
-        {
-            bool wavLoaded;
-            if (choice != "No Sound")
-            {
-                Pair<std::string, std::string> soundMappings[] = {
-                    Pair<std::string, std::string>("Beep", ":/resources/sounds/beep.wav"),
-                    Pair<std::string, std::string>("Duck", ":/resources/sounds/quack.wav"),
-                    Pair<std::string, std::string>("Cat", ":/resources/sounds/meow.wav"),
-                    Pair<std::string, std::string>("Dog", ":/resources/sounds/bark.wav")
-                };
-
-                constexpr int pairCount = sizeof(soundMappings) / sizeof(soundMappings[0]);
-
-                for (int i = 0; i < pairCount; ++i)
-                {
-                    if (soundMappings[i].first == choice)
-                    {
-                        wavLoaded = player.loadWAV(soundMappings[i].second);
-                    }
-                }
-
-                if (!wavLoaded)
-                {
-                    QMessageBox::warning(this, "Warning", "Failed to load audio file, 'Variable' sound option will be used instead.");
-                    variableSound = true;
-                }
-            }
-        }
+        on_soundComboBox_currentTextChanged(ui->soundComboBox->currentText());
 
         // Disable specific controls to prevent modification while sorting
 
@@ -165,9 +133,6 @@ void MainWindow::on_startButton_clicked()
         ui->nextStepButton->setEnabled(!isContinuous);
         ui->continuousRadioButton->setEnabled(false);
         ui->stepByStepRadioButton->setEnabled(false);
-
-        // Animation Settings
-        ui->soundComboBox->setEnabled(false);
 
         if (sortingAlgorithm == "Bubble Sort")
         {
@@ -272,9 +237,6 @@ void MainWindow::on_startButton_clicked()
     ui->nextStepButton->setEnabled(false);
     ui->continuousRadioButton->setEnabled(true);
     ui->stepByStepRadioButton->setEnabled(true);
-
-    // Animation Settings
-    ui->soundComboBox->setEnabled(true);
 }
 
 // Event Handler for pauseButton
@@ -361,8 +323,7 @@ void MainWindow::on_themeComboBox_currentTextChanged(const QString &arg1)
         Pair<QString, Pair<QColor, QColor>>("Crimson", Pair<QColor, QColor>(QColor(33, 33, 33), QColor(255, 0, 51))),
         Pair<QString, Pair<QColor, QColor>>("Inferno", Pair<QColor, QColor>(QColor(10, 10, 10), QColor(250, 50, 50))),
         Pair<QString, Pair<QColor, QColor>>("Whatsapp", Pair<QColor, QColor>(QColor(30, 36, 40), QColor(37, 211, 102))),
-        Pair<QString, Pair<QColor, QColor>>("Nebula", Pair<QColor, QColor>(QColor(20, 20, 40), QColor(200, 100, 250))),
-        Pair<QString, Pair<QColor, QColor>>("Minecraft", Pair<QColor, QColor>(QColor(80, 50, 30), QColor(50, 160, 80)))
+        Pair<QString, Pair<QColor, QColor>>("Nebula", Pair<QColor, QColor>(QColor(20, 20, 40), QColor(200, 100, 250)))
     };
 
     constexpr int themeCount = sizeof(themeColors) / sizeof(themeColors[0]);
@@ -392,10 +353,8 @@ void MainWindow::waitForStep()
     if (!isContinuous)
     {
         stepTriggered = false;
-        while (!stepTriggered)
-        {
-            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-        }
+
+        while (!stepTriggered) QCoreApplication::processEvents();
     }
 }
 
@@ -413,7 +372,7 @@ void MainWindow::wait()
     while (QTime::currentTime() < dieTime)
     {
         if (shouldReset) return; // For if the user uses a high delay but tries to reset
-        else QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+        else QCoreApplication::processEvents();
     }
 }
 
@@ -529,12 +488,46 @@ void MainWindow::visualize()
     ui->fullScreenButton->setGeometry(newButtonX, newButtonY, ui->fullScreenButton->width(), ui->fullScreenButton->height());
 }
 
+// Event Handler to allow realtime modification of sound option
+void MainWindow::on_soundComboBox_currentTextChanged(const QString &arg1)
+{
+    if (arg1 != "Variable")
+    {
+        bool wavLoaded;
+        if (arg1 != "No Sound")
+        {
+            Pair<std::string, std::string> soundMappings[] = {
+                Pair<std::string, std::string>("Beep", ":/resources/sounds/beep.wav"),
+                Pair<std::string, std::string>("Duck", ":/resources/sounds/quack.wav"),
+                Pair<std::string, std::string>("Cat", ":/resources/sounds/meow.wav"),
+                Pair<std::string, std::string>("Dog", ":/resources/sounds/bark.wav")
+            };
+
+            constexpr int pairCount = sizeof(soundMappings) / sizeof(soundMappings[0]);
+
+            for (int i = 0; i < pairCount; ++i)
+            {
+                if (soundMappings[i].first == arg1)
+                {
+                    wavLoaded = player.loadWAV(soundMappings[i].second);
+                }
+            }
+
+            if (!wavLoaded)
+            {
+                QMessageBox::warning(this, "Warning", "Failed to load audio file, 'Variable' sound option will be used instead.");
+                ui->soundComboBox->setCurrentIndex(ui->soundComboBox->findText("Variable"));
+            }
+        }
+    }
+}
+
 // Function to handle playing sounds, whether that's a WAV file or a frequency with ADSR
 void MainWindow::playSound(int i, int j)
 {
     if (ui->soundComboBox->currentText() == "No Sound") return;
 
-    if (variableSound)
+    if (ui->soundComboBox->currentText() == "Variable")
     {
         float minFrequency = 120.0f;
         float maxFrequency = 1212.0f;
@@ -594,6 +587,7 @@ void MainWindow::on_fullScreenButton_clicked()
         }
         else
         {
+            ui->soundComboBox->setEnabled(true);
             ui->delaySpinBox->setEnabled(true);
             ui->themeComboBox->setEnabled(true);
             ui->invertThemeCheckBox->setEnabled(true);
@@ -643,7 +637,7 @@ void MainWindow::on_fullScreenButton_clicked()
     visualize();
 }
 
-// Event Handler for keyboard shortcuts (Escape, F11, Right Arrow, and F keys are handled)
+// Event Handler for keyboard shortcuts (Escape, F11, Right Arrow, G, and F keys are handled)
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if ((event->key() == Qt::Key_Escape && this->isFullScreen()) || (event->key() == Qt::Key_F11) || (event->key() == Qt::Key_F))
@@ -662,16 +656,20 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     {
         on_switchButton_clicked();
     }
+    else if (event->key() == Qt::Key_M)
+    {
+        ui->soundComboBox->setCurrentIndex(ui->soundComboBox->findText("No Sound"));
+    }
     else
     {
         QMainWindow::keyPressEvent(event);
     }
 }
 
-// Event filter to show fullScreenButton only when mouse cursor is in the upper 30% space of textLabel when in fullscreen
+// Event filter to show fullScreenButton only when mouse cursor is in the upper 30% region of textLabel when in fullscreen
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
-    if (this->isFullScreen() && watched == ui->textLabel && event->type() == QEvent::MouseMove)
+    if (event->type() == QEvent::MouseMove && this->isFullScreen() && watched == ui->textLabel)
     {
         bool inUpperArea = static_cast<QMouseEvent *>(event)->pos().y() <= ui->textLabel->height() * 0.3;
 
@@ -684,15 +682,17 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     return QMainWindow::eventFilter(watched, event);
 }
 
-// Event Handler for the close event, this is to ensure that the program has stopped all processes before attempting to close
-// Resetting handles this already so it's used
+// Event Handler for the close event
+// This is to ensure that the program has stopped all processes before attempting to close
+// Resetting (shouldReset = true) handles this already so it's used before closing
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     shouldReset = true;
     event->accept();
 }
 
-// Event Handler for window resize event, this makes sure that new window size is fully utilized for a better visualization
+// Event Handler for window resize event
+// This makes sure that when the window is resized, the new size is fully utilized for a better visualization
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     resizeTextLabel();
@@ -758,3 +758,4 @@ void MainWindow::on_switchButton_clicked()
     secondWindow->show();
     this->hide();
 }
+

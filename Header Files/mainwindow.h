@@ -86,6 +86,7 @@ private slots:
     void on_horizontalSlider_valueChanged(int value);
     void on_switchButton_clicked();
     void on_elementsCount_valueChanged(int arg1);
+    void on_soundComboBox_currentTextChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;

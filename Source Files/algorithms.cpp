@@ -10,7 +10,7 @@ Algorithms::Algorithms(MainWindow& m)
     comparator(m.comparator),
     comparisonCount(m.comparisonCount), arrayAccessCount(m.arrayAccessCount),
     redBar1Index(m.redBar1Index), redBar2Index(m.redBar2Index),
-    greenBarIndex(m.greenBarIndex), blueBarIndex(m.blueBarIndex)
+    greenBarIndex(m.greenBarIndex), blueBarIndex(m.blueBarIndex), maxHeight(m.maxHeight)
 {
     mainwindow = &m;
 }
@@ -209,7 +209,7 @@ void Algorithms::quickSort(int start, int end)
 void Algorithms::countingSort(int place)
 {
     // Determine radix
-    int max = (place == 0) ? (*std::max_element(array.begin(), array.end()) + 1) : 10;
+    int max = (place == 0) ? (maxHeight + 1) : 10;
 
     // Initialize buckets as a linked-list based list
     Vector<List<int>> buckets(max);
@@ -221,32 +221,43 @@ void Algorithms::countingSort(int place)
         int digit = place == 0 ? item : (item / place) % 10;
 
         // Insert the element into the corresponding bucket
-        buckets[digit].insert(item, buckets[digit].size());
+        buckets[digit].insert(item);
 
         ++arrayAccessCount;
         blueBarIndex = i;
+
         mainwindow->waitForStep();
         mainwindow->visualize();
-        mainwindow->playSound(i, digit);
+        mainwindow->playSound(i, i);
         mainwindow->wait();
     }
 
     blueBarIndex = -1;
+    mainwindow->visualize();
 
     int index = 0;
-    for (int b = 0; b < max; ++b)
+
+    int start = isAscending ? 0 : max - 1;
+    int end = isAscending ? max : -1;
+    int step = isAscending ? 1 : -1;
+
+    for (int bucket = start; bucket != end; bucket += step)
     {
-        while (!buckets[b].empty())
+        while (!buckets[bucket].empty())
         {
-            array[index++] = buckets[b][0];
-            buckets[b].erase(0);
+            array[index++] = buckets[bucket][0];
+            buckets[bucket].eraseAt(0);
 
             ++arrayAccessCount;
             redBar1Index = index - 1;
+
             mainwindow->waitForStep();
             mainwindow->visualize();
-            mainwindow->playSound(index - 1, b);
+            mainwindow->playSound(redBar1Index, redBar1Index);
             mainwindow->wait();
+
+            // If counting sort (place == 0) or if radix sort and the current pass is the last one, mark element as green (sorted)
+            if (place == 0 || place != 0 && maxHeight / (place * 10) <= 0) sortedElements.push_back(redBar1Index);
         }
     }
 
@@ -256,23 +267,9 @@ void Algorithms::countingSort(int place)
 
 void Algorithms::radixSort()
 {
-    int max = *std::max_element(array.begin(), array.end());
-
-    for (int place = 1; max / place > 0; place *= 10)
+    for (int place = 1; maxHeight / place > 0; place *= 10)
     {
         countingSort(place);
-    }
-
-    for (int i = 0; i < elementsCount; ++i)
-    {
-        sortedElements.push_back(i);
-
-        redBar1Index = i;
-
-        mainwindow->waitForStep();
-        mainwindow->visualize();
-        mainwindow->playSound(i, i);
-        mainwindow->wait();
     }
 }
 
@@ -705,7 +702,7 @@ void Algorithms::shellSort()
 {
     for (int gap = elementsCount / 2; gap > 0; gap /= 2)
     {
-        for (int i = gap; i < elementsCount; i++)
+        for (int i = gap; i < elementsCount; ++i)
         {
             if (shouldReset) return;
 

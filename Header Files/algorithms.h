@@ -62,6 +62,8 @@ private:
 
     // Visual Elements
     int& redBar1Index, & redBar2Index, & greenBarIndex, & blueBarIndex;
+
+    int & maxHeight;
 };
 
 #endif // ALGORITHMS_H

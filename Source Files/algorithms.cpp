@@ -759,10 +759,10 @@ void Algorithms::stalinSort()
 
         mainwindow->waitForStep();
         mainwindow->visualize();
-        mainwindow->playSound(i, i);
+        mainwindow->playSound(i, 0);
         mainwindow->wait();
 
-        if (!comparator(array[lastValidIndex], array[i]))
+        if (comparator(array[i], array[lastValidIndex]))
         {
             lastValidIndex = i;
             sortedElements.push_back(i);
@@ -777,6 +777,8 @@ void Algorithms::stalinSort()
         redBar1Index = -1;
         greenBarIndex = -1;
 
+        mainwindow->waitForStep();
         mainwindow->visualize();
+        mainwindow->wait();
     }
 }

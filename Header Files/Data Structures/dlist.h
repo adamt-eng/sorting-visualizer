@@ -1,36 +1,35 @@
 #ifndef DLIST_H
 #define DLIST_H
-#include <cstddef>
 
-namespace gui{
+template <typename ListElement>
+class DList {
+public:
+    // Type Definitions
+    typedef ListElement* iterator;
 
-    template <typename ListElement>
-    class DList
-    {
-    private:
-        ListElement* arr;
-        int mySize;
-        int myCapacity;
-    public:
-        typedef ListElement* iterator;
-        DList();
-        DList(const DList& original);
-        DList(int newSize, const ListElement& initialValue);
-        DList(int newCapacity);
-        template<size_t N>
-        DList(const ListElement (&arr)[N]);
-        ~DList();
-        void clear();
-        bool empty();
-        int size();
-        int capacity();
-        void erase(int position);
-        void insert(ListElement element, int position);
-        void insert(ListElement element);
-        ListElement& operator [](int index);
-        int find(ListElement item) const;
-        iterator begin();
-        iterator end();
-    };
-}
-#endif // List_H
+    // Constructors and Destructor
+    DList(const DList& original);
+    DList(int newCapacity = 1024);
+    ~DList();
+
+    // Member Functions
+    void clear();
+    bool empty() const;
+    int size() const;
+    int capacity() const;
+    void erase(int position);
+    void insert(ListElement element, int position);
+    ListElement& operator[](int index);
+    int find(ListElement item) const;
+
+    // Assignment Operator
+    const DList & operator=(const DList & rightHandSide);
+
+private:
+    // Member Variables
+    ListElement* arr;
+    int mySize;
+    int myCapacity;
+};
+
+#endif // DLIST_H

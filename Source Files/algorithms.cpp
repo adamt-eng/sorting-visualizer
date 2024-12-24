@@ -753,15 +753,15 @@ void Algorithms::stalinSort()
     {
         if (shouldReset) return;
 
-        ++comparisonCount;
-        arrayAccessCount += 2;
-
         redBar1Index = i;
 
         mainwindow->waitForStep();
         mainwindow->visualize();
-        mainwindow->playSound(i, 0);
+        mainwindow->playSound(redBar1Index, 0);
         mainwindow->wait();
+
+        ++comparisonCount;
+        arrayAccessCount += 2;
 
         if (comparator(array[i], array[lastValidIndex]))
         {

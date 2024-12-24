@@ -217,6 +217,8 @@ void Algorithms::countingSort(int place)
     // Distribute elements into buckets
     for (int i = 0; i < elementsCount; ++i)
     {
+        if (shouldReset) return;
+
         int item = array[i];
         int digit = place == 0 ? item : (item / place) % 10;
 
@@ -243,6 +245,8 @@ void Algorithms::countingSort(int place)
 
     for (int bucket = start; bucket != end; bucket += step)
     {
+        if (shouldReset) return;
+
         while (!buckets[bucket].empty())
         {
             array[index++] = buckets[bucket][0];
@@ -541,10 +545,10 @@ void Algorithms::bogoSort()
         sorted = true;
         for (int i = 0; i < elementsCount - 1; ++i)
         {
-            ++comparisonCount; // Increment comparison count
-            arrayAccessCount += 2; // Access array[i] and array[i + 1]
+            ++comparisonCount;
+            arrayAccessCount += 2;
 
-            if (array[i] > array[i + 1])
+            if (comparator(array[i], array[i + 1]))
             {
                 sorted = false;
                 break;
@@ -559,9 +563,6 @@ void Algorithms::bogoSort()
             std::shuffle(array.begin(), array.end(), rng);
 
             arrayAccessCount += elementsCount; // Each shuffle accesses all elements
-
-            redBar1Index = -1;
-            redBar2Index = -1;
 
             mainwindow->waitForStep();
             mainwindow->visualize();

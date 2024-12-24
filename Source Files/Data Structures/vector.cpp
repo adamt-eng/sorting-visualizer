@@ -112,15 +112,15 @@ void Vector<T>::resize(int newSize)
 {
     if (newSize < mySize)
     {
-        mySize = newSize; // Reduce size without reallocating
+        mySize = newSize;
     }
     else
     {
-        reserve(newSize); // Ensure sufficient capacity
+        reserve(newSize);
 
         for (int i = mySize; i < newSize; ++i)
         {
-            arr[i] = T(); // Default construct new elements
+            arr[i] = T(); 
         }
 
         mySize = newSize;
@@ -142,6 +142,10 @@ T& Vector<T>::at(int index)
 template<typename T>
 T& Vector<T>::operator[](int index)
 {
+    if (index < 0 || index >= mySize)
+    {
+        throw std::out_of_range("Index out of bounds");
+    }
     return arr[index];
 }
 

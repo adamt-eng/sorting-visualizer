@@ -1,9 +1,6 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include <iostream>
-using namespace std;
-
 template <typename T>
 class List
 {
@@ -16,23 +13,30 @@ private:
         Node(T item) : data(item), next(nullptr) {}
     };
 
-    typedef Node *NodePointer;
+    typedef Node* NodePointer;
+
+    NodePointer first;
+    int mySize;
 
 public:
-    T& operator[](int index);
+    // Constructors and Destructor
     List();
     List(const List<T> &originalList);
     ~List();
-    const List<T> &operator=(const List<T> &rightSide);
-    bool empty();
-    void insert(T item, int index);
-    void erase(int index);
-    T search(T item);
-    int size();
 
-private:
-    NodePointer first;
-    int mySize;
+    // Operator Overloads
+    const List<T> &operator=(const List<T> &rightSide);
+    T& operator[](int index);
+
+    // Member functions
+    void insert(T item, int index);
+    void insert(T item);
+    void eraseAt(int index);
+    void erase(T item);
+
+    bool empty() const;
+    int size() const;
+    int find(T item) const;
 };
 
 #endif // LIST_H

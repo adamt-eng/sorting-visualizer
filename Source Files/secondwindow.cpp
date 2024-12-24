@@ -147,6 +147,18 @@ SecondWindow::~SecondWindow()
     delete ui;
 }
 
+// Event Handler for keyboard shortcuts
+void SecondWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_S)
+    {
+        on_runButton_2_clicked();
+    }
+    else
+    {
+        QMainWindow::keyPressEvent(event);
+    }
+}
 #include <QApplication>
 #include "../Header Files/mainwindow.h"
 

@@ -16,6 +16,9 @@ class SecondWindow : public QMainWindow
 {
     Q_OBJECT
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
 public:
     SecondWindow(QWidget *parent = nullptr);
     ~SecondWindow();

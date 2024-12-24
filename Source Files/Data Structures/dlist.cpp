@@ -30,7 +30,7 @@ DList<ListElement>::DList(const DList<ListElement> & original) : mySize(original
 
     if (arr != nullptr)
     {
-        for(int i = 0; i < mySize; i++)
+        for(int i = 0; i < mySize; ++i)
             arr[i] = original.arr[i];
     }
     else
@@ -49,7 +49,7 @@ DList<ListElement>::DList(int newSize, const ListElement& initialValue): mySize(
     }
     else
     {
-        for (int i = 0; i < mySize; i++) {
+        for (int i = 0; i < mySize; ++i) {
             arr[i] = initialValue;
         }
     }
@@ -104,7 +104,7 @@ void DList<ListElement>::erase(int position) {
         throw std::runtime_error("Illegal location to delete");
     }
 
-    for (int i = position; i < mySize - 1; i++)
+    for (int i = position; i < mySize - 1; ++i)
         arr[i] = arr[i + 1];
 
     mySize--;
@@ -146,7 +146,7 @@ ListElement& DList<ListElement> ::operator[](int index){
 
 template <typename ListElement>
 int DList<ListElement> ::find(ListElement item) const{
-    for (int i = 0; i < mySize; i++) {
+    for (int i = 0; i < mySize; ++i) {
         if (arr[i] == item) {
             return i;
         }

@@ -148,12 +148,12 @@ SecondWindow::~SecondWindow()
 }
 
 #include <QApplication>
-//#include "../Header Files/mainwindow.h"
+#include "../Header Files/mainwindow.h"
 
 void SecondWindow::on_runButton_2_clicked()
 {
-   // MainWindow *mainwindow = new MainWindow();
-   // mainwindow->show();
-   // this->hide();
+   MainWindow *mainwindow = new MainWindow();
+   mainwindow->show();
+   this->hide();
 }
 

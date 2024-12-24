@@ -1,5 +1,6 @@
 #include "../Header Files/algorithms.h"
 #include "Data Structures/vector.cpp"
+#include "Data Structures/list.cpp"
 #include <random>
 
 Algorithms::Algorithms(MainWindow& m)
@@ -31,7 +32,6 @@ void Algorithms::bubbleSort()
             mainwindow->waitForStep();
             mainwindow->visualize();
             mainwindow->wait();
-
 
             if (comparator(array[j], array[j + 1]))
             {
@@ -208,88 +208,46 @@ void Algorithms::quickSort(int start, int end)
 
 void Algorithms::countingSort(int place)
 {
+    // Determine radix
     int max = (place == 0) ? (*std::max_element(array.begin(), array.end()) + 1) : 10;
 
-    Vector<int> count(max, 0);
-    Vector<int> output(elementsCount);
+    // Initialize buckets as a linked-list based list
+    Vector<List<int>> buckets(max);
 
-    // Build the count array
+    // Distribute elements into buckets
     for (int i = 0; i < elementsCount; ++i)
     {
-        int index = (place == 0) ? array[i] : (array[i] / place) % 10;
-        ++count[index];
+        int item = array[i];
+        int digit = place == 0 ? item : (item / place) % 10;
+
+        // Insert the element into the corresponding bucket
+        buckets[digit].insert(item, buckets[digit].size());
+
         ++arrayAccessCount;
-    }
-
-    // Build cumulative count
-    for (int i = 1; i < max; ++i)
-    {
-        count[i] += count[i - 1];
-    }
-
-    // Build the output array
-    if (isAscending)
-    {
-        for (int i = elementsCount - 1; i >= 0; --i)
-        {
-            int element = array[i];
-            int index = (place == 0) ? element : (element / place) % 10;
-            output[count[index] - 1] = element;
-            --count[index];
-
-            ++arrayAccessCount;
-
-            blueBarIndex = i;
-
-            mainwindow->waitForStep();
-            mainwindow->visualize();
-            mainwindow->playSound(i, i);
-            mainwindow->wait();
-        }
-    }
-    else
-    {
-        for (int i = 0; i < elementsCount; ++i)
-        {
-            int element = array[i];
-            int index = (place == 0) ? element : (element / place) % 10;
-            output[elementsCount - count[index]] = element;
-            --count[index];
-
-            ++arrayAccessCount;
-
-            blueBarIndex = i;
-
-            mainwindow->waitForStep();
-            mainwindow->visualize();
-            mainwindow->playSound(i, i);
-            mainwindow->wait();
-        }
+        blueBarIndex = i;
+        mainwindow->waitForStep();
+        mainwindow->visualize();
+        mainwindow->playSound(i, digit);
+        mainwindow->wait();
     }
 
     blueBarIndex = -1;
-    mainwindow->visualize();
 
-    // Copy back the sorted array and visualize each step
-    for (int i = 0; i < elementsCount; ++i)
+    int index = 0;
+    for (int b = 0; b < max; ++b)
     {
-        if (shouldReset) return;
-
-        array[i] = output[i];
-
-        ++arrayAccessCount;
-
-        redBar1Index = i;
-
-        if (place == 0)
+        while (!buckets[b].empty())
         {
-            sortedElements.push_back(i);
-        }
+            array[index++] = buckets[b][0];
+            buckets[b].erase(0);
 
-        mainwindow->waitForStep();
-        mainwindow->visualize();
-        mainwindow->playSound(i, i);
-        mainwindow->wait();
+            ++arrayAccessCount;
+            redBar1Index = index - 1;
+            mainwindow->waitForStep();
+            mainwindow->visualize();
+            mainwindow->playSound(index - 1, b);
+            mainwindow->wait();
+        }
     }
 
     redBar1Index = -1;
@@ -300,9 +258,9 @@ void Algorithms::radixSort()
 {
     int max = *std::max_element(array.begin(), array.end());
 
-    for (int i = 1; max / i > 0; i *= 10)
+    for (int place = 1; max / place > 0; place *= 10)
     {
-        countingSort(i);
+        countingSort(place);
     }
 
     for (int i = 0; i < elementsCount; ++i)
@@ -316,7 +274,6 @@ void Algorithms::radixSort()
         mainwindow->playSound(i, i);
         mainwindow->wait();
     }
-
 }
 
 void Algorithms::selectionSort()
@@ -746,39 +703,36 @@ void Algorithms::heapSort()
 
 void Algorithms::shellSort()
 {
-    for (int gap = elementsCount / 2; gap > 0; gap /= 2) {
-        for (int i = gap; i < elementsCount; i++) {
+    for (int gap = elementsCount / 2; gap > 0; gap /= 2)
+    {
+        for (int i = gap; i < elementsCount; i++)
+        {
             if (shouldReset) return;
 
             int temp = array[i];
             int j = i;
-            arrayAccessCount+=1;
+            ++arrayAccessCount;
 
             redBar1Index = temp;
             redBar2Index = j - gap;
-
-
 
             mainwindow->waitForStep();
             mainwindow->visualize();
             mainwindow->playSound(redBar1Index, redBar2Index);
             mainwindow->wait();
 
-            while (j >= gap && comparator(array[j - gap], temp)) {
+            while (j >= gap && comparator(array[j - gap], temp))
+            {
                 redBar1Index = temp;
                 redBar2Index = j;
-
-
 
                 array[j] = array[j - gap];
                 j -= gap;
-                comparisonCount++;
-                arrayAccessCount+=3;
+                ++comparisonCount;
+                arrayAccessCount += 3;
 
                 redBar1Index = temp;
                 redBar2Index = j;
-
-
 
                 mainwindow->waitForStep();
                 mainwindow->visualize();
@@ -791,3 +745,41 @@ void Algorithms::shellSort()
     }
 }
 
+void Algorithms::stalinSort()
+{
+    int lastValidIndex = 0;
+
+    sortedElements.push_back(0);
+
+    for (int i = 1; i < elementsCount;)
+    {
+        if (shouldReset) return;
+
+        ++comparisonCount;
+        arrayAccessCount += 2;
+
+        redBar1Index = i;
+
+        mainwindow->waitForStep();
+        mainwindow->visualize();
+        mainwindow->playSound(i, i);
+        mainwindow->wait();
+
+        if (!comparator(array[lastValidIndex], array[i]))
+        {
+            lastValidIndex = i;
+            sortedElements.push_back(i);
+            ++i;
+        }
+        else
+        {
+            array.erase(i);
+            --elementsCount;
+        }
+
+        redBar1Index = -1;
+        greenBarIndex = -1;
+
+        mainwindow->visualize();
+    }
+}

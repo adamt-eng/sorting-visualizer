@@ -1,169 +1,187 @@
 #include "../../Header Files/Data Structures/list.h"
-#include <new>
-#include <stdexcept>
 
-namespace gui{
+using namespace std;
 
-template<typename ListElement>
-List<ListElement>::List(int newCapacity) : mySize(0)
+template <typename T>
+List<T>::List() : first(nullptr), mySize(0) {}
+
+template<typename T>
+T& List<T>::operator[](int index)
 {
-    if (newCapacity > 0)
+    if (index < 0 || index >= mySize)
     {
-        myCapacity = newCapacity;
-    }
-    else
-    {
-        throw std::runtime_error("Illegal capacity value");
+        throw std::runtime_error("Index out of bounds: " + std::to_string(index));
     }
 
-    arr = new (std::nothrow) ListElement[newCapacity];
+    List<T>::NodePointer ptr = first;
 
-    if (arr == nullptr)
+    for (int i = 0; i < index; ++i)
     {
-        throw std::runtime_error("Inadequate memory to allocate storage for list");
+        ptr = ptr->next;
+    }
+
+    return ptr->data;
+}
+
+
+template <typename T>
+List<T>::List(const List<T> & originalList) : first(nullptr), mySize(originalList.mySize)
+{
+    if (mySize == 0) return;
+
+    List<T>::NodePointer originalPtr, currentPtr;
+
+    first = new Node(originalList.first->data);
+    currentPtr = first;
+
+    originalPtr = originalList.first->next;
+    while (originalPtr != nullptr)
+    {
+        currentPtr->next = new Node(originalPtr->data);
+        originalPtr = originalPtr->next;
+        currentPtr = currentPtr->next;
     }
 }
 
-template <typename ListElement>
-List<ListElement>::List(const List<ListElement> & original) : mySize(original.mySize), myCapacity(original.myCapacity){
-    arr = new(std::nothrow) ListElement[myCapacity];
+template <typename T>
+const List<T> & List<T>::operator=(const List<T> & rightSide)
+{
+    mySize = rightSide.mySize;
 
-    if (arr != nullptr)
+    if (mySize == 0)
     {
-        for(int i = 0; i < mySize; i++)
-            arr[i] = original.arr[i];
+        this->~List();
+        first = nullptr;
+        return *this;
     }
-    else
-    {
-        throw std::runtime_error("Inadequate memory to allocate storage for list");
-    }
-}
 
-template <typename ListElement>
-List<ListElement>::List(int newSize, const ListElement& initialValue): mySize(newSize), myCapacity(newSize){
-    arr = new (std::nothrow) ListElement[myCapacity];
+    if (this != &rightSide)
+    {
+        this->~List();
 
-    if (arr == nullptr)
-    {
-        throw std::runtime_error("Inadequate memory to allocate storage for list");
-    }
-    else
-    {
-        for (int i = 0; i < mySize; i++) {
-            arr[i] = initialValue;
+        List<T>::NodePointer originalPtr, lastPtr;
+
+        first = new Node(rightSide.first->data);
+        lastPtr = first;
+
+        originalPtr = rightSide.first->next;
+        while (originalPtr != nullptr)
+        {
+            lastPtr->next = new Node(originalPtr->data);
+            originalPtr = originalPtr->next;
+            lastPtr = lastPtr->next;
         }
     }
+
+    return *this;
 }
 
-template <typename ListElement>
-template<std::size_t N>
-List<ListElement> :: List(const ListElement (&array)[N]){
-    arr = new (std::nothrow)  ListElement[N];
-    if (arr == nullptr)
+template <typename T>
+inline List<T>::~List()
+{
+    List<T>::NodePointer prev = first, ptr;
+
+    while (prev != nullptr)
     {
-        throw std::runtime_error("Inadequate memory to allocate storage for list");
+        ptr = prev->next;
+        delete prev;
+        prev = ptr;
     }
-    else
-    {
-        mySize = N;
-        myCapacity = N;
-        for (std::size_t i = 0; i < N; ++i) {
-            arr[i] = array[i];
-        }
-    }
-}
 
-template <typename ListElement>
-List<ListElement>::~List(){
-    delete[] arr;
-}
-
-template <typename ListElement>
-void List<ListElement>::clear(){
+    first = nullptr;
     mySize = 0;
 }
 
-template <typename ListElement>
-bool List<ListElement> ::empty(){return mySize == 0;}
+template <typename T>
+bool List<T>::empty()
+{
+    return mySize == 0;
+}
 
-template <typename ListElement>
-int List<ListElement> ::size(){return mySize;}
-
-template <typename ListElement>
-int List<ListElement> ::capacity(){return myCapacity;}
-
-template <typename ListElement>
-void List<ListElement>::erase(int position) {
-    if (mySize == 0)
+template <typename T>
+void List<T>::insert(T item, int index)
+{
+    if (index < 0 || index > mySize)
     {
-        throw std::runtime_error("List is empty");
+        throw std::runtime_error("Can't insert at index '" + std::to_string(index) + "'");
     }
 
-    if (position < 0 || position >= mySize)
-    {
-        throw std::runtime_error("Illegal location to delete");
-    }
+    mySize++;
 
-    for (int i = position; i < mySize - 1; i++)
-        arr[i] = arr[i + 1];
+    List<T>::NodePointer newPtr = new Node(item), predPtr = first;
+
+    if (index == 0)
+    {
+        newPtr->next = first;
+        first = newPtr;
+    }
+    else
+    {
+        for (int i = 1; i < index; i++)
+        {
+            predPtr = predPtr->next;
+        }
+
+        newPtr->next = predPtr->next;
+        predPtr->next = newPtr;
+    }
+}
+
+template <typename T>
+void List<T>::erase(int index)
+{
+    if (index < 0 || index >= mySize)
+    {
+        throw std::runtime_error("Can't delete at index '" + std::to_string(index) + "'");
+    }
 
     mySize--;
-}
 
-template <typename ListElement>
-void List<ListElement>::insert(ListElement element, int position) {
-    if (mySize == myCapacity)
+    List<T>::NodePointer ptr, predPtr = first;
+
+    if (index == 0)
     {
-        throw std::runtime_error("No space for list element");
+        ptr = first;
+        first = ptr->next;
+        delete ptr;
     }
-
-    if (position < 0 || position > mySize)
+    else
     {
-        throw std::runtime_error("Illegal location to insert");
+        for (int i = 1; i < index; i++)
+        {
+            predPtr = predPtr->next;
+        }
+
+        ptr = predPtr->next;
+        predPtr->next = ptr->next;
+        delete ptr;
     }
-
-    for (int i = mySize; i > position; i--) {
-        arr[i] = arr[i - 1];
-    }
-
-    arr[position] = element;
-
-    // Increment the size
-    mySize++;
 }
 
-template <typename ListElement>
-void List<ListElement>::insert(ListElement element){
-}
+template <typename T>
+T List<T>::search(T item)
+{
+    int index;
 
-template <typename ListElement>
-ListElement& List<ListElement> ::operator[](int index){
-    if (index < 0 || index >= mySize) {
-        throw std::runtime_error("Index out of bounds");
-    }
-    return arr[index];
-}
+    List<T>::NodePointer temp = first;
 
-template <typename ListElement>
-int List<ListElement> ::find(ListElement item) const{
-    for (int i = 0; i < mySize; i++) {
-        if (arr[i] == item) {
-            return i;
+    for (index = 0; index < mySize; index++)
+    {
+        if (temp->data == item)
+        {
+            return index;
+        }
+        else
+        {
+            temp = temp->next;
         }
     }
-    return-1;
+
+    return -1; // Return -1 if not found
 }
 
-template<typename ListElement>
-typename List<ListElement>::iterator List<ListElement>::begin()
+template <typename T>
+int List<T>::size()
 {
-    return arr;
-}
-
-template<typename ListElement>
-typename List<ListElement>::iterator List<ListElement>::end()
-{
-    return arr + mySize;
-}
-
+    return mySize;
 }

@@ -57,17 +57,18 @@ void MainWindow::setAlgorithmsComplexity(QComboBox *comboBox)
 {
     Pair<QString, QString> algorithmComplexityPairs[] = {
         Pair<QString, QString>("Bubble Sort", "O(n²)"),
-        Pair<QString, QString>("Merge Sort", "O(n log n)"),
-        Pair<QString, QString>("Quick Sort", "O(n log n)"),
+        Pair<QString, QString>("Merge Sort", "O(n * log n)"),
+        Pair<QString, QString>("Quick Sort", "O(n * log n)"),
         Pair<QString, QString>("Counting Sort", "O(n + k)"),
-        Pair<QString, QString>("Radix Sort", "O(nk)"),
+        Pair<QString, QString>("Radix Sort", "O(n * k)"),
         Pair<QString, QString>("Selection Sort", "O(n²)"),
         Pair<QString, QString>("Insertion Sort", "O(n²)"),
-        Pair<QString, QString>("Heap Sort", "O(n log n)"),
+        Pair<QString, QString>("Heap Sort", "O(n * log n)"),
         Pair<QString, QString>("Cocktail Sort", "O(n²)"),
         Pair<QString, QString>("Gnome Sort", "O(n²)"),
-        Pair<QString, QString>("Bogo Sort", "O((n-1)!)"),
-        Pair<QString, QString>("Shell Sort", "O(n²)")
+        Pair<QString, QString>("Bogo Sort", "O(n*n!)"),
+        Pair<QString, QString>("Shell Sort", "O(n²)"),
+        Pair<QString, QString>("Stalin Sort", "O(n²)")
     };
 
     constexpr int pairCount = sizeof(algorithmComplexityPairs) / sizeof(algorithmComplexityPairs[0]);
@@ -213,6 +214,10 @@ void MainWindow::on_startButton_clicked()
         else if (sortingAlgorithm == "Shell Sort")
         {
             algorithms->shellSort();
+        }
+        else if (sortingAlgorithm == "Stalin Sort")
+        {
+            algorithms->stalinSort();
         }
 
         if (!shouldReset)
@@ -486,7 +491,7 @@ void MainWindow::visualize()
 
         QColor currentColor = barColor;
 
-        if (!heapElements.isEmpty() && std::find(heapElements.begin(), heapElements.end(), i) != heapElements.end())
+        if (!heapElements.empty() && std::find(heapElements.begin(), heapElements.end(), i) != heapElements.end())
         {
             int level = static_cast<int>(std::log2(i + 1));
             currentColor = heapLevelColors[level % 7];
@@ -650,6 +655,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     else if (event->key() == Qt::Key_Space && isContinuous && ui->startButton->text() == "Reset")
     {
         on_pauseButton_clicked();
+    }
+    else if (event->key() == Qt::Key_G)
+    {
+        on_switchButton_clicked();
     }
     else
     {

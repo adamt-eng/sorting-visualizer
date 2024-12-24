@@ -1,36 +1,38 @@
 #ifndef LIST_H
 #define LIST_H
-#include <cstddef>
 
-namespace gui{
+#include <iostream>
+using namespace std;
 
-    template <typename ListElement>
-    class List
-    {
-    private:
-        ListElement* arr;
-        int mySize;
-        int myCapacity;
+template <typename T>
+class List
+{
+private:
+    class Node {
     public:
-        typedef ListElement* iterator;
-        List();
-        List(const List& original);
-        List(int newSize, const ListElement& initialValue);
-        List(int newCapacity);
-        template<size_t N>
-        List(const ListElement (&arr)[N]);
-        ~List();
-        void clear();
-        bool empty();
-        int size();
-        int capacity();
-        void erase(int position);
-        void insert(ListElement element, int position);
-        void insert(ListElement element);
-        ListElement& operator [](int index);
-        int find(ListElement item) const;
-        iterator begin();
-        iterator end();
+        T data;
+        Node *next;
+        Node() : next(nullptr) {}
+        Node(T item) : data(item), next(nullptr) {}
     };
-}
-#endif // List_H
+
+    typedef Node *NodePointer;
+
+public:
+    T& operator[](int index);
+    List();
+    List(const List<T> &originalList);
+    ~List();
+    const List<T> &operator=(const List<T> &rightSide);
+    bool empty();
+    void insert(T item, int index);
+    void erase(int index);
+    T search(T item);
+    int size();
+
+private:
+    NodePointer first;
+    int mySize;
+};
+
+#endif // LIST_H

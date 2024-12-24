@@ -50,11 +50,14 @@ set(PROJECT_SOURCES
     "Header Files/Data Structures/queue.h"
     "Source Files/Data Structures/queue.cpp"
 
-    "Header Files/Data Structures/list.h"
-    "Source Files/Data Structures/list.cpp"
+    "Header Files/Data Structures/dlist.h"
+    "Source Files/Data Structures/dlist.cpp"
 
     "Header Files/Data Structures/priorityqueue.h"
     "Source Files/Data Structures/priorityqueue.cpp"
+
+    "Header Files/Data Structures/list.h"
+    "Source Files/Data Structures/list.cpp"
 
     mainwindow.ui
     secondwindow.ui

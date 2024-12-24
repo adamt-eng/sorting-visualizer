@@ -334,6 +334,11 @@
          </item>
          <item>
           <property name="text">
+           <string>Shell Sort</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>Cocktail Sort</string>
           </property>
          </item>
@@ -349,7 +354,7 @@
          </item>
          <item>
           <property name="text">
-           <string>Shell Sort</string>
+           <string>Stalin Sort</string>
           </property>
          </item>
         </widget>

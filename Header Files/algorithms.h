@@ -28,10 +28,13 @@ public:
 
     void bogoSort();
 
+    void stalinSort();
+
     void heapify(int n, int i);
     void pop(int n);
     void buildHeap();
     void heapSort();
+
     void shellSort();
 
 private:

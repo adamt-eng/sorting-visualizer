@@ -207,11 +207,6 @@ void MainWindow::on_startButton_clicked()
         generateArray();
     }
 
-    // Reset variables and update visualization
-    redBar1Index = redBar2Index = greenBarIndex = blueBarIndex = -1;
-    heapElements.clear();
-    visualize();
-
     // Reset buttons text
     ui->pauseButton->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
     ui->startButton->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
@@ -237,6 +232,12 @@ void MainWindow::on_startButton_clicked()
     ui->nextStepButton->setEnabled(false);
     ui->continuousRadioButton->setEnabled(true);
     ui->stepByStepRadioButton->setEnabled(true);
+
+    // Reset variables and update visualization
+    redBar1Index = redBar2Index = greenBarIndex = blueBarIndex = -1;
+    heapElements.clear();
+    visualize();
+
 }
 
 // Event Handler for pauseButton
@@ -367,7 +368,7 @@ void MainWindow::on_nextStepButton_clicked()
 // Delay function to wait the time specified by the user in delayInMilliseconds
 void MainWindow::wait()
 {
-    if (!isContinuous) return;
+    if (!isContinuous || delayInMilliseconds == 0) return;
     QTime dieTime = QTime::currentTime().addMSecs(delayInMilliseconds);
     while (QTime::currentTime() < dieTime)
     {
@@ -403,6 +404,8 @@ void MainWindow::generateArray()
 // Visualization function
 void MainWindow::visualize()
 {
+    if (delayInMilliseconds == 0 && (ui->startButton->text() == "Reset" || ui->pauseButton->isEnabled())) return;
+
     int width = ui->textLabel->width();
     int height = ui->textLabel->height();
 
@@ -525,7 +528,7 @@ void MainWindow::on_soundComboBox_currentTextChanged(const QString &arg1)
 // Function to handle playing sounds, whether that's a WAV file or a frequency with ADSR
 void MainWindow::playSound(int i, int j)
 {
-    if (ui->soundComboBox->currentText() == "No Sound") return;
+    if (ui->soundComboBox->currentText() == "No Sound" || delayInMilliseconds == 0) return;
 
     if (ui->soundComboBox->currentText() == "Variable")
     {

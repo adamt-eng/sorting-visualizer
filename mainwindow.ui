@@ -137,8 +137,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>14</width>
-           <height>14</height>
+           <width>12</width>
+           <height>12</height>
           </size>
          </property>
         </widget>
@@ -217,8 +217,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>14</width>
-           <height>14</height>
+           <width>12</width>
+           <height>12</height>
           </size>
          </property>
         </widget>
@@ -245,8 +245,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>14</width>
-           <height>14</height>
+           <width>12</width>
+           <height>12</height>
           </size>
          </property>
         </widget>
@@ -565,11 +565,6 @@
          <item>
           <property name="text">
            <string>Whatsapp</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Minecraft</string>
           </property>
          </item>
         </widget>
@@ -942,8 +937,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>14</width>
-           <height>14</height>
+           <width>12</width>
+           <height>12</height>
           </size>
          </property>
         </widget>

@@ -752,13 +752,22 @@ void MainWindow::changeEvent(QEvent *event)
 #include <QApplication>
 #include "../Header Files/secondwindow.h"
 
+SecondWindow *secondWindow;
+
 // Event handler to switch to the graph visualizer window
 void MainWindow::on_switchButton_clicked()
 {
     shouldReset = true;
 
-    SecondWindow *secondWindow = new SecondWindow();
+    if (secondWindow == nullptr)
+    {
+        secondWindow = new SecondWindow(this);
+    }
+
+    secondWindow->setWindowOpacity(0);
     secondWindow->show();
-    this->hide();
+    secondWindow->setWindowOpacity(100);
+
+    this->setWindowOpacity(0);
 }
 

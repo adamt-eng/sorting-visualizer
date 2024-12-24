@@ -159,13 +159,12 @@ void SecondWindow::keyPressEvent(QKeyEvent *event)
         QMainWindow::keyPressEvent(event);
     }
 }
+
 #include <QApplication>
-#include "../Header Files/mainwindow.h"
 
 void SecondWindow::on_runButton_2_clicked()
 {
-   MainWindow *mainwindow = new MainWindow();
-   mainwindow->show();
-   this->hide();
+    qobject_cast<QWidget*>(this->parent())->setWindowOpacity(100);
+    this->setWindowOpacity(0);
 }
 

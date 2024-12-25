@@ -266,7 +266,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Swith to Sorting Visualizer</string>
+        <string>Switch to Sorting Visualizer</string>
        </property>
       </widget>
      </item>

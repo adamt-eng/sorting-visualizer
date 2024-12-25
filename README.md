@@ -54,8 +54,8 @@ We are honored that our professor recognized the value of this project and decid
 ### For Windows
 1. **Option 1: Download Prebuilt Executable**  
    - Navigate to the [Releases](https://github.com/adamt-eng/sorting-visualizer/releases) page on the repository.
-   - Download the latest `.exe` file.
-   - Run the executable to start using the application.
+   - Download the latest `.zip` file.
+   - Extract the `.zip` then run `sorting-visualizer.exe` to start using the application.
 
 2. **Option 2: Build from Source**
 

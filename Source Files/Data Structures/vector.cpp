@@ -21,8 +21,17 @@ Vector<T>::Vector(int newCapacity)
 }
 
 template<typename T>
-Vector<T>::Vector(int newSize, const T& initialValue) : mySize(newSize), myCapacity(newSize), arr(new T[newSize])
+Vector<T>::Vector(int newSize, const T& initialValue)
 {
+    if (newSize < 0)
+    {
+        throw std::out_of_range("Size can't be a negative value.");
+    }
+
+    myCapacity = newSize;
+    mySize = newSize;
+    arr = new T[newSize];
+
     for (int i = 0; i < newSize; ++i)
     {
         arr[i] = initialValue;

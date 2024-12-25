@@ -125,7 +125,6 @@ void Graph::BFS(int startNode, int goalNode, QGraphicsScene *scene) {
         }
     }
 
-    // Optionally, reset node colors to blue after traversal if the goal was reached
     for (auto& node : nodes) {
         node->setBrush(Qt::blue);
     }
@@ -175,7 +174,6 @@ void Graph::DFS(int startNode, int goalNode, QGraphicsScene *scene) {
         }
     }
 
-    // Optionally, reset node colors to blue after traversal if the goal was reached
     for (auto& node : nodes) {
         node->setBrush(Qt::blue);
     }
@@ -234,7 +232,6 @@ void Graph::Dijkstra(int startNode, int goalNode, QGraphicsScene *scene) {
         }
     }
 
-    // Optionally, reset node colors to blue after traversal if the goal was reached
     for (auto& node : nodes) {
         node->setBrush(Qt::blue);
     }

@@ -49,6 +49,31 @@ We are honored that our professor recognized the value of this project and decid
 - **UI Framework**: [Qt Creator](https://www.qt.io/product/development-tools)
 - **Sound Effects**: [SDL2](https://www.libsdl.org/)
 
+## Installation
+
+### For Windows
+1. **Option 1: Download Prebuilt Executable**  
+   - Navigate to the [Releases](https://github.com/adamt-eng/sorting-visualizer/releases) page on the repository.
+   - Download the latest `.exe` file.
+   - Run the executable to start using the application.
+
+2. **Option 2: Build from Source**
+
+   Follow these steps to build and run the project using Qt Creator:
+   1. Download and install [Qt Creator](https://www.qt.io/product/development-tools).
+   2. Open Qt Creator and select **Create New Project**.
+   3. Choose **Import Project** and then select **Git Clone**.
+   4. Paste the repository link:
+      
+      ```bash
+      https://github.com/adamt-eng/sorting-visualizer
+      ```
+   6. After cloning, select all kits and click **Configure Project**.
+   7. Build and run the project directly from Qt Creator.
+
+### For MacOS
+- VERY SOON!
+
 ## Usage
 
 ### 1. **Launch the Application**

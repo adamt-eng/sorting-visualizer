@@ -38,6 +38,7 @@ public:
     // Element Access
     T& at(int index);
     T& operator[](int index);
+    int find(T item) const;
 
     // Iterators
     iterator begin();

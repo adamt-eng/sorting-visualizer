@@ -235,6 +235,20 @@ void Vector<T>::erase(int pos)
     --mySize;
 }
 
+template <typename T>
+int Vector<T>::find(T item) const
+{
+    for (int i = 0; i < mySize; ++i)
+    {
+        if (arr[i] == item)
+        {
+            return i;
+        }
+    }
+
+    return -1; // Return -1 if element not found
+}
+
 // Iterators
 template<typename T>
 typename Vector<T>::iterator Vector<T>::begin()

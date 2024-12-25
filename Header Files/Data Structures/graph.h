@@ -8,6 +8,7 @@
 #include <QPen>
 #include "pair.h"
 #include "../../Source Files/Data Structures/vector.cpp"
+#include <vector>
 
 class Graph {
 public:

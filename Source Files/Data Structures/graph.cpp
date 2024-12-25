@@ -68,8 +68,12 @@ void Graph::addEdge(Node* node1, Node* node2, int weight, QGraphicsScene *scene,
     edges.push_back(newEdge);
 
     scene->addItem(newEdge);
-    adjList_[node1->getNodeNumber()].insert(node2->getNodeNumber(), weight);
-    adjList_[node2->getNodeNumber()].insert(node1->getNodeNumber(), weight); // For undirected graph
+
+    Pair<int, int> connect2to1(node2->getNodeNumber(), weight);
+    Pair<int, int> connect1to2(node2->getNodeNumber(), weight);
+
+    adjList_[node1->getNodeNumber()].push_back(connect2to1);
+    adjList_[node2->getNodeNumber()].push_back(connect1to2); // For undirected graph
 }
 
 void Graph::changeWeightVisibility(bool check){

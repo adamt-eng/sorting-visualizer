@@ -521,16 +521,17 @@ void Algorithms::insertionSort()
 
 void Algorithms::bogoSort()
 {
+    int start = 0;
+    int end = elementsCount-1;
     bool sorted = false;
-    int shuffleSeed = 0; // Seed to vary shuffle deterministically
+    int shuffleSeed = 0;
 
     while (!sorted)
     {
         if (shouldReset) return;
 
-        // Check if the array is sorted
         sorted = true;
-        for (int i = 0; i < elementsCount - 1; ++i)
+        for (int i = start; i < end; ++i)
         {
             ++comparisonCount;
             arrayAccessCount += 2;
@@ -542,14 +543,12 @@ void Algorithms::bogoSort()
             }
         }
 
-        // If not sorted, shuffle the array
         if (!sorted)
         {
-            // Shuffle using a deterministic seed
             std::mt19937 rng(shuffleSeed++);
             std::shuffle(array.begin(), array.end(), rng);
 
-            arrayAccessCount += elementsCount; // Each shuffle accesses all elements
+            arrayAccessCount += elementsCount;
 
             mainwindow->waitForStep();
             mainwindow->visualize();

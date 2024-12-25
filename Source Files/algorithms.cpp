@@ -693,11 +693,9 @@ void Algorithms::shellSort()
         {
             if (shouldReset) return;
 
-            int temp = array[i];
             int j = i;
-            ++arrayAccessCount;
 
-            redBar1Index = temp;
+            redBar1Index = j;
             redBar2Index = j - gap;
 
             mainwindow->waitForStep();
@@ -705,26 +703,38 @@ void Algorithms::shellSort()
             mainwindow->playSound(redBar1Index, redBar2Index);
             mainwindow->wait();
 
-            while (j >= gap && comparator(array[j - gap], temp))
+            while (j >= gap)
             {
-                redBar1Index = temp;
-                redBar2Index = j;
-
-                array[j] = array[j - gap];
-                j -= gap;
+                arrayAccessCount += 2;
                 ++comparisonCount;
-                arrayAccessCount += 3;
-
-                redBar1Index = temp;
-                redBar2Index = j;
 
                 mainwindow->waitForStep();
                 mainwindow->visualize();
                 mainwindow->wait();
-            }
 
-            array[j] = temp;
-            arrayAccessCount++;
+                if (comparator(array[j - gap], array[j]))
+                {
+                    redBar1Index = j - gap;
+                    redBar2Index = j;
+
+                    std::swap(array[j], array[j - gap]);
+
+                    j -= gap;
+
+                    arrayAccessCount += 2;
+
+                    redBar1Index = j - gap;
+                    redBar2Index = j;
+
+                    mainwindow->waitForStep();
+                    mainwindow->visualize();
+                    mainwindow->wait();
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
     }
 }

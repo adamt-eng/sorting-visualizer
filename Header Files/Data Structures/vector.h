@@ -11,7 +11,7 @@ public:
 
     // Constructors and Destructor
     Vector();
-    explicit Vector(int newCapacity);
+    Vector(int newCapacity);
     Vector(int newSize, const T& initialValue);
     Vector(const Vector<T>& other); // Copy constructor
     ~Vector();

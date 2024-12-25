@@ -6,11 +6,32 @@ template<typename T>
 Vector<T>::Vector() : mySize(0), myCapacity(1), arr(new T[1]) {}
 
 template<typename T>
-Vector<T>::Vector(int newCapacity) : mySize(0), myCapacity(newCapacity), arr(new T[newCapacity]) {}
+Vector<T>::Vector(int newCapacity)
+{
+    if (newCapacity >= 0)
+    {
+        myCapacity = newCapacity;
+        mySize = newCapacity;
+        arr = new T[newCapacity];
+    }
+    else
+    {
+        throw std::out_of_range("Capacity can't be a negative value.");
+    }
+}
 
 template<typename T>
-Vector<T>::Vector(int newSize, const T& initialValue) : mySize(newSize), myCapacity(newSize), arr(new T[newSize])
+Vector<T>::Vector(int newSize, const T& initialValue)
 {
+    if (newSize < 0)
+    {
+        throw std::out_of_range("Size can't be a negative value.");
+    }
+
+    myCapacity = newSize;
+    mySize = newSize;
+    arr = new T[newSize];
+
     for (int i = 0; i < newSize; ++i)
     {
         arr[i] = initialValue;
@@ -112,15 +133,15 @@ void Vector<T>::resize(int newSize)
 {
     if (newSize < mySize)
     {
-        mySize = newSize; // Reduce size without reallocating
+        mySize = newSize;
     }
     else
     {
-        reserve(newSize); // Ensure sufficient capacity
+        reserve(newSize);
 
         for (int i = mySize; i < newSize; ++i)
         {
-            arr[i] = T(); // Default construct new elements
+            arr[i] = T(); 
         }
 
         mySize = newSize;
@@ -142,6 +163,10 @@ T& Vector<T>::at(int index)
 template<typename T>
 T& Vector<T>::operator[](int index)
 {
+    if (index < 0 || index >= mySize)
+    {
+        throw std::out_of_range("Index out of bounds");
+    }
     return arr[index];
 }
 

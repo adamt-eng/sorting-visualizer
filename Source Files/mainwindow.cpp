@@ -14,7 +14,11 @@
 
 // SDL Includes
 #define SDL_MAIN_HANDLED
-#include <SDL2/SDL.h>
+#ifdef __APPLE__
+#include <SDL.h>          // macOS (framework)
+#else
+#include <SDL2/SDL.h>     // Windows/Linux
+#endif
 
 // Project Includes
 #include ".././ui_mainwindow.h"

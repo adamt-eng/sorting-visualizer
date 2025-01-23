@@ -1,7 +1,12 @@
 #ifndef SOUNDPLAYER_H
 #define SOUNDPLAYER_H
 
-#include <SDL2/SDL.h>
+#ifdef __APPLE__
+#include <SDL.h>          // macOS (framework)
+#else
+#include <SDL2/SDL.h>     // Windows/Linux
+#endif
+
 #include <string>
 #include <cmath>
 

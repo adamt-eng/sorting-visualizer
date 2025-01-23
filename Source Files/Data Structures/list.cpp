@@ -1,7 +1,7 @@
 #include "../../Header Files/Data Structures/list.h"
 #include <utility>
 #include <stdexcept>
-
+#include <string>
 using namespace std;
 
 template <typename T>

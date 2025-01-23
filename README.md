@@ -51,29 +51,33 @@ We are honored that our professor recognized the value of this project and decid
 
 ## Installation
 
-### For Windows
-1. **Option 1: Download Prebuilt Executable**  
-   - Navigate to the [Releases](https://github.com/adamt-eng/sorting-visualizer/releases) page on the repository.
-   - Download the latest `.zip` file.
-   - Extract the `.zip` then run `sorting-visualizer.exe` to start using the application.
+### Option 1: Download From Releases  
+- Navigate to the [Releases](https://github.com/adamt-eng/sorting-visualizer/releases) page.
 
-2. **Option 2: Build from Source**
+#### For Windows:
+   - Download the file: `sorting-visualizer-win32-x64.zip`.
+   - Extract the file.
+   - Run `sorting-visualizer.exe` to start using the application.
 
-   Follow these steps to build and run the project using Qt Creator:
-   1. Download and install [Qt Creator](https://www.qt.io/product/development-tools).
-   2. Open Qt Creator and select **Create New Project**.
-   3. Choose **Import Project** and then select **Git Clone**.
-   4. Paste the repository link:
+#### For macOS:
+   - Download the file: `sorting-visualizer.dmg`.
+   - Open the file.
+   - Run `sorting-visualizer.app` to start using the application.
+   - Note: You may need to navigate to `System Preferences > Security & Privacy > General` and click "Open Anyway" to allow the application to run.
+   
+### Option 2: Build from Source
+
+Follow these steps to build and run the project using Qt Creator:
+1. Download and install [Qt Creator](https://www.qt.io/product/development-tools).
+2. Open Qt Creator and select **Create New Project**.
+3. Choose **Import Project** and then select **Git Clone**.
+4. Paste the repository link:
       
-      ```bash
-      https://github.com/adamt-eng/sorting-visualizer
-      ```
-   6. After cloning, select all kits and click **Configure Project**.
-   7. Build and run the project directly from Qt Creator.
-
-### For MacOS
-- VERY SOON!
-
+```bash
+  https://github.com/adamt-eng/sorting-visualizer
+```
+6. After cloning, select all kits and click **Configure Project**.
+7. Build and run the project directly from Qt Creator.
 ## Usage
 
 ### 1. **Launch the Application**

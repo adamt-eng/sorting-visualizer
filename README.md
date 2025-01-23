@@ -3,7 +3,7 @@
 An interactive educational tool built in C++ using the Qt framework. This project provides intuitive visualizations of sorting algorithms and graph traversal techniques, making it an excellent resource for students, educators, and developers.
 > This project was part of our `Data Structures and Problem Solving` course in semester `Fall 2024` at `Faculty of Engineering, Ain Shams University`.
 
-We are honored that our professor recognized the value of this project and decided to use it as a teaching tool for our fellow colleagues. This acknowledgment underscores the educational potential of our Sorting and Graph Visualizer. ⭐
+We are honored that our professor recognized the value of this project and asked us to add support for macOS so he could use it as a teaching tool for our fellow colleagues. This acknowledgment underscores the educational potential of our Sorting and Graph Visualizer. ⭐
 
 ---
 

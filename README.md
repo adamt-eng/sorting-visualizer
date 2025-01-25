@@ -6,6 +6,24 @@ An interactive educational tool built in C++ using the Qt framework. This projec
 We are honored that our professor recognized the value of this project and asked us to add support for macOS so he could use it as a teaching tool for our fellow colleagues. This acknowledgment underscores the educational potential of our Sorting and Graph Visualizer. ⭐
 
 ---
+## Table of Contents
+
+- [Sorting Visualizer](#sorting-visualizer)
+  - [Features](#features)
+- [Graph Visualizer](#graph-visualizer)
+  - [Features](#features-1)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+  - [Option 1: Download From Releases](#option-1-download-from-releases)
+  - [Option 2: Build from Source](#option-2-build-from-source)
+- [Usage](#usage)
+  - [1. Launch the Application](#1-launch-the-application)
+  - [2. Sorting Visualizer](#2-sorting-visualizer)
+  - [3. Graph Visualizer](#3-graph-visualizer)
+- [Algorithms Supported](#algorithms-supported)
+  - [Sorting Algorithms](#sorting-algorithms)
+  - [Graph Algorithms](#graph-algorithms)
+---
 
 ### Sorting Visualizer
 <img src="resources/media/Sorting%20Showcase.png" alt="Sorting Showcase" width="95%">

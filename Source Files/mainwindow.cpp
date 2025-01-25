@@ -49,6 +49,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     algorithms = new Algorithms(*this);
 
     this->setFocus();
+
+    ui->scrollArea->setStyleSheet("QScrollArea { background: transparent; }");
+    ui->scrollArea->widget()->setStyleSheet("#scrollAreaWidgetContents { background: palette(window); }");
 }
 
 // UI Destructor
@@ -607,7 +610,7 @@ void MainWindow::on_fullScreenButton_clicked()
         ui->fullScreenButton->setEnabled(true);
         ui->switchButton->setEnabled(true);
         ui->fullScreenButton->show();
-
+        ui->groupBox->show();
         ui->textLabel->setGeometry(originalTextLabelGeometry);
     }
     else
@@ -637,6 +640,7 @@ void MainWindow::on_fullScreenButton_clicked()
             }
         }
 
+        ui->groupBox->hide();
         ui->fullScreenButton->hide();
         ui->textLabel->setGeometry(this->centralWidget()->geometry());
     }
@@ -703,6 +707,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     resizeTextLabel();
+
+    ui->groupBox->setGeometry(ui->groupBox->x(), ui->groupBox->y(), ui->groupBox->width(), ui->centralwidget->height() - 20);
+
     QMainWindow::resizeEvent(event);
 }
 

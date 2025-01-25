@@ -87,7 +87,7 @@ We are honored that our professor recognized the value of this project and asked
 
 Follow these steps to build and run the project using Qt Creator:
 1. Download and install [Qt Creator](https://www.qt.io/product/development-tools).
-2. Open Qt Creator and select **Create New Project**.
+2. Run Qt Creator and select **Create New Project**.
 3. Choose **Import Project** and then select **Git Clone**.
 4. Paste the repository link:
       
@@ -99,7 +99,7 @@ Follow these steps to build and run the project using Qt Creator:
 ## Usage
 
 ### 1. **Launch the Application**
-   - Open the application. By default, the **Sorting Visualizer** will load first.
+   - Run the application. By default, the **Sorting Visualizer** will load first.
 
 ---
 

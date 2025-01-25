@@ -29,7 +29,7 @@
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string>Sorting Algorithms Visualizer</string>
+   <string>github.com/adamt-eng/sorting-visualizer</string>
   </property>
   <property name="windowIcon">
    <iconset theme="QIcon::ThemeIcon::MediaPlaybackStart"/>
@@ -38,10 +38,10 @@
    <widget class="QLabel" name="textLabel">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>20</y>
-      <width>1031</width>
-      <height>730</height>
+      <x>220</x>
+      <y>10</y>
+      <width>791</width>
+      <height>601</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -100,852 +100,831 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QScrollArea" name="scrollArea">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>204</width>
-      <height>621</height>
+      <x>12</x>
+      <y>9</y>
+      <width>191</width>
+      <height>620</height>
      </rect>
     </property>
-    <property name="title">
-     <string>Sorting Visualizer</string>
+    <property name="frameShape">
+     <enum>QFrame::Shape::NoFrame</enum>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignmentFlag::AlignCenter</set>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
     </property>
-    <property name="flat">
+    <property name="widgetResizable">
      <bool>true</bool>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
-     <property name="leftMargin">
-      <number>6</number>
+    <widget class="QWidget" name="scrollAreaWidgetContents_2">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>-212</y>
+       <width>177</width>
+       <height>832</height>
+      </rect>
      </property>
-     <property name="topMargin">
-      <number>6</number>
-     </property>
-     <property name="rightMargin">
-      <number>6</number>
-     </property>
-     <property name="bottomMargin">
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="QScrollArea" name="scrollArea">
-       <property name="frameShape">
-        <enum>QFrame::Shape::NoFrame</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents_2">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>-167</y>
-          <width>172</width>
-          <height>832</height>
-         </rect>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QGroupBox" name="algorithmSettingsGroupBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="title">
+         <string>Algorithm Settings</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="bottomMargin">
+          <number>15</number>
+         </property>
          <item>
-          <widget class="QGroupBox" name="algorithmSettingsGroupBox">
-           <property name="title">
-            <string>Algorithm Settings</string>
+          <layout class="QVBoxLayout" name="startLayout">
+           <property name="spacing">
+            <number>2</number>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignCenter</set>
+           <property name="leftMargin">
+            <number>12</number>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <property name="bottomMargin">
-             <number>15</number>
-            </property>
-            <item>
-             <layout class="QVBoxLayout" name="startLayout">
-              <property name="spacing">
-               <number>2</number>
+           <property name="rightMargin">
+            <number>12</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="startButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>Start</string>
+             </property>
+             <property name="icon">
+              <iconset theme="QIcon::ThemeIcon::MediaPlaybackStart"/>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>12</width>
+               <height>12</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pauseButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>Pause</string>
+             </property>
+             <property name="icon">
+              <iconset theme="QIcon::ThemeIcon::MediaPlaybackPause"/>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>12</width>
+               <height>12</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="algorithmComboBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="placeholderText">
+              <string/>
+             </property>
+             <item>
+              <property name="text">
+               <string>Bubble Sort</string>
               </property>
-              <property name="leftMargin">
-               <number>12</number>
+             </item>
+             <item>
+              <property name="text">
+               <string>Selection Sort</string>
               </property>
-              <property name="rightMargin">
-               <number>12</number>
+             </item>
+             <item>
+              <property name="text">
+               <string>Insertion Sort</string>
               </property>
-              <item>
-               <widget class="QPushButton" name="startButton">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Start</string>
-                </property>
-                <property name="icon">
-                 <iconset theme="QIcon::ThemeIcon::MediaPlaybackStart"/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>12</width>
-                  <height>12</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pauseButton">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Pause</string>
-                </property>
-                <property name="icon">
-                 <iconset theme="QIcon::ThemeIcon::MediaPlaybackPause"/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>12</width>
-                  <height>12</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="algorithmComboBox">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>9</pointsize>
-                 </font>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="placeholderText">
-                 <string/>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>Bubble Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Selection Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Insertion Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Merge Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Heap Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Quick Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Counting Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Radix Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Shell Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Cocktail Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Gnome Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Bogo Sort</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Stalin Sort</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="orderLayout">
-              <property name="leftMargin">
-               <number>12</number>
+             </item>
+             <item>
+              <property name="text">
+               <string>Merge Sort</string>
               </property>
-              <property name="rightMargin">
-               <number>12</number>
+             </item>
+             <item>
+              <property name="text">
+               <string>Heap Sort</string>
               </property>
-              <item>
-               <widget class="QRadioButton" name="ascendingRadioButton">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Ascending</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="descendingRadioButton">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Descending</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
+             </item>
+             <item>
+              <property name="text">
+               <string>Quick Sort</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Counting Sort</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Radix Sort</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Shell Sort</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cocktail Sort</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gnome Sort</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Bogo Sort</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Stalin Sort</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QGroupBox" name="arraySettingsGroupBox">
-           <property name="title">
-            <string>Array Settings</string>
+          <layout class="QVBoxLayout" name="orderLayout">
+           <property name="leftMargin">
+            <number>12</number>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignCenter</set>
+           <property name="rightMargin">
+            <number>12</number>
            </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
-            <property name="bottomMargin">
-             <number>15</number>
-            </property>
-            <item>
-             <layout class="QVBoxLayout" name="elementsCountLayout">
-              <property name="spacing">
-               <number>10</number>
-              </property>
-              <property name="leftMargin">
-               <number>12</number>
-              </property>
-              <property name="rightMargin">
-               <number>12</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="elementsCountLabel">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Elements Count:</string>
-                </property>
-                <property name="scaledContents">
-                 <bool>false</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="elementsCount">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::WheelFocus</enum>
-                </property>
-                <property name="minimum">
-                 <number>2</number>
-                </property>
-                <property name="maximum">
-                 <number>10000</number>
-                </property>
-                <property name="value">
-                 <number>100</number>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="generateArrayButton">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Generate</string>
-                </property>
-                <property name="icon">
-                 <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>12</width>
-                  <height>12</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="stepControlGroupBox">
-           <property name="title">
-            <string>Step Control</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignCenter</set>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
-            <property name="bottomMargin">
-             <number>15</number>
-            </property>
-            <item>
-             <layout class="QVBoxLayout" name="stepControlLayout">
-              <property name="spacing">
-               <number>10</number>
-              </property>
-              <property name="leftMargin">
-               <number>12</number>
-              </property>
-              <property name="rightMargin">
-               <number>12</number>
-              </property>
-              <item>
-               <widget class="QRadioButton" name="continuousRadioButton">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Continuous</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-                <property name="autoExclusive">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="stepByStepRadioButton">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Step-by-step</string>
-                </property>
-                <property name="autoExclusive">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="nextStepButton">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Next Step</string>
-                </property>
-                <property name="icon">
-                 <iconset theme="QIcon::ThemeIcon::MediaSeekForward"/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>12</width>
-                  <height>12</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="animationSettingsGroupBox">
-           <property name="title">
-            <string>Animation Settings</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignCenter</set>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <property name="bottomMargin">
-             <number>15</number>
-            </property>
-            <item>
-             <layout class="QGridLayout" name="themeGridLayout">
-              <property name="leftMargin">
-               <number>12</number>
-              </property>
-              <property name="rightMargin">
-               <number>12</number>
-              </property>
-              <property name="spacing">
-               <number>8</number>
-              </property>
-              <item row="0" column="0" colspan="4">
-               <widget class="QLabel" name="themeLabel">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Theme:</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0" colspan="2">
-               <widget class="QComboBox" name="themeComboBox">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>90</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="editable">
-                 <bool>false</bool>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>Default</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Aurora</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Nebula</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Amethyst</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Steel</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Crimson</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Inferno</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Blossom</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Night</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Cyber</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Autumn</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Retro</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Solar</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Tropical</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Sunset</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Frosty</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Whatsapp</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item row="1" column="2" colspan="2">
-               <widget class="QCheckBox" name="invertThemeCheckBox">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="toolTip">
-                 <string/>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout">
-              <property name="spacing">
-               <number>8</number>
-              </property>
-              <property name="leftMargin">
-               <number>12</number>
-              </property>
-              <property name="rightMargin">
-               <number>12</number>
-              </property>
-              <item>
-               <layout class="QVBoxLayout" name="soundLayout">
-                <item>
-                 <widget class="QLabel" name="soundLabel">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Sound:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="soundComboBox">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="focusPolicy">
-                   <enum>Qt::FocusPolicy::NoFocus</enum>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>Variable</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Beep</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Duck</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Cat</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Dog</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>No Sound</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QVBoxLayout" name="delayLayout">
-                <item>
-                 <widget class="QLabel" name="delayLabel">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Delay (ms):</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="delaySpinBox">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="focusPolicy">
-                   <enum>Qt::FocusPolicy::WheelFocus</enum>
-                  </property>
-                  <property name="maximum">
-                   <number>10000</number>
-                  </property>
-                  <property name="value">
-                   <number>50</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QVBoxLayout" name="statsLayout">
-                <item>
-                 <widget class="QLabel" name="statsLabel">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Statistics Text Size:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSlider" name="horizontalSlider">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="singleStep">
-                   <number>1</number>
-                  </property>
-                  <property name="value">
-                   <number>10</number>
-                  </property>
-                  <property name="sliderPosition">
-                   <number>10</number>
-                  </property>
-                  <property name="tracking">
-                   <bool>true</bool>
-                  </property>
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="invertedAppearance">
-                   <bool>false</bool>
-                  </property>
-                  <property name="invertedControls">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="switchGroupBox">
-           <property name="title">
-            <string/>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignCenter</set>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_8">
-            <item>
-             <layout class="QVBoxLayout" name="switchLayout">
-              <property name="leftMargin">
-               <number>12</number>
-              </property>
-              <property name="topMargin">
-               <number>10</number>
-              </property>
-              <property name="rightMargin">
-               <number>12</number>
-              </property>
-              <property name="bottomMargin">
-               <number>10</number>
-              </property>
-              <item>
-               <widget class="QPushButton" name="switchButton">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Graph Visualizer</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
+           <item>
+            <widget class="QRadioButton" name="ascendingRadioButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>Ascending</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="descendingRadioButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>Descending</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
-      </widget>
-     </item>
-    </layout>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="arraySettingsGroupBox">
+        <property name="title">
+         <string>Array Settings</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <property name="bottomMargin">
+          <number>15</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="elementsCountLayout">
+           <property name="spacing">
+            <number>10</number>
+           </property>
+           <property name="leftMargin">
+            <number>12</number>
+           </property>
+           <property name="rightMargin">
+            <number>12</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="elementsCountLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Elements Count:</string>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="elementsCount">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::WheelFocus</enum>
+             </property>
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>10000</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="generateArrayButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>Generate</string>
+             </property>
+             <property name="icon">
+              <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>12</width>
+               <height>12</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="stepControlGroupBox">
+        <property name="title">
+         <string>Step Control</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <property name="bottomMargin">
+          <number>15</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="stepControlLayout">
+           <property name="spacing">
+            <number>10</number>
+           </property>
+           <property name="leftMargin">
+            <number>12</number>
+           </property>
+           <property name="rightMargin">
+            <number>12</number>
+           </property>
+           <item>
+            <widget class="QRadioButton" name="continuousRadioButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>Continuous</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="stepByStepRadioButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>Step-by-step</string>
+             </property>
+             <property name="autoExclusive">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="nextStepButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>Next Step</string>
+             </property>
+             <property name="icon">
+              <iconset theme="QIcon::ThemeIcon::MediaSeekForward"/>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>12</width>
+               <height>12</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="animationSettingsGroupBox">
+        <property name="title">
+         <string>Animation Settings</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="bottomMargin">
+          <number>15</number>
+         </property>
+         <item>
+          <layout class="QGridLayout" name="themeGridLayout">
+           <property name="leftMargin">
+            <number>12</number>
+           </property>
+           <property name="rightMargin">
+            <number>12</number>
+           </property>
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item row="0" column="0" colspan="4">
+            <widget class="QLabel" name="themeLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Theme:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="QComboBox" name="themeComboBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>90</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="editable">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>Default</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Aurora</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Nebula</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Amethyst</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Steel</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Crimson</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Inferno</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Blossom</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Night</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cyber</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Autumn</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Retro</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Solar</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Tropical</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Sunset</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Frosty</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Whatsapp</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="2" colspan="2">
+            <widget class="QCheckBox" name="invertThemeCheckBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="toolTip">
+              <string/>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <property name="leftMargin">
+            <number>12</number>
+           </property>
+           <property name="rightMargin">
+            <number>12</number>
+           </property>
+           <item>
+            <layout class="QVBoxLayout" name="soundLayout">
+             <item>
+              <widget class="QLabel" name="soundLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Sound:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="soundComboBox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Variable</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Beep</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Duck</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Cat</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Dog</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>No Sound</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="delayLayout">
+             <item>
+              <widget class="QLabel" name="delayLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Delay (ms):</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="delaySpinBox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::WheelFocus</enum>
+               </property>
+               <property name="maximum">
+                <number>10000</number>
+               </property>
+               <property name="value">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="statsLayout">
+             <item>
+              <widget class="QLabel" name="statsLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Statistics Text Size:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="horizontalSlider">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="singleStep">
+                <number>1</number>
+               </property>
+               <property name="value">
+                <number>10</number>
+               </property>
+               <property name="sliderPosition">
+                <number>10</number>
+               </property>
+               <property name="tracking">
+                <bool>true</bool>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
+               <property name="invertedControls">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="switchGroupBox">
+        <property name="title">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_8">
+         <item>
+          <layout class="QVBoxLayout" name="switchLayout">
+           <property name="leftMargin">
+            <number>12</number>
+           </property>
+           <property name="topMargin">
+            <number>10</number>
+           </property>
+           <property name="rightMargin">
+            <number>12</number>
+           </property>
+           <property name="bottomMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="switchButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>Graph Visualizer</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

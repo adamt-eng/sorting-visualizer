@@ -610,7 +610,7 @@ void MainWindow::on_fullScreenButton_clicked()
         ui->fullScreenButton->setEnabled(true);
         ui->switchButton->setEnabled(true);
         ui->fullScreenButton->show();
-        ui->groupBox->show();
+        ui->scrollArea->show();
         ui->textLabel->setGeometry(originalTextLabelGeometry);
     }
     else
@@ -640,7 +640,7 @@ void MainWindow::on_fullScreenButton_clicked()
             }
         }
 
-        ui->groupBox->hide();
+        ui->scrollArea->hide();
         ui->fullScreenButton->hide();
         ui->textLabel->setGeometry(this->centralWidget()->geometry());
     }
@@ -708,7 +708,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 {
     resizeTextLabel();
 
-    ui->groupBox->setGeometry(ui->groupBox->x(), ui->groupBox->y(), ui->groupBox->width(), ui->centralwidget->height() - 20);
+    ui->scrollArea->setGeometry(ui->scrollArea->x(), ui->scrollArea->y(), ui->scrollArea->width(), ui->centralwidget->height() - 10);
 
     QMainWindow::resizeEvent(event);
 }
